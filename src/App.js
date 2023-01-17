@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import SideBar from "./components/sidebar/SideBar";
-import Content from "./components/content/Content";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import SideBar from './Components/sidebar/SideBar';
+import Content from './Components/content/Content';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
