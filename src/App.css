@@ -1,3 +1,5 @@
+@import 'react-bootstrap-sidebar-menu/dist/sidebar-menu.scss';
+
 .App {
   text-align: center;
 }
