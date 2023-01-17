@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import HomePage from "../Components/HomePage/HomePage";
-import RunningOFDMTab from "../Components/RunningConfigurationPage/OFDMTab/OFDMTab";
-import RunningOFDMTabQAMTab from "../Components/RunningConfigurationPage/QAMTab/QAMTab";
-import ManageConfigurationPage from "../Components/ManageConfigurationPage/ManageConfigurationPage";
-import ConfigurationQAMTab from "../Components/ConfigurationPage/QAMTab";
-import ConfigurationOFDMTab from "../Components/ConfigurationPage/OFDMTab";
-import MainTenanacePage from "../Components/System/MaintenancePage/MaintenancePage";
-import SoftwareUpgradePage from "../Components/System/SoftwareUpgradePage/SoftwareUpgradePage";
-import SettingsPage from "../Components/System/SettingsPage/SettingsPage";
+import HomePage from "../components/HomePage/HomePage";
+import RunningOFDMTab from "../components/RunningConfigurationPage/OFDMTab/OFDMTab";
+import RunningOFDMTabQAMTab from "../components/RunningConfigurationPage/QAMTab/QAMTab";
+import ManageConfigurationPage from "../components/ManageConfigurationPage/ManageConfigurationPage";
+import ConfigurationQAMTab from "../components/ConfigurationPage/QAMTab";
+import ConfigurationOFDMTab from "../components/ConfigurationPage/OFDMTab";
+import MainTenanacePage from "../components/System/MaintenancePage/MaintenancePage";
+import SoftwareUpgradePage from "../components/System/SoftwareUpgradePage/SoftwareUpgradePage";
+import SettingsPage from "../components/System/SettingsPage/SettingsPage";
 
 
 export default function Routes() {
