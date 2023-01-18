@@ -10,9 +10,6 @@
 body {
   /*font-family: 'Poppins', sans-serif;*/
   font-family: "Nunito Sans", sans-serif;
-  /*background: #fafafa;*/
-  background-color: #f5f9fc;
-  overflow: hidden  ;
 }
 
 a,
@@ -83,9 +80,11 @@ ul {
   color: #e9ecef;
   background: #2d3646 !important;
 }
-
-.nav-item:hover {
-  background: #fdff53;
+.nav-item .nav-link:hover {
+  background: #f5e5ba;
+}
+.sidebar .accordion-header:hover {
+  background: #f5e5ba;
   transition: 0.2s;
 }
 .nav-item:hover a {
@@ -116,11 +115,14 @@ li a.dropdown-toggle::after {
 .sidebar_navlinks li {
   list-style: none;
   border-bottom: 1px solid #00000069;
+  background-color: #f1e4ff;
+}
+.sidebar .accordion-header {
+  background-color: #f1e4ff;
 }
 .sidebar_navlinks li a,
 .sidebar .accordion-header {
   color: #000;
-  background-color: rgb(225 199 255 / 48%);
 }
 .sidebar .accordion-button {
   padding: 10px 16px !important;
@@ -152,6 +154,119 @@ li a.dropdown-toggle::after {
 .content {
   margin-left: 0;
   height: 100vh;
+  padding: 0;
+}
+/* ---------------------------------------------------
+    TITLE STYLE
+----------------------------------------------------- */
+.main_title {
+  padding: 15px 50px 15px;
+}
+/* ---------------------------------------------------
+    NAV TABS STYLE
+----------------------------------------------------- */
+.nav_tabs {
+  background-color: #f1e4ff;
+  border-bottom: 1px solid;
+}
+.nav_tabs .nav-link {
+  min-width: 350px;
+  font-size: 1.5rem;
+  color: #000;
+  font-weight: bold;
+  padding: 15px;
+  border: none;
+  border-right: 1px solid;
+  border-radius: 0;
+}
+.nav_tabs .nav-link.active {
+  color: #000;
+  background-color: #f5e5ba;
+  border-color: #000;
+  border: none;
+  border-right: 1px solid;
+}
+.nav_tabs .nav-link:focus,
+.nav_tabs .nav-link:hover {
+  border-right: 1px solid;
+}
+.nav_tabs .nav-link:focus,
+.nav_tabs .nav-link:hover {
+  border: none;
+  border-right: 1px solid;
+}
+.tabs_wrapper > .tab-content {
+  padding: 15px;
+}
+
+/* ---------------------------------------------------
+    CONFIG TABS STYLE
+----------------------------------------------------- */
+.config_tabs {
+  background: #d3d3d363;
+}
+.config_tabs .nav-item .nav-link {
+  min-width: 350px;
+  margin: 0 auto;
+  border-radius: 0;
+  padding: 15px;
+  border: none;
+  border-right: 1px solid;
+  color: #000;
+}
+.config_tabs .nav-link:focus,
+.config_tabs .nav-link:hover {
+  border: none;
+  border-right: 1px solid;
+}
+.config_tabs .nav-link.active {
+  color: #000;
+  background-color: #f5e5ba;
+  border-color: #000;
+  border: none;
+  border-right: 1px solid;
+}
+
+/* ---------------------------------------------------
+    OFDM TABS STYLE
+----------------------------------------------------- */
+
+.searchbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 13px;
+  background: #d3d3d363;
+}
+.searchbar label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+.table-responsive {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.main_table thead tr {
+  display: block;
+}
+.main_table th, td {
+  width: 200px;
+  padding: 5px 10px !important;
+}
+.main_table tbody {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  height: 280px;
+}
+.main_table thead {
+  background: #d3d3d363;
+}
+.action {
+  background: #d3d3d363;
+}
+.action_btns {
+  display: flex;
+  justify-content: flex-end;
 }
 
 @media only screen and (max-width: 575.98px) {
@@ -160,8 +275,6 @@ li a.dropdown-toggle::after {
   }
 
   .content.is-open {
-    /*margin-left: 100%;*/
-    display: none;
     transition: all 0.5s;
   }
 
@@ -193,7 +306,7 @@ li a.dropdown-toggle::after {
   align-items: center;
   height: 100vh;
 }
-.welcome_screen  .welcome_head_wrapper {
+.welcome_screen .welcome_head_wrapper {
   max-width: 800px;
   text-align: center;
 }
@@ -202,7 +315,7 @@ li a.dropdown-toggle::after {
   letter-spacing: 4px;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #5243A1;
+  color: #5243a1;
 }
 .welcome_screen .welcome_head_wrapper p {
   font-size: 25px;

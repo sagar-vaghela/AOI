@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import HomePage from "../Components/HomePage/HomePage";
 import MainTenanacePage from "../Components/System/MaintenancePage/MaintenancePage";
 import SoftwareUpgradePage from "../Components/System/SoftwareUpgradePage/SoftwareUpgradePage";
@@ -11,14 +11,14 @@ import Help from "../Components/Help/Help";
 
 export default function Routes() {
   return (
-    <Router>
+    <Switch>
       <Route exact path="/" component={HomePage} />
       <Route exact path="/downstream" component={Downstream}></Route>
       <Route exact path="/upstream" component={Upstream}></Route>
       <Route exact path="/system/maintenanace" component={MainTenanacePage} />
       <Route exact path="/system/softwareUpgrade" component={SoftwareUpgradePage} />
       <Route exact path="/system/settings" component={SettingsPage} /> 
-      <Route exact path="/help" component={Help} /> 
-    </Router>
+      <Route exact path="/help" component={Help} />
+    </Switch>
   );
 }
