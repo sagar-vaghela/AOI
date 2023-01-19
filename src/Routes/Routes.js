@@ -15,9 +15,9 @@ export default function Routes() {
       <Route exact path="/" component={HomePage} />
       <Route exact path="/downstream" component={Downstream}></Route>
       <Route exact path="/upstream" component={Upstream}></Route>
-      <Route exact path="/system/maintenanace" component={MainTenanacePage} />
-      <Route exact path="/system/softwareUpgrade" component={SoftwareUpgradePage} />
-      <Route exact path="/system/settings" component={SettingsPage} /> 
+      <Route exact path="/maintenanace" component={MainTenanacePage} />
+      <Route exact path="/softwareUpgrade" component={SoftwareUpgradePage} />
+      <Route exact path="/settings" component={SettingsPage} /> 
       <Route exact path="/help" component={Help} />
     </Switch>
   );

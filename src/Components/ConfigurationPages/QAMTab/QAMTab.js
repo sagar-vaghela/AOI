@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
+import Button from '../../Button';
+import EditModal from '../../Modal/EditModal';
 
 export default function QAMTab() {
+  const [modalShow, setModalShow] = React.useState(false);
+  const handleClick = () => {
+    setModalShow(true)
+  }
+  console.log(modalShow);
   const tablerow = [
     { no: 1, frequency: "test", Power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test' },
     { no: 2, frequency: "test", Power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test' },
@@ -24,55 +30,65 @@ export default function QAMTab() {
     { no: 18, frequency: "test", Power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test' },
     { no: 19, frequency: "test", Power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test' }
   ]
-  const headings = [
-    'No',
-    'Frequency',
-    'Power',
-    'Width',
-    'Modulation',
-    'Annex',
-    'OP Mode',
-    'Muted'
-  ]
+
   return (
-    <div className='channle_tab'>
-      <div className='border border-dark border-top-0 mb-4'>
-        <div className='searchbar border-bottom border-dark'>
+    <div className='channle_tab '>
+      <div className='border border-dark mb-4'>
+        <div className='searchbar table_top_bar d-flex justify-content-end border-bottom border-dark'>
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-        <Table responsive bordered className='main_table mb-0' >
+        <Table responsive bordered className='main_table mb-0 table-fixed' >
           <thead>
             <tr>
-              {headings.map((heading, index) => (
-                <th key={index}>{heading}</th>
-              ))}
+              <th className='col-1'>No</th>
+              <th className='col-2'>Frequency</th>
+              <th className='col-1'>Power</th>
+              <th className='col-1'>Width</th>
+              <th className='col-2'>Modulation</th>
+              <th className='col-2'>Annex</th>
+              <th className='col-2'>OP Mode</th>
+              <th className='col-1'>Muted</th>
             </tr>
           </thead>
           <tbody className='bg-white'>
             {tablerow.map((item) => (
               <tr key={item.no}>
-                <td>{item.no}</td>
-                <td>{item.frequency}</td>
-                <td>{item.Power}</td>
-                <td>{item.width}</td>
-                <td>{item.modulation}</td>
-                <td>{item.annex}</td>
-                <td>{item.op_mode}</td>
-                <td>
-                  <Form>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                    />
-                  </Form>
+                <td className='col-1'>{item.no}</td>
+                <td className='col-2'>{item.frequency}</td>
+                <td className='col-1'>{item.Power}</td>
+                <td className='col-1'>{item.width}</td>
+                <td className='col-2'>{item.modulation}</td>
+                <td className='col-2'>{item.annex}</td>
+                <td className='col-2'>{item.op_mode}</td>
+                <td className='col-1'>
+                  <label className="toggle_box">
+                    <input type="checkbox" />
+                    <span className="slider"></span>
+                    <span className="labels" data-on="Yes" data-off="No"></span>
+                  </label>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       </div>
-
+      <div className="action mb-4 border border-dark p-2">
+        <h5 className='border-bottom border-dark d-inline-block'>Action</h5>
+        <div className="action_btns justify-content-between">
+          <div className="left_btns">
+            <Button label={'Edit'} handleClick={handleClick} />
+            <EditModal
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+            />
+          </div>
+          <div className="right_btn">
+            <Button label={'Save as'} />
+            <Button label={'Make Default'} />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
