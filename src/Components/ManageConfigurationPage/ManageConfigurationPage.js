@@ -1,7 +1,7 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table';
 import Button from '../Button';
-import OFDMTab from '../ConfigurationPages/OFDMTab/OFDMTab'
+import OFDMTab from '../RunningConfigPages/Channels/OFDMTab/OFDMTab'
 
 export default function ManageConfigurationPage() {
 
@@ -41,7 +41,7 @@ export default function ManageConfigurationPage() {
             <tr>
               <th className='col-2'>No</th>
               <th className='col-6'>Name</th>
-              <th className='col-4'>'Editable'</th>
+              <th className='col-4'>Editable</th>
             </tr>
           </thead>
           <tbody className='bg-white'>

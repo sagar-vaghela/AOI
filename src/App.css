@@ -411,13 +411,14 @@ rgba(255, 255, 255, 0.4);
   background-color: #EFEFEE;
   padding: 10px;
 }
-.modal_common .modal-content .modal-header{
+.modal_common .modal-content .modal-header {
   padding: 0;
   border: none;
+  justify-content: center;
 }
 .modal_common .modal-content .modal-header .btn-close{
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 5px;
   border-bottom: none;
   z-index: 999;
@@ -429,12 +430,10 @@ rgba(255, 255, 255, 0.4);
   align-items: center;
   padding: 0;
   border: none;
-}
-.edit_modal .power_mute {
-  display: flex;
   justify-content: center;
 }
-.modal_common input[type='text']{
+.modal_common input[type='text'],
+.modal_common input[type='number'],.modal-content select{
   max-width: 100px;
 }
 .edit_modal .mute {
@@ -446,10 +445,10 @@ rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   background: transparent url('close-circle-svgrepo-com.svg') center/1em auto no-repeat;
 }
-.modal_common .btn-close:focus{
-  border: none;
-  outline: none;
-  box-shadow: none;
+.modal_common .btn-close:focus,select:focus{
+  border: none ;
+  outline: none !important;
+  box-shadow: none !important;
 }
 /* ---------------------------------------------------
     MEDIA STYLE

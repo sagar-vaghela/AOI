@@ -1,9 +1,8 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table';
-import Button from '../../Button';
+import Button from '../../../Button';
 
-export default function OFDMTab() {
-
+const OFDMTab = () => {
   return (
     <div className='channle_tab OFDM_TAB'>
       <div className='border border-dark  mb-4'>
@@ -14,14 +13,14 @@ export default function OFDMTab() {
         <Table responsive bordered className='main_table mb-0 ' >
           <thead>
             <tr>
-                <th className='col-1'>No</th>
-                <th className='col-2'>Subcarrier Zero Frequency</th>
-                <th className='col-2'>Cyclic Prefix</th>
-                <th className='col-2'>Roll Off Period</th>
-                <th className='col-2'>Time Interleaver Depth</th>
-                <th className='col-1 '>Subcarrier Spacing</th>
-                <th className='col-1'>Power</th>
-                <th className='col-1'>Mute</th>
+              <th className='col-1'>No</th>
+              <th className='col-2'>Subcarrier Zero Frequency</th>
+              <th className='col-2'>Cyclic Prefix</th>
+              <th className='col-2'>Roll Off Period</th>
+              <th className='col-2'>Time Interleaver Depth</th>
+              <th className='col-1 '>Subcarrier Spacing</th>
+              <th className='col-1'>Power</th>
+              <th className='col-1'>Mute</th>
             </tr>
           </thead>
           <tbody className='bg-white'></tbody>
@@ -44,3 +43,5 @@ export default function OFDMTab() {
     </div>
   )
 }
+
+export default OFDMTab

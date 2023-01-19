@@ -3,6 +3,7 @@ import RunningConfigPage from '../RunningConfigPages/RunningConfigPage'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import ManageConfigurationPage from '../ManageConfigurationPage/ManageConfigurationPage';
+import Configuration from '../ConfigurationPages/Configuration';
 
 
 const Downstream = () => {
@@ -13,14 +14,14 @@ const Downstream = () => {
         id="uncontrolled-tab-example"
         className="nav_tabs"
       >
-        <Tab eventKey="RunningConfigPage"  title="Running Configuration">
+        <Tab eventKey="RunningConfigPage" title="Running Configuration">
           <RunningConfigPage />
         </Tab>
         <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
           <ManageConfigurationPage />
         </Tab>
         <Tab eventKey="configuration" title="Configuration">
-          Cofiguration
+          <Configuration />
         </Tab>
       </Tabs>
     </div>

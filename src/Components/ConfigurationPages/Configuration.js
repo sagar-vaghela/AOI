@@ -1,11 +1,10 @@
 import React from 'react'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import OFDMTab from './Channels/OFDMTab/OFDMTab';
-import QAMTab from './Channels/QAMTab/QAMTab';
+import QAMTab from './Channels/QAMTab/QAMTab'
+import OFDMTab from './Channels/OFDMTab/OFDMTab'
 
-
-const RunningConfigPage = () => {
+const Configuration = () => {
     return (
         <Tabs
             defaultActiveKey="OFDMChannels"
@@ -16,10 +15,10 @@ const RunningConfigPage = () => {
                 <QAMTab />
             </Tab>
             <Tab eventKey="OFDMChannels" tabClassName='fw-bold' title="OFDM Channels">
-                <OFDMTab />
+                <OFDMTab />  
             </Tab>
         </Tabs>
     )
 }
 
-export default RunningConfigPage
+export default Configuration

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Table from 'react-bootstrap/Table';
-import Button from '../../Button';
-import EditModal from '../../Modal/EditModal';
+import Button from '../../../Button';
+import EditModal from '../../../Modal/EditModal';
 
 export default function QAMTab() {
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
   const handleClick = () => {
     setModalShow(true)
   }

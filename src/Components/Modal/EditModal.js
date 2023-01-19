@@ -23,12 +23,12 @@ const EditModal = (props) => {
                     <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
                     <input type="text" />
                 </div>
-                <div className="power_mute mb-3">
-                    <div className="power me-3">
+                <div className="d-flex justify-content-center mb-3">
+                    <div className="me-3">
                         <label htmlFor="" className='me-2'>Power: </label>
                         <input type="text" />
                     </div>
-                    <div className="mute">
+                    <div>
                         <label htmlFor="" className='me-2'>Mute: </label>
                         <label className="toggle_box">
                             <input type="checkbox" />

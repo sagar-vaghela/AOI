@@ -6,7 +6,8 @@ const Button = (props) => {
         backgroundColor: '#fff',
         padding: '2px 15px',
         marginRight: '20px',
-        minWidth : '150px'
+        minWidth : '150px',
+        marginBottom : '10px'
     }
 
     return (
