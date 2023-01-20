@@ -2,8 +2,8 @@ import React from "react";
 import classNames from "classnames";
 import { Container } from "react-bootstrap";
 import Routes from "../../Routes/Routes";
-import NavTab from "../NavTab/NavTab";
 import { useLocation } from 'react-router-dom';
+import NavBar from "./Navbar";
 
 
 const Content = (props) => {
@@ -18,6 +18,7 @@ const Content = (props) => {
           <h3 className="main_title bg-light border-bottom border-dark fw-bold mb-0">CPSG 5102 Cable Plant Generator</h3>
         </>
       )}
+      {/* <NavBar/> */}
       <Routes />
     </Container>
   )

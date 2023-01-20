@@ -3,8 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from '../Button'
 import Form from 'react-bootstrap/Form';
 
-
-const AddRangeModal = (props) => {
+const OfdmEditModal = (props) => {
     return (
         <Modal
             {...props}
@@ -16,36 +15,51 @@ const AddRangeModal = (props) => {
 
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Add Range
-                </Modal.Title>
+                {/* <Modal.Title id="contained-modal-title-vcenter">
+                    Modal heading
+                </Modal.Title> */}
             </Modal.Header>
             <Modal.Body>
+                <div className="selected_channel mb-3">
+                    <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
+                    <input type="text" />
+                </div>
                 <div className='d-flex justify-content-center'>
                     <div className="mb-3 d-flex flex-column align-items-end me-3">
                         <div className='mb-2'>
-                            <label htmlFor="" className='me-2'>Number of Channels: </label>
+                            <label htmlFor="" className='me-2'>Subcarrier Zero Frequency: </label>
                             <input type="number" />
+                        </div>
+                        <div className='d-flex mb-2 align-items-center'>
+                            <label htmlFor="" className='text-nowrap me-2'>Cyclic Prefix: </label>
+                            <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                                <option></option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </Form.Select>
                         </div>
                         <div className='mb-2'>
                             <label htmlFor="" className='me-2'>Power: </label>
                             <input type="text" />
                         </div>
-                        <div className='mb-2'>
-                            <label htmlFor="" className='me-2'>Annex Type: </label>
-                            <input type="text" />
-                        </div>
                     </div>
-                    <div className="mb-3 d-flex flex-column align-items-start">
-                        <div className='me-2 mb-2'>
-                            <label htmlFor="" className='me-2'>Starting Frequency: </label>
+                    <div className="mb-3 d-flex flex-column align-items-start align-items-end">
+                        <div className=' mb-2'>
+                            <label htmlFor="" className='me-2'>Time Interleaver Depth: </label>
                             <input type="number" />
                         </div>
-                        <div className='mb-2'>
-                            <h5 htmlFor="" className='fw-bold me-2'>Advanced Settings </h5>
+                        <div className='d-flex mb-2 align-items-center'>
+                            <label htmlFor="" className='text-nowrap me-2'>Roll Off Period: </label>
+                            <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                                <option></option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </Form.Select>
                         </div>
-                        <div className='d-flex'>
-                            <label htmlFor="" className='text-nowrap me-2'>Modulation Type: </label>
+                        <div className='d-flex align-items-center'>
+                            <label htmlFor="" className='text-nowrap me-2'>Subcarrier Spacing: </label>
                             <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
                                 <option></option>
                                 <option value="1">One</option>
@@ -67,7 +81,7 @@ const AddRangeModal = (props) => {
             <Modal.Footer>
                 {/* <Button onClick={props.onHide}>Close</Button> */}
                 <div className='edit_btns'>
-                    <Button label={'Add Range'} />
+                    <Button label={'Edit'} />
                     <Button label={'Cancel'} handleClick={props.onHide} />
                 </div>
             </Modal.Footer>
@@ -75,4 +89,4 @@ const AddRangeModal = (props) => {
     )
 }
 
-export default AddRangeModal
+export default OfdmEditModal

@@ -7,7 +7,7 @@ export default function MaintenancePage() {
   return (
     <div className='tabs_wrapper'>
 
-      <div className='channle_tab '>
+      <div className='channel_tab '>
         <Tabs
           defaultActiveKey=""
           id="uncontrolled-tab-example"
@@ -21,7 +21,7 @@ export default function MaintenancePage() {
           </Tab>
         </Tabs>
         <div className="action mb-4 border border-dark p-2">
-          <h5 className='border-bottom border-dark d-inline-block'>System Maintenance</h5>
+          <h5 className='border-bottom border-dark d-inline-block fw-bold'>System Maintenance</h5>
           <div>Reboot Control</div>
           <div className="action_btns justify-content-between">
 

@@ -10,7 +10,7 @@ export default function SettingsPage() {
   return (
     <div className='tabs_wrapper'>
 
-      <div className='channle_tab '>
+      <div className='channel_tab '>
         <Tabs
           defaultActiveKey=""
           id="uncontrolled-tab-example"
@@ -25,7 +25,7 @@ export default function SettingsPage() {
         </Tabs>
 
         <div className="action mb-4 border border-dark p-2">
-          <h5 className='border-bottom border-dark d-inline-block'>Settings</h5>
+          <h5 className='border-bottom border-dark d-inline-block fw-bold'>Settings</h5>
           <div>Configure US-DS Splits</div>
           <div style={{ width: '20%' }}>
             <Form.Select aria-label="Default select example">
@@ -36,7 +36,7 @@ export default function SettingsPage() {
 
 
         <div className="action mb-4 border border-dark p-2">
-          <h5 className='border-bottom border-dark d-inline-block'>Product Info</h5>
+          <h5 className='border-bottom border-dark d-inline-block fw-bold'>Product Info</h5>
 
           <Container>
             <Row>
@@ -52,7 +52,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="action mb-4 border border-dark p-2">
-          <h5 className='border-bottom border-dark d-inline-block'>General</h5>
+          <h5 className='border-bottom border-dark d-inline-block fw-bold'>General</h5>
 
           <Container>
             <Row>

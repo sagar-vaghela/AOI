@@ -5,7 +5,7 @@ import Button from '../../../Button';
 export default function OFDMTab() {
 
   return (
-    <div className='channle_tab OFDM_TAB'>
+    <div className='channel_tab OFDM_TAB'>
       <div className='border border-dark  mb-4'>
         <div className='searchbar table_top_bar d-flex justify-content-end border-bottom border-dark'>
           <label htmlFor="search">Search:</label>
@@ -37,7 +37,7 @@ export default function OFDMTab() {
         </div>
       </div>
 
-      <div className="channle_btns">
+      <div className="channel_btns">
         <Button label={'OFDM Channel Subcarries'} style={{ padding: '20px' }} />
         <Button label={'OFDM Channel Profiles'} />
       </div>

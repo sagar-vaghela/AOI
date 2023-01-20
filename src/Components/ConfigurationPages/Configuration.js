@@ -11,11 +11,11 @@ const Configuration = () => {
             id="uncontrolled-tab-example"
             className="config_tabs border border-dark"
         >
-            <Tab eventKey="QAMChannels" tabClassName='fw-bold' title="QAM Channels">
+            <Tab eventKey="QAMChannels" tabClassName='fw-bold col-4' title="QAM Channels">
                 <QAMTab />
             </Tab>
-            <Tab eventKey="OFDMChannels" tabClassName='fw-bold' title="OFDM Channels">
-                <OFDMTab />  
+            <Tab eventKey="OFDMChannels" tabClassName='fw-bold col-4' title="OFDM Channels">
+                <OFDMTab />
             </Tab>
         </Tabs>
     )

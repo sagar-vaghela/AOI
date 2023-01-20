@@ -32,13 +32,13 @@ export default function QAMTab() {
   ]
 
   return (
-    <div className='channle_tab '>
+    <div className='channel_tab '>
       <div className='border border-dark mb-4'>
         <div className='searchbar table_top_bar d-flex justify-content-end border-bottom border-dark'>
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-        <Table responsive bordered className='main_table mb-0 table-fixed' >
+        <Table responsive bordered className='main_table mb-0' >
           <thead>
             <tr>
               <th className='col-1'>No</th>

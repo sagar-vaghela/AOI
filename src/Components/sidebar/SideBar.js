@@ -1,8 +1,12 @@
 import React from "react";
-import { Nav, Accordion } from "react-bootstrap";
+import { Nav, Accordion, Button } from "react-bootstrap";
 import classNames from "classnames";
 import logo from '../../new-logo.png'
 import { Link, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTimes
+} from "@fortawesome/free-solid-svg-icons";
 
 export const SideBar = ({
   isOpen,
@@ -23,6 +27,14 @@ export const SideBar = ({
         <Link to="/">
           <img src={logo} alt="AOI logo" />
         </Link>
+        {/* <Button
+          variant="link"
+          onClick={toggle}
+          style={{ color: "#fff" }}
+          className="mt-4"
+        >
+          <FontAwesomeIcon icon={faTimes} pull="right" size="xs" />
+        </Button> */}
       </div>
 
       <Nav className="flex-column pt-2">

@@ -8,7 +8,7 @@ export default function SoftwareUpgradePage() {
   return (
     <div className='tabs_wrapper'>
 
-      <div className='channle_tab '>
+      <div className='channel_tab '>
         <Tabs
           defaultActiveKey=""
           id="uncontrolled-tab-example"

@@ -19,7 +19,7 @@ const EditModal = (props) => {
                 </Modal.Title> */}
             </Modal.Header>
             <Modal.Body>
-                <div className="selected_channle mb-3">
+                <div className="selected_channel mb-3">
                     <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
                     <input type="text" />
                 </div>

@@ -86,9 +86,6 @@ ul {
   color: #e9ecef;
   background: #2d3646 !important;
 }
-.nav-item .nav-link:hover {
-  background: #f5e5ba;
-}
 .sidebar .accordion-header:hover {
   background: #f5e5ba;
   transition: 0.2s;
@@ -154,10 +151,10 @@ li a.dropdown-toggle::after {
 .collapsing {
   background-color: transparent;
 }
-.active a{
+.active a {
   background-color: #f5e5ba;
 }
-.accordion-body .sidebar_navlinks li a{
+.accordion-body .sidebar_navlinks li a {
   padding-left: 30px;
 }
 /* ---------------------------------------------------
@@ -244,7 +241,7 @@ li a.dropdown-toggle::after {
 /* ---------------------------------------------------
     TABS TABLE STYLE
 ----------------------------------------------------- */
-.table_top_bar{
+.table_top_bar {
   background: #d3d3d363;
 }
 .searchbar {
@@ -254,41 +251,33 @@ li a.dropdown-toggle::after {
   margin-right: 10px;
   font-weight: bold;
 }
-.table-fixed tbody {
-  height: 300px;
-  overflow-y: auto;
-  width: 100%;;
+/* ******************** Table Css **************** */
+
+tbody tr,tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
-.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
-  display: block;
-}
-.table-fixed tbody td {
-  float: left;
-  background: #fff;
-}
-.table-fixed thead tr th {
-  background-color: #d3d3d363;
-  float: left;
-}
-/* .table-fixed td th {
-  border:  1px solid #000;
-} */
-.table-fixed.table-bordered>:not(caption)>*>* {
-  border-width: 1px;
-}
-.main_table thead {
+thead {
   background: #d3d3d363;
 }
-.action {
+tbody {
+  max-height: 300px;
+  overflow-y: scroll;
+  width: 100%;
+  display: block;
+}
+
+.action,.table_header {
   background: #d3d3d363;
 }
 .action_btns {
   display: flex;
 }
+/* ******************** Table Toggle Css **************** */
 .toggle_box {
   --width: 55px;
   --height: calc(var(--width) / 3);
-
   position: relative;
   display: inline-block;
   width: var(--width);
@@ -297,11 +286,9 @@ li a.dropdown-toggle::after {
   border-radius: var(--height);
   cursor: pointer;
 }
-
 .toggle_box input {
   display: none;
 }
-
 .toggle_box .slider {
   position: absolute;
   top: 0;
@@ -312,7 +299,6 @@ li a.dropdown-toggle::after {
   background-color: #ccc;
   transition: all 0.4s ease-in-out;
 }
-
 .toggle_box .slider::before {
   content: "";
   position: absolute;
@@ -325,15 +311,12 @@ li a.dropdown-toggle::after {
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
   transition: all 0.4s ease-in-out;
 }
-
-.toggle_box input:checked+.slider {
-  background-color: #2196F3;
+.toggle_box input:checked + .slider {
+  background-color: #2196f3;
 }
-
-.toggle_box input:checked+.slider::before {
+.toggle_box input:checked + .slider::before {
   transform: translateX(calc(var(--width) - var(--height)));
 }
-
 .toggle_box .labels {
   position: absolute;
   top: 8px;
@@ -344,7 +327,6 @@ li a.dropdown-toggle::after {
   font-family: sans-serif;
   transition: all 0.4s ease-in-out;
 }
-
 .toggle_box .labels::after {
   content: attr(data-off);
   position: absolute;
@@ -356,7 +338,6 @@ li a.dropdown-toggle::after {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
   transition: all 0.4s ease-in-out;
 }
-
 .toggle_box .labels::before {
   content: attr(data-on);
   position: absolute;
@@ -365,16 +346,13 @@ li a.dropdown-toggle::after {
   transform: translateY(-50%);
   color: #ffffff;
   opacity: 0;
-  text-shadow: 1px 1px 2px
-rgba(255, 255, 255, 0.4);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.4);
   transition: all 0.4s ease-in-out;
 }
-
-.toggle_box input:checked~.labels::after {
+.toggle_box input:checked ~ .labels::after {
   opacity: 0;
 }
-
-.toggle_box input:checked~.labels::before {
+.toggle_box input:checked ~ .labels::before {
   opacity: 1;
 }
 
@@ -405,10 +383,10 @@ rgba(255, 255, 255, 0.4);
 /* ---------------------------------------------------
     MODAL STYLE
 ----------------------------------------------------- */
-.modal_common .modal-content{
+.modal_common .modal-content {
   border-radius: 2px;
   border: 1px solid #000;
-  background-color: #EFEFEE;
+  background-color: #efefee;
   padding: 10px;
 }
 .modal_common .modal-content .modal-header {
@@ -416,24 +394,25 @@ rgba(255, 255, 255, 0.4);
   border: none;
   justify-content: center;
 }
-.modal_common .modal-content .modal-header .btn-close{
+.modal_common .modal-content .modal-header .btn-close {
   position: absolute;
   right: 5px;
   top: 5px;
   border-bottom: none;
   z-index: 999;
 }
-.modal_common .modal-body{
+.modal_common .modal-body {
   text-align: center;
 }
-.modal_common .modal-footer{
+.modal_common .modal-footer {
   align-items: center;
   padding: 0;
   border: none;
   justify-content: center;
 }
-.modal_common input[type='text'],
-.modal_common input[type='number'],.modal-content select{
+.modal_common input[type="text"],
+.modal_common input[type="number"],
+.modal-content select {
   max-width: 100px;
 }
 .edit_modal .mute {
@@ -441,18 +420,94 @@ rgba(255, 255, 255, 0.4);
   justify-content: center;
   align-items: center;
 }
-.modal_common .btn-close{
+.modal_common .btn-close {
   border-radius: 50%;
-  background: transparent url('close-circle-svgrepo-com.svg') center/1em auto no-repeat;
+  background: transparent url("close-circle-svgrepo-com.svg") center/1em auto
+    no-repeat;
 }
-.modal_common .btn-close:focus,select:focus{
-  border: none ;
+.modal_common .btn-close:focus,
+select:focus {
+  border: none;
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* ---------------------------------------------------
+    OFDM Chennle STYLE
+----------------------------------------------------- */
+.OFDM_channel_tab li .nav-link.active{
+  background: #f5e5ba;
+  text-decoration: none;
+}
+
+
+
+
 /* ---------------------------------------------------
     MEDIA STYLE
 ----------------------------------------------------- */
+
+@media (max-width: 1199px) {
+  .welcome_screen .welcome_head_wrapper h1 {
+    font-size: 60px;
+  }
+  .sidebar {
+    min-width: 200px;
+  }
+  .nav_tabs .nav-link {
+    min-width: 200px;
+    font-size: 20px;
+    padding: 10px;
+  }
+  .config_tabs .nav-item .nav-link {
+    min-width: 200px;
+    padding: 10px;
+  }
+  .searchbar {
+    padding: 8px;
+  }
+  .table > :not(caption) > * > * {
+    padding: 4px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .welcome_screen .welcome_head_wrapper h1 {
+    font-size: 50px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .sidebar {
+    min-width: 160px;
+  }
+  .nav_tabs .nav-link {
+    min-width: 140px;
+    font-size: 16px;
+    padding: 8px;
+  }
+  .config_tabs .nav-item .nav-link {
+    min-width: 140px;
+    font-size: 14px;
+    padding: 8px;
+  }
+  .main_table thead tr,
+  tbody tr td {
+    font-size: 12px;
+  }
+  .toggle_box {
+    --width: 35px;
+  }
+  .toggle_box .labels {
+    font-size: 8px;
+  }
+  .toggle_box .labels::before,
+  .toggle_box .labels::after {
+    top: -5%;
+  }
+  .searchbar label {
+    font-size: 14px;
+  }
+}
 
 @media only screen and (max-width: 575.98px) {
   body {

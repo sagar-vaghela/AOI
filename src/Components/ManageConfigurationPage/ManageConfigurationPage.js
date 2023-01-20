@@ -2,6 +2,8 @@ import React from 'react'
 import Table from 'react-bootstrap/Table';
 import Button from '../Button';
 import OFDMTab from '../RunningConfigPages/Channels/OFDMTab/OFDMTab'
+import BootstrapTable from 'react-bootstrap-table-next';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 
 export default function ManageConfigurationPage() {
 
@@ -26,8 +28,22 @@ export default function ManageConfigurationPage() {
     { no: 18, name: "test1.db", editable: 'Yes' },
     { no: 19, name: "test1.db", editable: 'No' }
   ]
+  const columns = [
+    {
+      dataField: 'no',
+      text: 'No'
+    },
+    {
+      dataField: 'name',
+      text: 'Name'
+    },
+    {
+      dataField: 'editable',
+      text: 'Editable'
+    }
+  ];
   return (
-    <div className='channle_tab '>
+    <div className='channel_tab '>
       <div className='border border-dark mb-4'>
         <div className='table_top_bar border-bottom border-dark d-flex justify-content-between align-items-center p-2'>
           <h5 className='mb-0'>Current Configuration files</h5>
@@ -36,7 +52,7 @@ export default function ManageConfigurationPage() {
             <input type="text" id='search' />
           </div>
         </div>
-        <Table responsive bordered className='main_table mb-0 table-fixed' >
+        {/* <Table responsive bordered className='main_table mb-0' >
           <thead>
             <tr>
               <th className='col-2'>No</th>
@@ -53,10 +69,16 @@ export default function ManageConfigurationPage() {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </Table> */}
+        <BootstrapTable
+          keyField="no"
+          data={tablerow}
+          columns={columns}
+          cellEdit={cellEditFactory({ mode: 'dbclick' })}
+        />
       </div>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block'>Action</h5>
+        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'New'} />
@@ -68,7 +90,7 @@ export default function ManageConfigurationPage() {
         </div>
       </div>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block'>Manage Actions</h5>
+        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Manage Actions</h5>
         <div className="action_btns justify-content-between align-items-end">
           <div className="left_btns">
             <Button label={'Delete'} />
@@ -85,7 +107,7 @@ export default function ManageConfigurationPage() {
           </div>
         </div>
       </div>
-      <OFDMTab/>
+      <OFDMTab />
     </div>
   )
 }
