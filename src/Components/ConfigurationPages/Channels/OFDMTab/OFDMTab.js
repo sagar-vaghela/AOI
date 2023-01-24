@@ -1,19 +1,37 @@
 import React, { useState } from 'react'
-import Table from 'react-bootstrap/Table';
 import Button from '../../../Button';
 import OfdmEditModal from '../../../Modal/OfdmEditModal';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import OFDMChannelTab from '../../../OFDMChannelTab/OFDMChannelTab';
+import Visualize from '../../../Modal/Visualize';
 
 const OFDMTab = () => {
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
+  const [visualizeModel, setVisualizeModel] = useState(false)
+
   const ofdmEditHandleClick = () => {
-    setOfdmEditModalShow(true)
+    setOfdmEditModalShow(!OfdmEditModalShow)
   }
+
+  const visualizeHandleClick = () => {
+    setVisualizeModel(!visualizeModel)
+  }
+
+  const hideVisualize = () => {
+    setVisualizeModel(false)
+  }
+
+  // if (visualizeModel) {
+  //   document.getElementsByClassName('tab-content')[0].classList.add('overflow-hide')
+  // } else {
+  //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
+  // }
+
   const tablerow = [
     { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: 25, rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
   ]
+
   const columns = [
     {
       dataField: 'no',
@@ -48,6 +66,15 @@ const OFDMTab = () => {
       text: 'Mute'
     },
   ];
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    hideSelectColumn: true,
+    bgColor: '#f1e4ff',
+    classes: 'selection-row',
+    clickToEdit: true
+  };
+
   return (
     <div className='channel_tab OFDM_TAB'>
       <div className='border border-dark  mb-4'>
@@ -55,26 +82,12 @@ const OFDMTab = () => {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-        {/* <Table responsive bordered className='main_table mb-0 ' >
-          <thead>
-            <tr>
-              <th className='col-1'>No</th>
-              <th className='col-2'>Subcarrier Zero Frequency</th>
-              <th className='col-2'>Cyclic Prefix</th>
-              <th className='col-2'>Roll Off Period</th>
-              <th className='col-2'>Time Interleaver Depth</th>
-              <th className='col-1 '>Subcarrier Spacing</th>
-              <th className='col-1'>Power</th>
-              <th className='col-1'>Mute</th>
-            </tr>
-          </thead>
-          <tbody className='bg-white'></tbody>
-        </Table> */}
         <BootstrapTable
           keyField="no"
           data={tablerow}
           columns={columns}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+          selectRow={ selectRow }
           headerClasses="table_header"
           classes="mb-0"
         />
@@ -91,7 +104,7 @@ const OFDMTab = () => {
                 show={OfdmEditModalShow}
                 onHide={() => setOfdmEditModalShow(false)} />
               <Button label={'Delete'} />
-              <Button label={'Visualize'} />
+              <Button label={'Visualize'} handleClick={visualizeHandleClick} />
             </div>
           </div>
           <div className="right_btn d-flex flex-column">
@@ -100,7 +113,10 @@ const OFDMTab = () => {
         </div>
       </div>
 
-      <OFDMChannelTab/>
+      <OFDMChannelTab />
+      {
+        visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null
+      }
     </div>
   )
 }

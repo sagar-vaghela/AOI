@@ -23,6 +23,7 @@ export const SideBar = ({
 
   return (
     <div className={classNames("sidebar", { "is-open": isOpen })}>
+      <Button variant="link" style={{ float: 'right' }} onClick={toggle}> <FontAwesomeIcon icon={faTimes} pull="right" size="lg" /></Button>
       <div className="sidebar-header">
         <Link to="/">
           <img src={logo} alt="AOI logo" />

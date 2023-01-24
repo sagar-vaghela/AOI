@@ -1,24 +1,31 @@
 import React, { useState } from 'react'
-import Table from 'react-bootstrap/Table';
 import Button from '../../../Button';
 import EditModal from '../../../Modal/EditModal';
 import AddRangeModal from '../../../Modal/AddRangeModal';
 import AddTilt from '../../../Modal/AddTilt';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import Visualize from '../../../Modal/Visualize';
 
 const QAMTab = () => {
   const [editModalShow, setEditModalShow] = useState(false);
   const [rangeModalShow, setRangeModalShow] = useState(false);
   const [tiltModalShow, setTiltModalShow] = useState(false);
+  const [visualizeModel, setVisualizeModel] = useState(false)
   const editHandleClick = () => {
-    setEditModalShow(true)
+    setEditModalShow(!editModalShow)
   }
   const rangeHandleClick = () => {
-    setRangeModalShow(true)
+    setRangeModalShow(!rangeModalShow)
   }
   const tiltHandleClick = () => {
-    setTiltModalShow(true)
+    setTiltModalShow(!tiltModalShow)
+  }
+  const visualizeHandleClick = () => {
+    setVisualizeModel(!visualizeModel)
+  }
+  const hideVisualize = () => {
+    setVisualizeModel(false)
   }
 
   const muted = (<div><label className="toggle_box">
@@ -48,6 +55,15 @@ const QAMTab = () => {
     { no: 18, frequency: "test", power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
     { no: 19, frequency: "test", power: 25, width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
   ]
+
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    hideSelectColumn: true,
+    bgColor: '#f1e4ff',
+    classes: 'selection-row',
+    clickToEdit: true
+  };
 
   const columns = [
     {
@@ -104,45 +120,12 @@ const QAMTab = () => {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-        {/* <Table responsive bordered className='main_table mb-0' >
-          <thead>
-            <tr>
-              <th className='col-1'>No</th>
-              <th className='col-2'>Frequency</th>
-              <th className='col-1'>Power</th>
-              <th className='col-1'>Width</th>
-              <th className='col-2'>Modulation</th>
-              <th className='col-2'>Annex</th>
-              <th className='col-2'>OP Mode</th>
-              <th className='col-1'>Muted</th>
-            </tr>
-          </thead>
-          <tbody className='bg-white'>
-            {tablerow.map((item) => (
-              <tr key={item.no}>
-                <td className='col-1'>{item.no}</td>
-                <td className='col-2'>{item.frequency}</td>
-                <td className='col-1'>{item.Power}</td>
-                <td className='col-1'>{item.width}</td>
-                <td className='col-2'>{item.modulation}</td>
-                <td className='col-2'>{item.annex}</td>
-                <td className='col-2'>{item.op_mode}</td>
-                <td className='col-1'>
-                  <label className="toggle_box">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                    <span className="labels" data-on="Yes" data-off="No"></span>
-                  </label>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table> */}
         <BootstrapTable
           keyField="no"
           data={tablerow}
           columns={columns}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+          selectRow={selectRow}
           headerClasses="table_header"
           classes="mb-0"
         />
@@ -173,10 +156,13 @@ const QAMTab = () => {
           </div>
           <div className="right_btn d-flex flex-column">
             <Button label={'Save'} />
-            <Button label={'Visualize'} />
+            <Button label={'Visualize'} handleClick={visualizeHandleClick} />
           </div>
         </div>
       </div>
+      {
+        visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null
+      }
     </div>
   )
 }

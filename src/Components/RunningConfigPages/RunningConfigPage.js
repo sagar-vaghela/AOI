@@ -8,7 +8,7 @@ import QAMTab from './Channels/QAMTab/QAMTab';
 const RunningConfigPage = () => {
     return (
         <Tabs
-            defaultActiveKey="OFDMChannels"
+            defaultActiveKey="QAMChannels"
             id="uncontrolled-tab-example"
             className="config_tabs border border-dark"
         >

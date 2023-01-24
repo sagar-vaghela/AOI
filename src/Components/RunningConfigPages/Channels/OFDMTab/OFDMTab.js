@@ -1,8 +1,8 @@
 import React from 'react'
-import Table from 'react-bootstrap/Table';
 import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import OFDMChannelTab from '../../../OFDMChannelTab/OFDMChannelTab';
 
 export default function OFDMTab() {
   const tablerow = [
@@ -42,6 +42,14 @@ export default function OFDMTab() {
       text: 'Mute'
     },
   ];
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    hideSelectColumn: true,
+    bgColor: '#f1e4ff',
+    classes: 'selection-row',
+    clickToEdit: true
+  };
 
   return (
     <div className='channel_tab OFDM_TAB'>
@@ -50,26 +58,12 @@ export default function OFDMTab() {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-        {/* <Table responsive bordered className='main_table mb-0 ' >
-          <thead>
-            <tr>
-              <th className='col-1'>No</th>
-              <th className='col-2'>Subcarrier Zero Frequency</th>
-              <th className='col-2'>Cyclic Prefix</th>
-              <th className='col-2'>Roll Off Period</th>
-              <th className='col-2'>Time Interleaver Depth</th>
-              <th className='col-1 '>Subcarrier Spacing</th>
-              <th className='col-1'>Power</th>
-              <th className='col-1'>Mute</th>
-            </tr>
-          </thead>
-          <tbody className='bg-white'></tbody>
-        </Table> */}
         <BootstrapTable
           keyField="no"
           data={tablerow}
           columns={columns}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+          selectRow={selectRow}
           headerClasses="table_header"
           classes="mb-0"
         />
@@ -84,10 +78,7 @@ export default function OFDMTab() {
         </div>
       </div>
 
-      <div className="channel_btns">
-        <Button label={'OFDM Channel Subcarries'} style={{ padding: '20px' }} />
-        <Button label={'OFDM Channel Profiles'} />
-      </div>
+      <OFDMChannelTab />
     </div>
   )
 }

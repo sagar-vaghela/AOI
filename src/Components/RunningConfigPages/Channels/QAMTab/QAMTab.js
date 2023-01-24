@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Table from 'react-bootstrap/Table';
 import Button from '../../../Button';
 import EditModal from '../../../Modal/EditModal';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -86,7 +85,14 @@ export default function QAMTab() {
       classes: 'col-1'
     },
   ];
-
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    hideSelectColumn: true,
+    bgColor: '#f1e4ff',
+    classes: 'selection-row',
+    clickToEdit: true
+  };
 
   return (
     <div className='channel_tab '>
@@ -95,45 +101,11 @@ export default function QAMTab() {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' />
         </div>
-
-        {/* <Table responsive bordered className='main_table mb-0 ' >
-          <thead>
-            <tr>
-              <th>No</th>
-              <th className='col-2'>Frequency</th>
-              <th className='col-1'>Power</th>
-              <th className='col-1'>Width</th>
-              <th className='col-2'>Modulation</th>
-              <th className='col-2'>Annex</th>
-              <th className='col-2'>OP Mode</th>
-              <th className='col-1'>Muted</th>
-            </tr>
-          </thead>
-          <tbody className='bg-white'>
-            {tableRow.map((item) => (
-              <tr key={item.no}>
-                <td className='col-1'>{item.no}</td>
-                <td className='col-2'>{item.frequency}</td>
-                <td className='col-1'>{item.Power}</td>
-                <td className='col-1'>{item.width}</td>
-                <td className='col-2'>{item.modulation}</td>
-                <td className='col-2'>{item.annex}</td>
-                <td className='col-2'>{item.op_mode}</td>
-                <td className='col-1'>
-                  <label className="toggle_box">
-                    <input type="checkbox" />
-                    <span className="slider"></span>
-                    <span className="labels" data-on="Yes" data-off="No"></span>
-                  </label>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table> */}
         <BootstrapTable
           keyField="no"
           data={tablerow}
           columns={columns}
+          selectRow={selectRow}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           headerClasses="table_header"
           classes="mb-0"
@@ -141,7 +113,7 @@ export default function QAMTab() {
       </div>
 
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
+        <h5 className='d-inline-block fw-bold'>Action</h5>
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'Edit'} handleClick={handleClick} />

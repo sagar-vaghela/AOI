@@ -38,7 +38,7 @@ const OFDMSubcarrier = () => {
                 <div className='d-flex'>
                     <label htmlFor="" className='text-nowrap me-2'>Channel: </label>
                     <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid', width: '16.66666667%' }} className='col-2'>
-                        <option selected disabled>-- select a channle --</option>
+                        <option  disabled>-- select a channle --</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
@@ -48,32 +48,32 @@ const OFDMSubcarrier = () => {
 
             <div className="action mb-4 border border-dark p-2">
                 <h5 className='border-bottom border-dark d-inline-block fw-bold'>Subcarrier Configuration</h5>
-                <div className='d-flex flex-wrap align-items-center justify-content-between'>
-                    <div className='d-flex align-items-center'>
+                <div className='d-flex flex-wrap align-items-center  justify-content-xl-between'>
+                    <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='text-nowrap me-2'>Type: </label>
                         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} >
-                            <option selected>Spacific</option>
+                            <option>Spacific</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </Form.Select>
                     </div>
-                    <div className='d-flex align-items-center'>
+                    <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='me-2'>First Subcarrier: </label>
                         <input type="number" />
                     </div>
-                    <div className='d-flex align-items-center'>
+                    <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='me-2'>Last Subcarrier: </label>
                         <input type="number" />
                     </div>
-                    <div className='d-flex align-items-center'>
+                    <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='me-2'>Increment: </label>
                         <input type="number" />
                     </div>
-                    <div className='d-flex align-items-center'>
+                    <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='text-nowrap me-2'>Uses: </label>
                         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} >
-                            <option selected>Spacific</option>
+                            <option >Spacific</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
@@ -100,7 +100,7 @@ const OFDMSubcarrier = () => {
                     keyField="no"
                     data={tablerow}
                     columns={columns}
-                    cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+                    // cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
                     headerClasses="table_header"
                     classes="mb-0"
                 />

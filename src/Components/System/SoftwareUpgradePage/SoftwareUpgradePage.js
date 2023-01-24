@@ -22,37 +22,37 @@ export default function SoftwareUpgradePage() {
           </Tab>
         </Tabs>
 
-        <div className="action mb-4 border border-dark p-2">
-          <h5 className='border-bottom border-dark d-inline-block'>Software Upgrade</h5>
-          <div>Main Software Version</div>
-          <div className="selected_channle mb-3 d-inline-block">
-            <label htmlFor="" className='me-2'>Version: </label>
-            <input type="text" placeholder='(1.0.0.12+cpsg_annex_a_3007)' style={{ width: '100%' }} />
+        <div className='p-3'>
+          <div className="action mb-4 border border-dark p-2">
+            <h4 className='border-bottom border-dark d-inline-block fw-bold'>Software Upgrade</h4>
+            <h6 className='fw-bold'>Main Software Version</h6>
+            <div className="selected_channle mb-3 ">
+              <label htmlFor="" className='me-2 fw-bold'>Version: </label>
+              <input type="text" placeholder='(1.0.0.12+cpsg_annex_a_3007)' style={{ width: 'calc(100% - 70px)' }} />
+            </div>
           </div>
-        </div>
 
-        <div className="action mb-4 border border-dark p-2">
-          <div>Main Software Version</div>
-          <div className="selected_channle mb-3 d-inline-block">
-            <label htmlFor="" className='me-2'>Version: </label>
-            <input type="text" placeholder='(1.0.0.5+cpsg4.0_2858.unofficial)' style={{ width: '100%' }} />
+          <div className="action mb-4 border border-dark p-2">
+            <h6 className='fw-bold'>Backup Software Version</h6>
+            <div className="selected_channle mb-3">
+              <label htmlFor="" className='me-2 fw-bold'>Version: </label>
+              <input type="text" placeholder='(1.0.0.5+cpsg4.0_2858.unofficial)' style={{ width: 'calc(100% - 70px)' }} />
+            </div>
           </div>
+
+          <div className="action mb-4 border border-dark p-2">
+            <h6 className='fw-bold'>Download Package</h6>
+            <Button label={'Download and Extract to Backup'} />
+            <h6 className='fw-bold'>Upgrade status: N/A</h6>
+            <ProgressBar now={100} label={`${0}%`} />
+          </div>
+
+          <div className="action mb-4 border border-dark p-2">
+            <h6 className='text-decoration-underline'>Action</h6>
+            <Button label={'Swap to backup'} />
+          </div>
+
         </div>
-
-
-        <div className="action mb-4 border border-dark p-2">
-          <div>Download Package</div>
-          <Button label={'Download and Extract to Backup'} />
-          <div>Upgrade status: N/A</div>
-          <ProgressBar now={100} label={`${0}%`} />
-        </div>
-
-
-        <div className="action mb-4 border border-dark p-2">
-          <div className='text-decoration-underline'>Action</div>
-          <Button label={'Swap to backup'} />
-        </div>
-
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
 import React from 'react'
+import Downstream from '../Downstream/Downstream'
 
 const Upstream = () => {
   return (
     <div>
-      Upstream
+      <Downstream/>
     </div>
   )
 }
