@@ -7,7 +7,7 @@ import OFDMTab from './Channels/OFDMTab/OFDMTab'
 const Configuration = () => {
     return (
         <Tabs
-            defaultActiveKey="OFDMChannels"
+            defaultActiveKey="QAMChannels"
             id="uncontrolled-tab-example"
             className="config_tabs border border-dark"
         >

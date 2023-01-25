@@ -22,7 +22,7 @@ const OFDMProfiles = () => {
   return (
     <>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Channel Select</h5>
+        <h5 className='d-inline-block fw-bold'>Channel Select</h5>
         <div className='d-flex align-items-center'>
           <label htmlFor="" className='text-nowrap me-2'>Channel: </label>
           <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid',width : 'auto'}} >
@@ -35,7 +35,7 @@ const OFDMProfiles = () => {
       </div>
 
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Configuration</h5>
+        <h5 className=' d-inline-block fw-bold'>Configuration</h5>
         <div className='d-flex flex-wrap align-items-center justify-content-between'>
           <div className='d-flex align-items-center'>
             <label htmlFor="" className='text-nowrap me-2'>Profile: </label>
@@ -50,7 +50,7 @@ const OFDMProfiles = () => {
       </div>
 
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
+        <h5 className='d-inline-block fw-bold'>Action</h5>
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'Add'} />
@@ -62,7 +62,7 @@ const OFDMProfiles = () => {
 
       <div className="mb-4 border border-dark ">
         <div className='action p-2'>
-          <h5 className='border-bottom d-inline-block border-dark  fw-bold'>Current Profiles</h5>
+          <h5 className='d-inline-block fw-bold'>Current Profiles</h5>
         </div>
         <BootstrapTable
           keyField="no"

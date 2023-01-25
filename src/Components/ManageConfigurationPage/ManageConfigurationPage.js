@@ -5,7 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import Visualize from '../Modal/Visualize';
 
-export default function ManageConfigurationPage() {
+export default function ManageConfigurationPage({setActiveTab}) {
   const [visualizeModel, setVisualizeModel] = useState(false)
   const visualizeHandleClick = () => {
     setVisualizeModel(!visualizeModel)
@@ -62,6 +62,11 @@ export default function ManageConfigurationPage() {
     classes: 'selection-row',
     clickToEdit: true
   };
+
+const newClick = ()=> {
+  setActiveTab('configuration');
+}
+
   return (
     <div className='channel_tab'>
       <div className='border border-dark mb-4'>
@@ -81,10 +86,10 @@ export default function ManageConfigurationPage() {
         />
       </div>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
+        <h5 className='d-inline-block fw-bold'>Action</h5>
         <div className="action_btns justify-content-between">
           <div className="left_btns">
-            <Button label={'New'} />
+            <Button label={'New'} handleClick={newClick} />
             <Button label={'Edit'} />
           </div>
           <div className="right_btn">
@@ -93,7 +98,7 @@ export default function ManageConfigurationPage() {
         </div>
       </div>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Manage Actions</h5>
+        <h5 className='d-inline-block fw-bold'>Manage Actions</h5>
         <div className="action_btns justify-content-between align-items-end">
           <div className="left_btns">
             <Button label={'Delete'} />

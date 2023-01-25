@@ -247,11 +247,17 @@ li a.dropdown-toggle::after {
 .tab-content.overflow-hide {
   overflow: hidden;
 }
+
+.settingsTab{
+  border-bottom: none !important
+}
+
 /* ---------------------------------------------------
     CONFIG TABS STYLE
 ----------------------------------------------------- */
 .config_tabs {
   background: #d3d3d363;
+  border-bottom: none !important;
 }
 .config_tabs .nav-item .nav-link {
   min-width: 350px;

@@ -25,7 +25,7 @@ export default function SettingsPage() {
         </Tabs>
         <div className='p-3'>
           <div className="action mb-4 border border-dark p-2">
-            <h4 className='border-bottom border-dark d-inline-block fw-bold'>Settings</h4>
+            <h4 className='d-inline-block fw-bold'>Settings</h4>
             <h6 className='fw-bold'>Configure US-DS Splits</h6>
             <div style={{ width: '20%' }}>
               <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} >
@@ -38,7 +38,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="action mb-4 border border-dark p-2">
-            <h6 className='border-bottom border-dark d-inline-block fw-bold'>Product Info</h6>
+            <h6 className='d-inline-block fw-bold'>Product Info</h6>
 
             <Container fluid>
               <Row className='text-center'>
@@ -54,7 +54,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="action mb-4 border border-dark p-2">
-            <h6 className='border-bottom border-dark d-inline-block fw-bold'>General</h6>
+            <h6 className='d-inline-block fw-bold'>General</h6>
 
             <Container fluid>
               <Row className='text-center'>

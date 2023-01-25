@@ -131,7 +131,7 @@ const QAMTab = () => {
         />
       </div>
       <div className="action mb-4 border border-dark p-2">
-        <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
+        <h5 className='d-inline-block fw-bold'>Action</h5>
         <div className="action_btns justify-content-between">
           <div className="left_btns d-flex flex-column">
             <div>

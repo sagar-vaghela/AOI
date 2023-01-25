@@ -24,7 +24,7 @@ export default function SoftwareUpgradePage() {
 
         <div className='p-3'>
           <div className="action mb-4 border border-dark p-2">
-            <h4 className='border-bottom border-dark d-inline-block fw-bold'>Software Upgrade</h4>
+            <h4 className='d-inline-block fw-bold'>Software Upgrade</h4>
             <h6 className='fw-bold'>Main Software Version</h6>
             <div className="selected_channle mb-3 ">
               <label htmlFor="" className='me-2 fw-bold'>Version: </label>
@@ -48,7 +48,7 @@ export default function SoftwareUpgradePage() {
           </div>
 
           <div className="action mb-4 border border-dark p-2">
-            <h6 className='text-decoration-underline'>Action</h6>
+            <h6>Action</h6>
             <Button label={'Swap to backup'} />
           </div>
 

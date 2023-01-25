@@ -22,7 +22,7 @@ export default function MaintenancePage() {
         </Tabs>
         <div className='p-3'>
           <div className="action mb-4 border border-dark p-2">
-            <h5 className='border-bottom border-dark d-inline-block fw-bold'>System Maintenance</h5>
+            <h5 className='d-inline-block fw-bold'>System Maintenance</h5>
             <div>Reboot Control</div>
             <div className="action_btns justify-content-between">
 

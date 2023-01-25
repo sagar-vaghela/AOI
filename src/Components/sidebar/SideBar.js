@@ -58,7 +58,7 @@ export const SideBar = ({
                     <Nav.Item as="li" className={splitLocation[1] === "softwareUpgrade" ? "active" : ""}>
                       <Link className="nav-link" to="/softwareUpgrade">Upgrade</Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className={splitLocation[1] === "settings" ? "active" : ""}>
+                    <Nav.Item as="li"  className={`${splitLocation[1] === "settings" ? "active" : ""} settingsTab`  }>
                       <Link className="nav-link" to="/settings">Settings</Link>
                     </Nav.Item>
                   </ul>

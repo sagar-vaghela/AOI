@@ -34,7 +34,7 @@ const OFDMSubcarrier = () => {
     return (
         <>
             <div className="action mb-4 border border-dark p-2">
-                <h5 className='border-bottom border-dark d-inline-block fw-bold'>Channel Select</h5>
+                <h5 className='d-inline-block fw-bold'>Channel Select</h5>
                 <div className='d-flex'>
                     <label htmlFor="" className='text-nowrap me-2'>Channel: </label>
                     <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid', width: '16.66666667%' }} className='col-2'>
@@ -47,7 +47,7 @@ const OFDMSubcarrier = () => {
             </div>
 
             <div className="action mb-4 border border-dark p-2">
-                <h5 className='border-bottom border-dark d-inline-block fw-bold'>Subcarrier Configuration</h5>
+                <h5 className='d-inline-block fw-bold'>Subcarrier Configuration</h5>
                 <div className='d-flex flex-wrap align-items-center  justify-content-xl-between'>
                     <div className='d-flex align-items-center mb-2 me-2 '>
                         <label htmlFor="" className='text-nowrap me-2'>Type: </label>
@@ -83,7 +83,7 @@ const OFDMSubcarrier = () => {
             </div>
 
             <div className="action mb-4 border border-dark p-2">
-                <h5 className='border-bottom border-dark d-inline-block fw-bold'>Action</h5>
+                <h5 className='d-inline-block fw-bold'>Action</h5>
                 <div className="action_btns justify-content-between">
                     <div className="left_btns">
                         <Button label={'Add Subcarrier Rule'} />
@@ -94,7 +94,7 @@ const OFDMSubcarrier = () => {
 
             <div className="mb-4 border border-dark ">
                 <div className='action p-2'>
-                    <h5 className='border-bottom d-inline-block border-dark  fw-bold'>Subcurrier Usage Type</h5>
+                    <h5 className='d-inline-block fw-bold'>Subcurrier Usage Type</h5>
                 </div>
                 <BootstrapTable
                     keyField="no"
