@@ -6,7 +6,7 @@ import ManageConfigurationPage from '../ManageConfigurationPage/ManageConfigurat
 import Configuration from '../ConfigurationPages/Configuration';
 
 
-const Downstream = () => {
+const Downstream = (props) => {
 
   const [activeTab, setActiveTab] = useState('RunningConfigPage');
 
@@ -24,7 +24,7 @@ const Downstream = () => {
         onSelect={(eventKey) => handleTabChange(eventKey)}
       >
         <Tab eventKey="RunningConfigPage" title="Running Configuration">
-          <RunningConfigPage />
+          <RunningConfigPage showAlertBox={props.showAlertBox}/>
         </Tab>
         <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
           <ManageConfigurationPage setActiveTab={setActiveTab} />

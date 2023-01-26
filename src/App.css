@@ -43,7 +43,7 @@ ul {
   min-width: 150px;
   margin-bottom: 10px;
 }
-.btn-file input[type=file] {
+.btn-file input[type="file"] {
   position: absolute;
   top: 0;
   right: 0;
@@ -61,7 +61,7 @@ ul {
 table tbody {
   border-color: rgba(0, 0, 0, 0.563) !important;
 }
-.form-control:focus{
+.form-control:focus {
   border: none;
   box-shadow: none;
 }
@@ -71,11 +71,25 @@ table tbody {
 .sidebar {
   min-width: 250px;
   max-width: 250px;
+  position: relative;
   background: #fff;
   border-right: 1px solid #00000069;
   color: #adb5bd;
   margin-left: -250px;
   transition: all 0.5s;
+}
+
+.close_btn {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.open_btn {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .sidebar.is-open {
@@ -84,7 +98,7 @@ table tbody {
 }
 
 .sidebar-header {
-  padding: 20px;
+  padding: 40px 20px 20px 20px;
 }
 
 .sidebar-header h3 {
@@ -103,9 +117,9 @@ table tbody {
 }
 
 .nav-item {
-  /*color: #ced4da;*/
   color: #adb5bd;
   font-weight: 300;
+  border-bottom: 1px solid #000;
 }
 
 .nav-item.open {
@@ -195,6 +209,15 @@ li a.dropdown-toggle::after {
   margin-left: 0;
   height: 100vh;
   padding: 0;
+  position: relative;
+}
+.alert{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+  z-index: 999;
 }
 /* ---------------------------------------------------
     TITLE STYLE
@@ -241,15 +264,15 @@ li a.dropdown-toggle::after {
   height: 85vh;
   overflow-y: scroll;
 }
-.tab-content{
+.tab-content {
   position: relative;
 }
 .tab-content.overflow-hide {
   overflow: hidden;
 }
 
-.settingsTab{
-  border-bottom: none !important
+.settingsTab {
+  border-bottom: none !important;
 }
 
 /* ---------------------------------------------------
@@ -279,7 +302,7 @@ li a.dropdown-toggle::after {
   border-color: #000;
   border: none;
   border-right: 1px solid;
-  text-decoration:none;
+  text-decoration: none;
 }
 
 /* ---------------------------------------------------
@@ -297,7 +320,8 @@ li a.dropdown-toggle::after {
 }
 /* ******************** Table Css **************** */
 
-tbody tr,tr {
+tbody tr,
+tr {
   display: table;
   width: 100%;
   table-layout: fixed;
@@ -311,14 +335,22 @@ tbody {
   width: 100%;
   display: block;
 }
-tr th, tr td{
+tr th,
+tr td {
   word-wrap: break-word;
 }
-.action,.table_header {
+.action,
+.table_header {
   background: #d3d3d363;
 }
 .action_btns {
   display: flex;
+}
+td.selection-cell,th.selection-cell-header {
+  width: 30px;
+}
+.selection-row{
+  background-color: rgb(241, 228, 255);
 }
 /* ******************** Table Toggle Css **************** */
 .toggle_box {
@@ -477,19 +509,16 @@ select:focus {
   outline: none !important;
   box-shadow: none !important;
 }
-.visualize_modal .bg-lightgray{
+.visualize_modal .bg-lightgray {
   background: #d3d3d363;
 }
 /* ---------------------------------------------------
     OFDM Chennle STYLE
 ----------------------------------------------------- */
-.OFDM_channel_tab li .nav-link.active{
+.OFDM_channel_tab li .nav-link.active {
   background: #f5e5ba;
   text-decoration: none;
 }
-
-
-
 
 /* ---------------------------------------------------
     MEDIA STYLE
@@ -538,7 +567,7 @@ select:focus {
     font-size: 14px;
     padding: 8px;
   }
- thead tr th,
+  thead tr th,
   tbody tr td {
     font-size: 12px;
   }
@@ -554,6 +583,21 @@ select:focus {
   }
   .searchbar label {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .close_btn,
+  .open_btn {
+    display: block;
+  }
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
   }
 }
 

@@ -5,7 +5,7 @@ import OFDMTab from './Channels/OFDMTab/OFDMTab';
 import QAMTab from './Channels/QAMTab/QAMTab';
 
 
-const RunningConfigPage = () => {
+const RunningConfigPage = (props) => {
     return (
         <Tabs
             defaultActiveKey="QAMChannels"
@@ -13,7 +13,7 @@ const RunningConfigPage = () => {
             className="config_tabs border border-dark"
         >
             <Tab eventKey="QAMChannels" tabClassName='fw-bold' title="QAM Channels">
-                <QAMTab />
+                <QAMTab showAlertBox={props.showAlertBox}/>
             </Tab>
             <Tab eventKey="OFDMChannels" tabClassName='fw-bold' title="OFDM Channels">
                 <OFDMTab />

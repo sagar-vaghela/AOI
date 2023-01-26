@@ -7,7 +7,7 @@ const Button = (props) => {
         padding: '2px 15px',
         marginRight: '20px',
         minWidth : '150px',
-        marginBottom : '10px'
+        marginBottom : '5px'
     }
 
     return (

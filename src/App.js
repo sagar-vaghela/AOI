@@ -29,8 +29,6 @@ function App() {
       window.removeEventListener("resize", updateWidth());
     }
   }, [])
-  
-
 
   const toggle = () => {
     setIsOpen(!isOpen);
