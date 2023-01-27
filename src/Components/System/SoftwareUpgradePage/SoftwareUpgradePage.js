@@ -1,27 +1,11 @@
 import React from 'react';
 import Button from '../../Button';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function SoftwareUpgradePage() {
   return (
     <div className='tabs_wrapper'>
-
       <div className='channel_tab '>
-        <Tabs
-          defaultActiveKey=""
-          id="uncontrolled-tab-example"
-          className="nav_tabs"
-        >
-          <Tab eventKey="RunningConfigPage" title="Running Configuration">
-          </Tab>
-          <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-          </Tab>
-          <Tab eventKey="configuration" title="Configuration">
-          </Tab>
-        </Tabs>
-
         <div className='p-3'>
           <div className="action mb-4 border border-dark p-2">
             <h4 className='d-inline-block fw-bold'>Software Upgrade</h4>

@@ -131,8 +131,9 @@ table tbody {
   color: #e9ecef;
   background: #2d3646 !important;
 }
-.sidebar .accordion-header:hover {
-  background: #f5e5ba;
+.sidebar .accordion-header button:hover,
+.sidebar_navlinks li a:hover {
+  font-weight: bold !important;
   transition: 0.2s;
 }
 .nav-item:hover a {
@@ -141,7 +142,6 @@ table tbody {
 .nav-item .svg-inline--fa {
   color: inherit;
 }
-
 li a.dropdown-toggle::after {
   display: inline-flex;
   position: relative;
@@ -198,6 +198,7 @@ li a.dropdown-toggle::after {
 }
 .active a {
   background-color: #f5e5ba;
+  font-weight: bold !important;
 }
 .accordion-body .sidebar_navlinks li a {
   padding-left: 30px;
@@ -211,7 +212,7 @@ li a.dropdown-toggle::after {
   padding: 0;
   position: relative;
 }
-.alert{
+.alert {
   position: absolute;
   top: 0;
   left: 0;
@@ -346,11 +347,19 @@ tr td {
 .action_btns {
   display: flex;
 }
-td.selection-cell,th.selection-cell-header {
+td.selection-cell,
+th.selection-cell-header {
   width: 30px;
 }
-.selection-row{
+.selection-row {
   background-color: rgb(241, 228, 255);
+}
+.tab-content button {
+  background-color: #fff;
+  padding: 2px 15px;
+  margin-right: 20px;
+  min-width: 150px;
+  margin-bottom: 5px;
 }
 /* ******************** Table Toggle Css **************** */
 .toggle_box {
@@ -519,6 +528,41 @@ select:focus {
   background: #f5e5ba;
   text-decoration: none;
 }
+.OFDM_channel_tab li {
+  border-bottom: 0;
+}
+
+/* ---------------------------------------------------
+    QAM Chennle STYLE
+----------------------------------------------------- */
+.advance_setting {
+  width: 30%;
+  margin: 0 auto;
+}
+.advance_setting .accordion-item {
+  background-color: transparent;
+  border: none;
+}
+.advance_setting .accordion-item .accordion-header button {
+  padding: 0;
+  background-color: transparent;
+  font-weight: bold;
+}
+.advance_setting .accordion-item .accordion-header button:focus {
+  border: none;
+  color: #000;
+  box-shadow: none;
+}
+.accordion-button:not(.collapsed) {
+  color: #000;
+}
+.advance_setting .accordion-body {
+  padding: 10px 0;
+}
+.advance_setting .collapse.show,
+.collapsing {
+  background-color: transparent;
+}
 
 /* ---------------------------------------------------
     MEDIA STYLE
@@ -599,6 +643,10 @@ select:focus {
     right: 0;
     z-index: 999;
   }
+  .OFDM_channel_tab li .nav-link {
+    font-size: 12px;
+    padding: 4px 12px !important;
+  }
 }
 
 @media only screen and (max-width: 575.98px) {
@@ -626,5 +674,18 @@ select:focus {
     display: inline-block;
     position: relative;
     left: 68%;
+  }
+}
+
+@media (max-width: 320px) {
+  .nav_tabs .nav-link {
+    min-width: 140px;
+    font-size: 12px;
+    padding: 6px;
+  }
+  .config_tabs .nav-item .nav-link {
+    min-width: 140px;
+    font-size: 12px;
+    padding: 6px;
   }
 }

@@ -3,26 +3,13 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 
 export default function SettingsPage() {
   return (
     <div className='tabs_wrapper'>
 
       <div className='channel_tab '>
-        <Tabs
-          defaultActiveKey=""
-          id="uncontrolled-tab-example"
-          className="nav_tabs"
-        >
-          <Tab eventKey="RunningConfigPage" title="Running Configuration">
-          </Tab>
-          <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-          </Tab>
-          <Tab eventKey="configuration" title="Configuration">
-          </Tab>
-        </Tabs>
+
         <div className='p-3'>
           <div className="action mb-4 border border-dark p-2">
             <h4 className='d-inline-block fw-bold'>Settings</h4>

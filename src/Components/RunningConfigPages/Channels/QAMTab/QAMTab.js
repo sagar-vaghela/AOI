@@ -11,6 +11,7 @@ export default function QAMTab(props) {
   const [modalShow, setModalShow] = useState(false);
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
+  const [editValue, setEditValue] = useState(0)
 
   const muted = (<div><label className="toggle_box">
     <input type="checkbox" />
@@ -19,32 +20,33 @@ export default function QAMTab(props) {
   </label></div>)
 
   const tablerow = [
-    { no: "1", frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "2", frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "3", frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "4", frequency: "test4", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "5", frequency: "test5", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "6", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "7", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "8", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "9", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "10", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "11", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "12", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "13", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "14", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "15", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "16", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "17", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "18", frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: "19", frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
+    { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 2, frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 3, frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 4, frequency: "test4", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 5, frequency: "test5", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 6, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 7, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 8, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 9, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 10, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 11, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 12, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 13, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 14, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 15, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 16, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 17, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 18, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 19, frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
   ]
   const columns = [
     {
       dataField: 'no',
       text: 'No',
       headerClasses: 'col-1',
-      classes: 'col-1'
+      classes: 'col-1',
+      sort: true
     },
     {
       dataField: 'frequency',
@@ -88,8 +90,10 @@ export default function QAMTab(props) {
   ];
 
 
-  const handleClick = () => {
-    setModalShow(true)
+  const editHandleClick = () => {
+    const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
+    selectRowLength === 0 ? setModalShow(false) : setModalShow(true)  // changes on ticket 1
+    setEditValue(selectRowLength);
   }
 
   const saveHandleClick = () => {
@@ -97,6 +101,7 @@ export default function QAMTab(props) {
   }
 
   const defaultHandleClick = () => {
+    console.log(props);
     props.showAlertBox('Action was complete successfully!', 'success')
   }
 
@@ -125,11 +130,12 @@ export default function QAMTab(props) {
       setSelectBtn('Select All')
     }
   }
+
   const editBody = (
     <>
       <div className="selected_channel mb-3">
         <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-        <input type="text" />
+        <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled/>
       </div>
       <div className="d-flex justify-content-center mb-3">
         <div className="me-3">
@@ -158,11 +164,16 @@ export default function QAMTab(props) {
     <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
   )
   const saveFooter = (
-      <div className='edit_btns'>
-        <Button label={'Save'} />
-        <Button label={'Cancel'} handleClick={() => setSaveAs(false)} />
-      </div>
+    <div className='edit_btns'>
+      <Button label={'Save'} />
+      <Button label={'Cancel'} handleClick={() => setSaveAs(false)} />
+    </div>
   )
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      console.log(`clicked on row with index: ${rowIndex}`);
+    }
+  };
 
   return (
     <>
@@ -187,15 +198,16 @@ export default function QAMTab(props) {
             selectRow={selectRow}
             cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
             headerClasses="table_header"
-            classes="mb-0"
+            classes="mb-0 table-striped"
+            rowEvents={ rowEvents }
           />
         </div>
 
         <div className="action mb-4 border border-dark p-2">
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
           <div className="action_btns justify-content-between">
-            <div className="left_btns">
-              <Button label={'Edit'} handleClick={handleClick} />
+            <div className="left_btns text-center">
+              <Button label={'Edit'} handleClick={editHandleClick} />
               <button onClick={selectHandleClick}>{selectBtn}</button>
               <ModalAoi
                 show={modalShow}
@@ -205,7 +217,7 @@ export default function QAMTab(props) {
                 modalFooter={editFooter}
               />
             </div>
-            <div className="right_btn">
+            <div className="right_btn text-center">
               <Button label={'Save as'} handleClick={saveHandleClick} />
               <ModalAoi
                 show={saveAs}

@@ -7,7 +7,7 @@ import OFDMProfiles from './OFDMProfiles';
 const OFDMChannelTab = () => {
     return (
         <Tabs
-            defaultActiveKey=""
+            defaultActiveKey="OFDMSubcarrier"
             id="uncontrolled-tab-example"
             className="OFDM_channel_tab border-0 mb-3"
         >

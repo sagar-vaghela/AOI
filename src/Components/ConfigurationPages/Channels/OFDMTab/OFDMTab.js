@@ -7,10 +7,21 @@ import Visualize from '../../../Modal/Visualize';
 import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 
+
+const tablerow = [
+  { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
+  { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
+]
+
+let manageConfigTableIndex = []
+
 const OFDMTab = () => {
   const [search, setSearch] = useState('')
+  const [selectBtn, setSelectBtn] = useState('Select All')
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
   const [visualizeModel, setVisualizeModel] = useState(false)
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [tableRow, setTableRow] = useState(tablerow)
 
   const ofdmEditHandleClick = () => {
     setOfdmEditModalShow(!OfdmEditModalShow)
@@ -24,21 +35,23 @@ const OFDMTab = () => {
     setVisualizeModel(false)
   }
 
+  const deleteHandleClick = () => {
+    setDeleteModalShow(true)
+  }
+
   // if (visualizeModel) {
   //   document.getElementsByClassName('tab-content')[0].classList.add('overflow-hide')
   // } else {
   //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
   // }
 
-  const tablerow = [
-    { no: '1', subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
-    { no: '2', subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
-  ]
+
 
   const columns = [
     {
       dataField: 'no',
-      text: 'No'
+      text: 'No',
+      sort: true
     },
     {
       dataField: 'subcarrierZeroFrequency',
@@ -77,6 +90,23 @@ const OFDMTab = () => {
     classes: 'selection-row',
     clickToEdit: true
   };
+
+  const selectHandleClick = () => {
+    var trElements = document.querySelectorAll("#config_ofdm_table tbody tr");
+    console.log(trElements);
+
+    if (selectBtn === 'Select All') {
+      trElements.forEach(function (element) {
+        element.classList.add("selection-row");
+      });
+      setSelectBtn('Deselect All')
+    } else {
+      trElements.forEach(function (element) {
+        element.classList.remove("selection-row");
+      });
+      setSelectBtn('Select All')
+    }
+  }
 
   const ofdmEditBody = (
     <>
@@ -146,6 +176,33 @@ const OFDMTab = () => {
       <Button label={'Cancel'} handleClick={() => setOfdmEditModalShow(false)} />
     </div>
   )
+  const deleteItem = (manageConfigTableIndex) => {
+    console.log("table row====", tableRow);
+    console.log("manageConfigTableIndex====", manageConfigTableIndex);
+    const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
+    setTableRow(results);
+    setDeleteModalShow(false)
+  }
+
+
+  const deleteBody = (
+    <p>Delete the entry?</p>
+  )
+
+  const deleteFooter = (
+    <div className='edit_btns'>
+      <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+      <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+    </div>
+  )
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+      console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
+
+    }
+  };
 
 
   return (
@@ -158,7 +215,7 @@ const OFDMTab = () => {
         <BootstrapTable
           id='config_ofdm_table'
           keyField="no"
-          data={tablerow.filter((row) =>
+          data={tableRow.filter((row) =>
             (row?.subcarrierZeroFrequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.cyclicPrefix?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.rollOffPeriod?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
@@ -171,7 +228,8 @@ const OFDMTab = () => {
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           selectRow={selectRow}
           headerClasses="table_header"
-          classes="mb-0"
+          classes="mb-0 table-striped"
+          rowEvents={rowEvents}
         />
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}
       </div>
@@ -181,6 +239,7 @@ const OFDMTab = () => {
         <div className="action_btns justify-content-between">
           <div className="left_btns d-flex flex-column">
             <div>
+              <Button label={'Add'} />
               <Button label={'Edit'} handleClick={ofdmEditHandleClick} />
               <ModalAoi
                 show={OfdmEditModalShow}
@@ -189,8 +248,16 @@ const OFDMTab = () => {
                 modalBody={ofdmEditBody}
                 modalFooter={ofdmEditFooter}
               />
-              <Button label={'Delete'} />
+              <Button label={'Delete'} handleClick={deleteHandleClick} />
+              <ModalAoi
+                show={deleteModalShow}
+                onHide={() => setDeleteModalShow(false)}
+                modalTitle=''
+                modalBody={deleteBody}
+                modalFooter={deleteFooter}
+              />
               <Button label={'Visualize'} handleClick={visualizeHandleClick} />
+              <button onClick={selectHandleClick}>{selectBtn}</button>
             </div>
           </div>
           <div className="right_btn d-flex flex-column">

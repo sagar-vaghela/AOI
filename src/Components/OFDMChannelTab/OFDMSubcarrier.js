@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '../Button'
 import { Form } from 'react-bootstrap'
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import ModalAoi from '../Modal/ModalAoi';
+
+
+const tablerow = [
+    { type: 1, first_subcarrier: "test", last_subcarrier: 25, increment: '10', uses: 'test' }
+]
+let manageConfigTableIndex = []
 
 const OFDMSubcarrier = () => {
-    const tablerow = [
-        { type: 1, first_subcarrier: "test", last_subcarrier: 25, increment: '10', uses: 'test' }
-    ]
+    const [tableRow, setTableRow] = useState(tablerow)
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
+
+    const deleteHandleClick = () => {
+        setDeleteModalShow(true)
+    }
+
 
     const columns = [
         {
@@ -31,6 +42,41 @@ const OFDMSubcarrier = () => {
             text: 'Uses'
         }
     ];
+    const selectRow = {
+        mode: 'checkbox',
+        clickToSelect: true,
+        hideSelectColumn: true,
+        bgColor: '#f1e4ff',
+        classes: 'selection-row',
+        clickToEdit: true
+    };
+
+    const deleteItem = (manageConfigTableIndex) => {
+        console.log("table row====", tableRow);
+        console.log("manageConfigTableIndex====", manageConfigTableIndex);
+        const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
+        setTableRow(results);
+        setDeleteModalShow(false)
+    }
+
+    const deleteBody = (
+        <p>Delete the entry?</p>
+    )
+
+    const deleteFooter = (
+        <div className='edit_btns'>
+            <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+            <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+        </div>
+    )
+    const rowEvents = {
+        onClick: (e, row, rowIndex) => {
+            manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+            console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
+
+        }
+    };
+
     return (
         <>
             <div className="action mb-4 border border-dark p-2">
@@ -38,7 +84,7 @@ const OFDMSubcarrier = () => {
                 <div className='d-flex'>
                     <label htmlFor="" className='text-nowrap me-2'>Channel: </label>
                     <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid', width: '16.66666667%' }} className='col-2'>
-                        <option  disabled>-- select a channle --</option>
+                        <option disabled>-- select a channle --</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>
@@ -82,15 +128,7 @@ const OFDMSubcarrier = () => {
                 </div>
             </div>
 
-            <div className="action mb-4 border border-dark p-2">
-                <h5 className='d-inline-block fw-bold'>Action</h5>
-                <div className="action_btns justify-content-between">
-                    <div className="left_btns">
-                        <Button label={'Add Subcarrier Rule'} />
-                        <Button label={'Remove Selected'} />
-                    </div>
-                </div>
-            </div>
+
 
             <div className="mb-4 border border-dark ">
                 <div className='action p-2'>
@@ -98,14 +136,32 @@ const OFDMSubcarrier = () => {
                 </div>
                 <BootstrapTable
                     keyField="no"
-                    data={tablerow}
+                    data={tableRow}
                     columns={columns}
-                    // cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+                    cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
                     headerClasses="table_header"
-                    classes="mb-0"
+                    selectRow={selectRow}
+                    rowEvents={rowEvents}
+                    classes="mb-0 table-striped"
+
                 />
             </div>
-
+            <div className="action mb-4 border border-dark p-2">
+                {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
+                <div className="action_btns justify-content-between">
+                    <div className="left_btns">
+                        <Button label={'Add Subcarrier Rule'} />
+                        <Button label={'Remove Selected'} handleClick={deleteHandleClick} />
+                        <ModalAoi
+                            show={deleteModalShow}
+                            onHide={() => setDeleteModalShow(false)}
+                            modalTitle=''
+                            modalBody={deleteBody}
+                            modalFooter={deleteFooter}
+                        />
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

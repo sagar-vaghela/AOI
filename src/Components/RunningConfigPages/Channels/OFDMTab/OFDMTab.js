@@ -9,18 +9,20 @@ export default function OFDMTab(props) {
   const [search, setSearch] = useState('')
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
+  const [selectBtn, setSelectBtn] = useState('Select All')
   const saveHandleClick = () => {
     setSaveAs(true)
   }
 
   const tablerow = [
-    { no: '1', subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
-    { no: '2', subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
+    { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
+    { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
   ]
   const columns = [
     {
       dataField: 'no',
-      text: 'No'
+      text: 'No',
+      sort : true
     },
     {
       dataField: 'subcarrierZeroFrequency',
@@ -51,6 +53,11 @@ export default function OFDMTab(props) {
       text: 'Mute'
     },
   ];
+  const defaultHandleClick = () => {
+    console.log(props);
+    props.showAlertBox('Action was complete successfully!', 'success')
+  }
+
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -59,6 +66,24 @@ export default function OFDMTab(props) {
     classes: 'selection-row',
     clickToEdit: true
   };
+
+  const selectHandleClick = () => {
+    var trElements = document.querySelectorAll("#running_ofdm_table tbody tr");
+    console.log(trElements);
+
+    if (selectBtn === 'Select All') {
+      trElements.forEach(function (element) {
+        element.classList.add("selection-row");
+      });
+      setSelectBtn('Deselect All')
+    } else {
+      trElements.forEach(function (element) {
+        element.classList.remove("selection-row");
+      });
+      setSelectBtn('Select All')
+    }
+  }
+  
 
   const saveBody = (
     <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
@@ -93,14 +118,16 @@ export default function OFDMTab(props) {
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           selectRow={selectRow}
           headerClasses="table_header"
-          classes="mb-0"
+          classes="mb-0 responsive table-striped"
         />
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}
       </div>
 
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
-        <div className="action_btns justify-content-end">
+        <div className="action_btns flex-wrap justify-content-md-end">
+
+        <button onClick={selectHandleClick}>{selectBtn}</button>
           <Button label={'Save as'} handleClick={saveHandleClick} />
           <ModalAoi
             show={saveAs}
@@ -109,7 +136,7 @@ export default function OFDMTab(props) {
             modalBody={saveBody}
             modalFooter={saveFooter}
           />
-          <Button label={'Make Default'} />
+          <Button label={'Make Default'} handleClick={defaultHandleClick} />
         </div>
       </div>
 

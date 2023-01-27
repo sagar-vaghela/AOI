@@ -10,6 +10,7 @@ const ModalAoi = ({ modalTitle, modalBody, modalFooter, onHide , show}) => {
             centered
             dialogClassName='modal_common edit_modal'
             backdrop={false}
+            onHide={onHide}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

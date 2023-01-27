@@ -5,29 +5,51 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import Visualize from '../../../Modal/Visualize';
 import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
+import { Accordion, Nav } from 'react-bootstrap';
+
+let manageConfigTableIndex = []
 
 const QAMTab = () => {
   const [search, setSearch] = useState('')
+  const [selectBtn, setSelectBtn] = useState('Select All')
   const [editModalShow, setEditModalShow] = useState(false);
   const [rangeModalShow, setRangeModalShow] = useState(false);
   const [tiltModalShow, setTiltModalShow] = useState(false);
   const [visualizeModel, setVisualizeModel] = useState(false);
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [saveModal, setSaveModal] = useState(false)
+  const [editValue, setEditValue] = useState(0)
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
+    const selectRowLength = document.querySelectorAll('#confinguration_qam_table .selection-row').length;
+    setEditValue(selectRowLength);
   }
+
   const rangeHandleClick = () => {
     setRangeModalShow(!rangeModalShow)
   }
+
   const tiltHandleClick = () => {
     setTiltModalShow(!tiltModalShow)
   }
+
   const visualizeHandleClick = () => {
     setVisualizeModel(!visualizeModel)
   }
+
   const hideVisualize = () => {
     setVisualizeModel(false)
   }
+
+  const deleteHandleClick = () => {
+    setDeleteModalShow(true)
+  }
+
+  const saveHandleClick = () => {
+    setSaveModal(true)
+  }
+
 
   const muted = (<div><label className="toggle_box">
     <input type="checkbox" />
@@ -36,26 +58,28 @@ const QAMTab = () => {
   </label></div>)
 
   const tablerow = [
-    { no: '1', frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '2', frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '3', frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '4', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '5', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '6', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '7', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '8', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '9', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '10', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '11', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '12', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '13', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '14', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '15', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '16', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '17', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '18', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: '19', frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
+    { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 2, frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 3, frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 4, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 5, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 6, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 7, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 8, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 9, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 10, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 11, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 12, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 13, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 14, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 15, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 16, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 17, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 18, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    { no: 19, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
   ]
+
+  const [tableRow, setTableRow] = useState(tablerow)
 
   const selectRow = {
     mode: 'checkbox',
@@ -66,12 +90,31 @@ const QAMTab = () => {
     clickToEdit: true
   };
 
+
+  const selectHandleClick = () => {
+    var trElements = document.querySelectorAll("#confinguration_qam_table tbody tr");
+    console.log(trElements);
+
+    if (selectBtn === 'Select All') {
+      trElements.forEach(function (element) {
+        element.classList.add("selection-row");
+      });
+      setSelectBtn('Deselect All')
+    } else {
+      trElements.forEach(function (element) {
+        element.classList.remove("selection-row");
+      });
+      setSelectBtn('Select All')
+    }
+  }
+
   const columns = [
     {
       dataField: 'no',
       text: 'No',
       headerClasses: 'col-1',
-      classes: 'col-1'
+      classes: 'col-1',
+      sort: true
     },
     {
       dataField: 'frequency',
@@ -126,38 +169,46 @@ const QAMTab = () => {
             <label htmlFor="" className='me-2'>Power: </label>
             <input type="text" />
           </div>
-          <div className='mb-2'>
-            <label htmlFor="" className='me-2'>Annex Type: </label>
-            <input type="text" />
-          </div>
+
         </div>
         <div className="mb-3 d-flex flex-column align-items-start">
-          <div className='me-2 mb-2'>
+          <div className='me-2 mb-3'>
             <label htmlFor="" className='me-2'>Starting Frequency: </label>
             <input type="number" />
           </div>
-          <div className='mb-2'>
-            <h5 htmlFor="" className='fw-bold me-2'>Advanced Settings </h5>
+          <div>
+            <label htmlFor="" className='me-2'>Mute: </label>
+            <label className="toggle_box">
+              <input type="checkbox" />
+              <span className="slider"></span>
+              <span className="labels" data-on="Yes" data-off="No"></span>
+            </label>
           </div>
-          <div className='d-flex'>
-            <label htmlFor="" className='text-nowrap me-2'>Modulation Type: </label>
-            <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
-              <option></option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </Form.Select>
-          </div>
+
         </div>
+
       </div>
-      <div>
-        <label htmlFor="" className='me-2'>Mute: </label>
-        <label className="toggle_box">
-          <input type="checkbox" />
-          <span className="slider"></span>
-          <span className="labels" data-on="Yes" data-off="No"></span>
-        </label>
-      </div>
+      <Accordion defaultActiveKey="1" className='advance_setting'>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header >Advanced Settings</Accordion.Header>
+          <Accordion.Body>
+            <div className='d-flex mb-2'>
+              <label htmlFor="" className='text-nowrap me-2'>Modulation Type: </label>
+              <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                <option></option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+            </div>
+            <div className='mb-2 d-flex'>
+              <label htmlFor="" className='me-2'>Annex Type: </label>
+              <input type="text" />
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+
     </>
   )
 
@@ -172,7 +223,7 @@ const QAMTab = () => {
     <>
       <div className="selected_channel mb-3">
         <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-        <input type="text" />
+        <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
       </div>
       <div className="d-flex justify-content-center mb-3">
         <div className="me-3">
@@ -230,6 +281,45 @@ const QAMTab = () => {
     </div>
   )
 
+  const deleteItem = (manageConfigTableIndex) => {
+    console.log("table row====", tableRow);
+    console.log("manageConfigTableIndex====", manageConfigTableIndex);
+    const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
+    setTableRow(results);
+    setDeleteModalShow(false)
+  }
+
+  const deleteBody = (
+    <p>Delete the entry?</p>
+  )
+
+  const deleteFooter = (
+    <div className='edit_btns'>
+      <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+      <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+    </div>
+  )
+
+  const saveBody = (
+    <p>Save the entry?</p>
+  )
+
+  const saveFooter = (
+    <div className='edit_btns'>
+      <Button label={'Save'} />
+      <Button label={'Cancel'} handleClick={() => setSaveModal(false)} />
+    </div>
+  )
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+      console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
+
+    }
+  };
+
+
   return (
     <div className='channel_tab '>
       <div className='border border-dark mb-4'>
@@ -240,7 +330,7 @@ const QAMTab = () => {
         <BootstrapTable
           id='confinguration_qam_table'
           keyField="no"
-          data={tablerow.filter((row) =>
+          data={tableRow.filter((row) =>
             (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
@@ -252,7 +342,8 @@ const QAMTab = () => {
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           selectRow={selectRow}
           headerClasses="table_header"
-          classes="mb-0"
+          classes="mb-0 table-striped"
+          rowEvents={rowEvents}
         />
       </div>
       <div className="action mb-4 border border-dark p-2">
@@ -277,7 +368,14 @@ const QAMTab = () => {
                 modalBody={editBody}
                 modalFooter={editFooter}
               />
-              <Button label={'Delete'} />
+              <Button label={'Delete'} handleClick={deleteHandleClick} />
+              <ModalAoi
+                show={deleteModalShow}
+                onHide={() => setDeleteModalShow(false)}
+                modalTitle=''
+                modalBody={deleteBody}
+                modalFooter={deleteFooter}
+              />
             </div>
             <div>
               <Button label={'Add Tilt'} handleClick={tiltHandleClick} />
@@ -288,10 +386,20 @@ const QAMTab = () => {
                 modalBody={tiltBody}
                 modalFooter={tiltFooter}
               />
+
+              <button onClick={selectHandleClick}>{selectBtn}</button>
             </div>
+
           </div>
           <div className="right_btn d-flex flex-column">
-            <Button label={'Save'} />
+            <Button label={'Save'} handleClick={saveHandleClick} />
+            <ModalAoi
+              show={saveModal}
+              onHide={() => setSaveModal(false)}
+              modalTitle=''
+              modalBody={saveBody}
+              modalFooter={saveFooter}
+            />
             <Button label={'Visualize'} handleClick={visualizeHandleClick} />
           </div>
         </div>
