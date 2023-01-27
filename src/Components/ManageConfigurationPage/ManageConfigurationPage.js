@@ -56,6 +56,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
     const selectRowLength = document.querySelectorAll('#manage_config_table .selection-row').length;
+    selectRowLength === 0 ? setEditModalShow(true) : setEditModalShow(true)
     setEditValue(selectRowLength);
   }
 
@@ -186,34 +187,55 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     </div>
   )
 
-  const editBody = (
-    <>
-      <div className="selected_channel mb-3">
-        <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-        <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <div className="me-3">
-          <label htmlFor="" className='me-2'>Power: </label>
-          <input type="text" />
-        </div>
-        <div>
-          <label htmlFor="" className='me-2'>Mute: </label>
-          <label className="toggle_box">
-            <input type="checkbox" />
-            <span className="slider"></span>
-            <span className="labels" data-on="Yes" data-off="No"></span>
-          </label>
-        </div>
-      </div>
-    </>
-  )
-  const editFooter = (
-    <div className='edit_btns'>
-      <Button label={'Edit'} />
-      <Button label={'Cancel'} handleClick={() => setEditModalShow(false)} />
-    </div>
-  )
+  const editBody = () => {
+    return (
+
+      <>
+        {editValue === 0 ?
+
+          <div>Please Select at list one Row !</div>
+          :
+          <>
+            <div className="selected_channel mb-3">
+              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
+              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+            </div>
+            <div className="d-flex justify-content-center mb-3">
+              <div className="me-3">
+                <label htmlFor="" className='me-2'>Power: </label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="" className='me-2'>Mute: </label>
+                <label className="toggle_box">
+                  <input type="checkbox" />
+                  <span className="slider"></span>
+                  <span className="labels" data-on="Yes" data-off="No"></span>
+                </label>
+              </div>
+            </div>
+          </>
+        }
+      </>
+    )
+  }
+
+  const editFooter = () => {
+    return (
+      <>
+        {editValue === 0 ?
+          <></>
+          :
+          <div className='edit_btns'>
+            <Button label={'Edit'} />
+            <Button label={'Cancel'} handleClick={() => setEditModalShow(false)} />
+          </div>
+        }
+      </>
+    )
+
+  }
+
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -258,8 +280,8 @@ export default function ManageConfigurationPage({ setActiveTab }) {
               show={editModalShow}
               onHide={() => setEditModalShow(false)}
               modalTitle=''
-              modalBody={editBody}
-              modalFooter={editFooter}
+              modalBody={editBody()}
+              modalFooter={editFooter()}
             />
             <button onClick={selectHandleClick}>{selectBtn}</button>
           </div>

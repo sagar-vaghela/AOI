@@ -14,9 +14,13 @@ let manageConfigTableIndex = []
 const OFDMSubcarrier = () => {
     const [tableRow, setTableRow] = useState(tablerow)
     const [deleteModalShow, setDeleteModalShow] = useState(false);
+    const [selectRowChannel, setSelectRowChannel] = useState();
 
     const deleteHandleClick = () => {
-        setDeleteModalShow(true)
+        setDeleteModalShow(true);
+        const selectRowLength = document.querySelectorAll('#manage_config_ofdm_table .selection-row').length;
+        selectRowLength === 0 ? setDeleteModalShow(true) : setDeleteModalShow(true);
+        setSelectRowChannel(selectRowLength);
     }
 
 
@@ -59,16 +63,32 @@ const OFDMSubcarrier = () => {
         setDeleteModalShow(false)
     }
 
-    const deleteBody = (
-        <p>Delete the entry?</p>
-    )
+    const deleteBody = () => {
+        return (
+            <>
+                {selectRowChannel === 0 ?
+                    <div>Please Select at list one Row !</div>
+                    :
+                    <p>Delete the entry?</p>
+                }
+            </>
+        )
+    }
 
-    const deleteFooter = (
-        <div className='edit_btns'>
-            <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
-            <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
-        </div>
-    )
+    const deleteFooter = () => {
+        return (
+            <>
+                {selectRowChannel === 0 ?
+                    <></>
+                    :
+                    <div className='edit_btns'>
+                        <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+                        <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+                    </div>
+                }
+            </>
+        )
+    }
     const rowEvents = {
         onClick: (e, row, rowIndex) => {
             manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
@@ -135,6 +155,7 @@ const OFDMSubcarrier = () => {
                     <h5 className='d-inline-block fw-bold'>Subcurrier Usage Type</h5>
                 </div>
                 <BootstrapTable
+                    id='manage_config_ofdm_table'
                     keyField="no"
                     data={tableRow}
                     columns={columns}
@@ -156,8 +177,8 @@ const OFDMSubcarrier = () => {
                             show={deleteModalShow}
                             onHide={() => setDeleteModalShow(false)}
                             modalTitle=''
-                            modalBody={deleteBody}
-                            modalFooter={deleteFooter}
+                            modalBody={deleteBody()}
+                            modalFooter={deleteFooter()}
                         />
                     </div>
                 </div>

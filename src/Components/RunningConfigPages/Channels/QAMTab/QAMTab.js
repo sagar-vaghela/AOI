@@ -92,7 +92,7 @@ export default function QAMTab(props) {
 
   const editHandleClick = () => {
     const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
-    selectRowLength === 0 ? setModalShow(false) : setModalShow(true)  // changes on ticket 1
+    selectRowLength === 0 ? setModalShow(true) : setModalShow(true)  // changes on ticket 1
     setEditValue(selectRowLength);
   }
 
@@ -131,34 +131,60 @@ export default function QAMTab(props) {
     }
   }
 
-  const editBody = (
-    <>
-      <div className="selected_channel mb-3">
-        <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-        <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled/>
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <div className="me-3">
-          <label htmlFor="" className='me-2'>Power: </label>
-          <input type="text" />
-        </div>
-        <div>
-          <label htmlFor="" className='me-2'>Mute: </label>
-          <label className="toggle_box">
-            <input type="checkbox" />
-            <span className="slider"></span>
-            <span className="labels" data-on="Yes" data-off="No"></span>
-          </label>
-        </div>
-      </div>
-    </>
-  )
-  const editFooter = (
-    <div className='edit_btns'>
-      <Button label={'Edit'} />
-      <Button label={'Cancel'} handleClick={() => setModalShow(false)} />
-    </div>
-  )
+  const editBody = () => {
+    return (
+
+      <>
+        {editValue === 0 ?
+
+          <div>Please Select at list one Row !</div>
+          :
+          <>
+
+            <div className="selected_channel mb-3">
+              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
+              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+            </div>
+
+            <div className="d-flex justify-content-center mb-3">
+              <div className="me-3">
+                <label htmlFor="" className='me-2'>Power: </label>
+                <input type="text" />
+              </div>
+
+              <div>
+                <label htmlFor="" className='me-2'>Mute: </label>
+                <label className="toggle_box">
+                  <input type="checkbox" />
+                  <span className="slider"></span>
+                  <span className="labels" data-on="Yes" data-off="No"></span>
+                </label>
+              </div>
+            </div>
+
+          </>
+        }
+      </>
+    )
+  }
+
+  const editFooter = () => {
+
+    return (
+      <>
+        {editValue === 0 ?
+          <></>
+          :
+          <div className='edit_btns'>
+            <Button label={'Edit'} />
+            <Button label={'Cancel'} handleClick={() => setModalShow(false)} />
+          </div>
+        }
+      </>
+    )
+
+  }
+
 
   const saveBody = (
     <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
@@ -199,7 +225,7 @@ export default function QAMTab(props) {
             cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
             headerClasses="table_header"
             classes="mb-0 table-striped"
-            rowEvents={ rowEvents }
+            rowEvents={rowEvents}
           />
         </div>
 
@@ -213,8 +239,8 @@ export default function QAMTab(props) {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 modalTitle=''
-                modalBody={editBody}
-                modalFooter={editFooter}
+                modalBody={editBody()}
+                modalFooter={editFooter()}
               />
             </div>
             <div className="right_btn text-center">

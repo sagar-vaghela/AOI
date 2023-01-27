@@ -23,6 +23,7 @@ const QAMTab = () => {
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
     const selectRowLength = document.querySelectorAll('#confinguration_qam_table .selection-row').length;
+    selectRowLength === 0 ? setEditModalShow(true) : setEditModalShow(true)  // changes on ticket 1
     setEditValue(selectRowLength);
   }
 
@@ -219,34 +220,53 @@ const QAMTab = () => {
     </div>
   )
 
-  const editBody = (
-    <>
-      <div className="selected_channel mb-3">
-        <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-        <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <div className="me-3">
-          <label htmlFor="" className='me-2'>Power: </label>
-          <input type="text" />
-        </div>
-        <div>
-          <label htmlFor="" className='me-2'>Mute: </label>
-          <label className="toggle_box">
-            <input type="checkbox" />
-            <span className="slider"></span>
-            <span className="labels" data-on="Yes" data-off="No"></span>
-          </label>
-        </div>
-      </div>
-    </>
-  )
-  const editFooter = (
-    <div className='edit_btns'>
-      <Button label={'Edit'} />
-      <Button label={'Cancel'} handleClick={() => setEditModalShow(false)} />
-    </div>
-  )
+  const editBody = () => {
+    return (
+      <>
+        {editValue === 0 ?
+          <div>Please Select at list one Row !</div>
+          :
+          <>
+            <div className="selected_channel mb-3">
+              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
+              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+            </div>
+            <div className="d-flex justify-content-center mb-3">
+              <div className="me-3">
+                <label htmlFor="" className='me-2'>Power: </label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="" className='me-2'>Mute: </label>
+                <label className="toggle_box">
+                  <input type="checkbox" />
+                  <span className="slider"></span>
+                  <span className="labels" data-on="Yes" data-off="No"></span>
+                </label>
+              </div>
+            </div>
+          </>
+        }
+      </>
+    )
+  }
+
+  const editFooter = () => {
+    return (
+      <>
+        {editValue === 0 ?
+          <></>
+          :
+          <div className='edit_btns'>
+            <Button label={'Edit'} />
+            <Button label={'Cancel'} handleClick={() => setEditModalShow(false)} />
+          </div>
+        }
+      </>
+    )
+
+  }
+
 
   const tiltBody = (
     <div className='d-flex flex-column justify-content-center'>
@@ -365,8 +385,8 @@ const QAMTab = () => {
                 show={editModalShow}
                 onHide={() => setEditModalShow(false)}
                 modalTitle=''
-                modalBody={editBody}
-                modalFooter={editFooter}
+                modalBody={editBody()}
+                modalFooter={editFooter()}
               />
               <Button label={'Delete'} handleClick={deleteHandleClick} />
               <ModalAoi

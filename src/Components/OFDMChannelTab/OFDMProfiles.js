@@ -15,9 +15,13 @@ const tablerow = [
 const OFDMProfiles = () => {
   const [tableRow, setTableRow] = useState(tablerow)
   const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [selectRowChannel, setSelectRowChannel] = useState();
 
   const deleteHandleClick = () => {
-    setDeleteModalShow(true)
+    setDeleteModalShow(true);
+    const selectRowLength = document.querySelectorAll('#manage_config_ofdm_table .selection-row').length;
+    selectRowLength === 0 ? setDeleteModalShow(true) : setDeleteModalShow(true);
+    setSelectRowChannel(selectRowLength);
   }
   const removeAllChannelHandle = () => {
     setTableRow([])
@@ -34,16 +38,33 @@ const OFDMProfiles = () => {
     }
   ];
 
-  const deleteBody = (
-    <p>Delete the entry?</p>
-  )
+  const deleteBody = () => {
+    return (
+      <>
+        {selectRowChannel === 0 ?
+          <div>Please Select at list one Row !</div>
+          :
+          <p>Delete the entry?</p>
+        }
+      </>
+    )
+  }
+  const deleteFooter = () => {
 
-  const deleteFooter = (
-    <div className='edit_btns'>
-      <Button label={'Yes'}   handleClick={() => deleteItem(manageConfigTableIndex)}/>
-      <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
-    </div>
-  )
+    return (
+      <>
+        {selectRowChannel === 0 ?
+          <></>
+          :
+          <div className='edit_btns'>
+            <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+            <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+          </div>
+        }
+      </>
+    )
+  }
+
 
   const selectRow = {
     mode: 'checkbox',
@@ -104,6 +125,7 @@ const OFDMProfiles = () => {
           <h5 className='d-inline-block fw-bold'>Current Profiles</h5>
         </div>
         <BootstrapTable
+          id='manage_config_ofdm_table'
           keyField="no"
           data={tableRow}
           columns={columns}
@@ -120,14 +142,14 @@ const OFDMProfiles = () => {
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'Add'} />
-            <Button label={'Remove All from Channel'}  handleClick={removeAllChannelHandle}/>
+            <Button label={'Remove All from Channel'} handleClick={removeAllChannelHandle} />
             <Button label={'Remove Selected'} handleClick={deleteHandleClick} />
             <ModalAoi
               show={deleteModalShow}
               onHide={() => setDeleteModalShow(false)}
               modalTitle=''
-              modalBody={deleteBody}
-              modalFooter={deleteFooter}
+              modalBody={deleteBody()}
+              modalFooter={deleteFooter()}
             />
           </div>
         </div>
