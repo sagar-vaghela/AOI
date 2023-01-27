@@ -361,6 +361,9 @@ th.selection-cell-header {
   min-width: 150px;
   margin-bottom: 5px;
 }
+/* .tab-content button:hover{
+  background-color: #000;
+} */
 /* ******************** Table Toggle Css **************** */
 .toggle_box {
   --width: 55px;

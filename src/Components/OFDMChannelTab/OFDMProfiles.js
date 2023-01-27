@@ -1,13 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
 import Button from '../Button'
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import ModalAoi from '../Modal/ModalAoi';
+
+let manageConfigTableIndex = []
+
+const tablerow = [
+  { channel: 1, profile: "test" },
+  { channel: 2, profile: "test1" }
+]
 
 const OFDMProfiles = () => {
-  const tablerow = [
-    { channel: 1, profile: "test" }
-  ]
+  const [tableRow, setTableRow] = useState(tablerow)
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+
+  const deleteHandleClick = () => {
+    setDeleteModalShow(true)
+  }
+  const removeAllChannelHandle = () => {
+    setTableRow([])
+  }
 
   const columns = [
     {
@@ -19,6 +33,42 @@ const OFDMProfiles = () => {
       text: 'Profile'
     }
   ];
+
+  const deleteBody = (
+    <p>Delete the entry?</p>
+  )
+
+  const deleteFooter = (
+    <div className='edit_btns'>
+      <Button label={'Yes'}   handleClick={() => deleteItem(manageConfigTableIndex)}/>
+      <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
+    </div>
+  )
+
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    hideSelectColumn: true,
+    bgColor: '#f1e4ff',
+    classes: 'selection-row',
+    clickToEdit: true
+  };
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+      console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
+
+    }
+  };
+  const deleteItem = (manageConfigTableIndex) => {
+    console.log("table row====", tableRow);
+    console.log("manageConfigTableIndex====", manageConfigTableIndex);
+    const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
+    setTableRow(results);
+    setDeleteModalShow(false)
+  }
+
   return (
     <>
       <div className="action mb-4 border border-dark p-2">
@@ -55,11 +105,13 @@ const OFDMProfiles = () => {
         </div>
         <BootstrapTable
           keyField="no"
-          data={tablerow}
+          data={tableRow}
           columns={columns}
-          // cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+          cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           headerClasses="table_header"
           classes="mb-0 text-center"
+          selectRow={selectRow}
+          rowEvents={rowEvents}
         />
       </div>
 
@@ -68,8 +120,15 @@ const OFDMProfiles = () => {
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'Add'} />
-            <Button label={'Remove All from Channel'} />
-            <Button label={'Remove Selected'} />
+            <Button label={'Remove All from Channel'}  handleClick={removeAllChannelHandle}/>
+            <Button label={'Remove Selected'} handleClick={deleteHandleClick} />
+            <ModalAoi
+              show={deleteModalShow}
+              onHide={() => setDeleteModalShow(false)}
+              modalTitle=''
+              modalBody={deleteBody}
+              modalFooter={deleteFooter}
+            />
           </div>
         </div>
       </div>
