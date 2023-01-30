@@ -80,16 +80,22 @@ table tbody {
 }
 
 .close_btn {
-  display: none;
+  /* display: none; */
   position: absolute;
   right: 0;
   top: 0;
 }
 .open_btn {
-  display: none;
+  /* display: none; */
   position: absolute;
-  left: 0;
-  top: 0;
+  left: -5px;
+  top: 14px;
+}
+button svg path{
+  fill: #5c478e;
+}
+.content.is-open .open_btn{
+  display: none;
 }
 
 .sidebar.is-open {
@@ -321,14 +327,16 @@ li a.dropdown-toggle::after {
 }
 /* ******************** Table Css **************** */
 
-tbody tr,
-tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+tbody tr {
+	display:table;
+	width:100%;
+	table-layout:fixed;
 }
-thead {
+thead, tfoot  {
   background: #d3d3d363;
+  display: table;
+  width: calc(100% - 15px);
+
 }
 tbody {
   max-height: 300px;
@@ -339,6 +347,8 @@ tbody {
 tr th,
 tr td {
   word-wrap: break-word;
+  border-right:1px solid #000;
+  width: 8.16%;
 }
 .action,
 .table_header {
@@ -631,13 +641,16 @@ select:focus {
   .searchbar label {
     font-size: 14px;
   }
+  thead, tfoot {
+    width: 100%;
+}
 }
 
 @media (max-width: 767px) {
-  .close_btn,
+  /* .close_btn,
   .open_btn {
     display: block;
-  }
+  } */
   .sidebar {
     position: absolute;
     top: 0;

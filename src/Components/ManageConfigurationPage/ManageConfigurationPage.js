@@ -120,7 +120,6 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     mode: 'checkbox',
     clickToSelect: true,
     hideSelectColumn: true,
-    bgColor: '#f1e4ff',
     classes: 'selection-row',
     clickToEdit: true
   };
@@ -266,7 +265,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
           columns={columns}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           selectRow={selectRow}
-          classes="mb-0 table-striped"
+          classes="mb-0"
           rowEvents={rowEvents}
         />
       </div>

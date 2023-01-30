@@ -7,10 +7,15 @@ import Visualize from '../../../Modal/Visualize';
 import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 
+const muted = (<div><label className="toggle_box">
+<input type="checkbox" />
+<span className="slider"></span>
+<span className="labels" data-on="Yes" data-off="No"></span>
+</label></div>)
 
 const tablerow = [
-  { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
-  { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
+  { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: muted },
+  { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: muted }
 ]
 
 let manageConfigTableIndex = []
@@ -90,7 +95,6 @@ const OFDMTab = () => {
     mode: 'checkbox',
     clickToSelect: true,
     hideSelectColumn: true,
-    bgColor: '#f1e4ff',
     classes: 'selection-row',
     clickToEdit: true
   };
@@ -197,6 +201,7 @@ const OFDMTab = () => {
     )
 
   }
+
   const deleteItem = (manageConfigTableIndex) => {
     console.log("table row====", tableRow);
     console.log("manageConfigTableIndex====", manageConfigTableIndex);
@@ -249,7 +254,7 @@ const OFDMTab = () => {
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
           selectRow={selectRow}
           headerClasses="table_header"
-          classes="mb-0 table-striped"
+          classes="mb-0"
           rowEvents={rowEvents}
         />
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}

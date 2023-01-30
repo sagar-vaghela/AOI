@@ -4,25 +4,63 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import OFDMChannelTab from '../../../OFDMChannelTab/OFDMChannelTab';
 import ModalAoi from '../../../Modal/ModalAoi';
+import { Form } from 'react-bootstrap';
+import Visualize from '../../../Modal/Visualize';
+
+
+const muted = (<div><label className="toggle_box">
+  <input type="checkbox" />
+  <span className="slider"></span>
+  <span className="labels" data-on="Yes" data-off="No"></span>
+</label></div>)
+
+const tablerow = [
+  { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: muted },
+  { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: muted }
+]
+
+
+let manageConfigTableIndex = []
 
 export default function OFDMTab(props) {
   const [search, setSearch] = useState('')
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [selectBtn, setSelectBtn] = useState('Select All')
+  const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
+  const [visualizeModel, setVisualizeModel] = useState(false)
+  const [editValue, setEditValue] = useState(0)
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [tableRow, setTableRow] = useState(tablerow)
+
   const saveHandleClick = () => {
     setSaveAs(true)
   }
 
-  const tablerow = [
-    { no: 1, subcarrierZeroFrequency: "test", cyclicPrefix: '25', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' },
-    { no: 2, subcarrierZeroFrequency: "demo", cyclicPrefix: '250', rollOffPeriod: '10', timeInterleaverDepth: 'test', subcarrierSpacing: 'test', power: 'test', mute: 'No' }
-  ]
+  const ofdmEditHandleClick = () => {
+    setOfdmEditModalShow(!OfdmEditModalShow)
+    const selectRowLength = document.querySelectorAll('#running_ofdm_table .selection-row').length;
+    selectRowLength === 0 ? setOfdmEditModalShow(true) : setOfdmEditModalShow(true)  // changes on ticket 1
+    setEditValue(selectRowLength);
+  }
+
+  const visualizeHandleClick = () => {
+    setVisualizeModel(!visualizeModel)
+  }
+
+  const deleteHandleClick = () => {
+    setDeleteModalShow(true)
+  }
+
+  const hideVisualize = () => {
+    setVisualizeModel(false)
+  }
+
   const columns = [
     {
       dataField: 'no',
       text: 'No',
-      sort : true
+      sort: true
     },
     {
       dataField: 'subcarrierZeroFrequency',
@@ -53,18 +91,21 @@ export default function OFDMTab(props) {
       text: 'Mute'
     },
   ];
-  const defaultHandleClick = () => {
-    console.log(props);
-    props.showAlertBox('Action was complete successfully!', 'success')
-  }
 
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
     hideSelectColumn: true,
-    bgColor: '#f1e4ff',
     classes: 'selection-row',
     clickToEdit: true
+  };
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+      console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
+
+    }
   };
 
   const selectHandleClick = () => {
@@ -83,15 +124,119 @@ export default function OFDMTab(props) {
       setSelectBtn('Select All')
     }
   }
-  
 
   const saveBody = (
     <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
   )
+
   const saveFooter = (
     <div className='edit_btns'>
       <Button label={'Save'} />
       <Button label={'Cancel'} handleClick={() => setSaveAs(false)} />
+    </div>
+  )
+
+  const ofdmEditBody = () => {
+    return (
+      <>
+        {editValue === 0 ?
+          <div>Please Select at list one Row !</div>
+          :
+          <>
+            <div className="selected_channel mb-3">
+              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
+              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+            </div>
+            <div className='d-flex justify-content-center'>
+              <div className="mb-3 d-flex flex-column align-items-end me-3">
+                <div className='mb-2'>
+                  <label htmlFor="" className='me-2'>Subcarrier Zero Frequency: </label>
+                  <input type="number" />
+                </div>
+                <div className='d-flex mb-2 align-items-center'>
+                  <label htmlFor="" className='text-nowrap me-2'>Cyclic Prefix: </label>
+                  <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                    <option></option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
+                </div>
+                <div className='mb-2'>
+                  <label htmlFor="" className='me-2'>Power: </label>
+                  <input type="text" />
+                </div>
+              </div>
+              <div className="mb-3 d-flex flex-column align-items-start align-items-end">
+                <div className=' mb-2'>
+                  <label htmlFor="" className='me-2'>Time Interleaver Depth: </label>
+                  <input type="number" />
+                </div>
+                <div className='d-flex mb-2 align-items-center'>
+                  <label htmlFor="" className='text-nowrap me-2'>Roll Off Period: </label>
+                  <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                    <option></option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
+                </div>
+                <div className='d-flex align-items-center'>
+                  <label htmlFor="" className='text-nowrap me-2'>Subcarrier Spacing: </label>
+                  <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+                    <option></option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label htmlFor="" className='me-2'>Mute: </label>
+              <label className="toggle_box">
+                <input type="checkbox" />
+                <span className="slider"></span>
+                <span className="labels" data-on="Yes" data-off="No"></span>
+              </label>
+            </div>
+          </>
+        }
+      </>
+    )
+  }
+
+  const ofdmEditFooter = () => {
+    return (
+      <>
+        {editValue === 0 ?
+          <></>
+          :
+          <div className='edit_btns'>
+            <Button label={'Edit'} />
+            <Button label={'Cancel'} handleClick={() => setOfdmEditModalShow(false)} />
+          </div>
+        }
+      </>
+    )
+
+  }
+  const deleteItem = (manageConfigTableIndex) => {
+    console.log("table row====", tableRow);
+    console.log("manageConfigTableIndex====", manageConfigTableIndex);
+    const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
+    setTableRow(results);
+    setDeleteModalShow(false)
+  }
+
+  const deleteBody = (
+    <p>Delete the entry?</p>
+  )
+
+  const deleteFooter = (
+    <div className='edit_btns'>
+      <Button label={'Yes'} handleClick={() => deleteItem(manageConfigTableIndex)} />
+      <Button label={'Cancel'} handleClick={() => setDeleteModalShow(false)} />
     </div>
   )
 
@@ -105,7 +250,7 @@ export default function OFDMTab(props) {
         <BootstrapTable
           id='running_ofdm_table'
           keyField="no"
-          data={tablerow.filter((row) =>
+          data={tableRow.filter((row) =>
             (row?.subcarrierZeroFrequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.cyclicPrefix?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
             (row?.rollOffPeriod?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
@@ -119,28 +264,53 @@ export default function OFDMTab(props) {
           selectRow={selectRow}
           headerClasses="table_header"
           classes="mb-0 responsive table-striped"
+          rowEvents={rowEvents}
         />
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}
       </div>
 
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
-        <div className="action_btns flex-wrap justify-content-md-end">
-
-        <button onClick={selectHandleClick}>{selectBtn}</button>
-          <Button label={'Save as'} handleClick={saveHandleClick} />
-          <ModalAoi
-            show={saveAs}
-            onHide={() => setSaveAs(false)}
-            modalTitle='Save As'
-            modalBody={saveBody}
-            modalFooter={saveFooter}
-          />
-          <Button label={'Make Default'} handleClick={defaultHandleClick} />
+        <div className="action_btns justify-content-between">
+          <div className="left_btns d-flex flex-column">
+            <div>
+              <Button label={'Edit'} handleClick={ofdmEditHandleClick} />
+              <ModalAoi
+                show={OfdmEditModalShow}
+                onHide={() => setOfdmEditModalShow(false)}
+                modalTitle=''
+                modalBody={ofdmEditBody()}
+                modalFooter={ofdmEditFooter()}
+              />
+              <Button label={'Delete'} handleClick={deleteHandleClick} />
+              <ModalAoi
+                show={deleteModalShow}
+                onHide={() => setDeleteModalShow(false)}
+                modalTitle=''
+                modalBody={deleteBody}
+                modalFooter={deleteFooter}
+              />
+              <Button label={'Visualize'} handleClick={visualizeHandleClick} />
+              {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
+            </div>
+          </div>
+          <div className="right_btn d-flex flex-column">
+            <Button label={'Save As'} handleClick={saveHandleClick} />
+            <ModalAoi
+              show={saveAs}
+              onHide={() => setSaveAs(false)}
+              modalTitle='Save As'
+              modalBody={saveBody}
+              modalFooter={saveFooter}
+            />
+          </div>
         </div>
       </div>
 
       <OFDMChannelTab />
+      {
+        visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null
+      }
     </div>
   )
 }

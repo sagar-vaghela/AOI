@@ -50,7 +50,6 @@ const OFDMSubcarrier = () => {
         mode: 'checkbox',
         clickToSelect: true,
         hideSelectColumn: true,
-        bgColor: '#f1e4ff',
         classes: 'selection-row',
         clickToEdit: true
     };
@@ -148,22 +147,20 @@ const OFDMSubcarrier = () => {
                 </div>
             </div>
 
-
-
             <div className="mb-4 border border-dark ">
-                <div className='action p-2'>
+                <div className='action p-2 '>
                     <h5 className='d-inline-block fw-bold'>Subcurrier Usage Type</h5>
                 </div>
                 <BootstrapTable
                     id='manage_config_ofdm_table'
-                    keyField="no"
+                    keyField="type"
                     data={tableRow}
                     columns={columns}
                     cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
                     headerClasses="table_header"
                     selectRow={selectRow}
                     rowEvents={rowEvents}
-                    classes="mb-0 table-striped"
+                    classes="mb-0"
 
                 />
             </div>

@@ -44,27 +44,27 @@ export default function QAMTab(props) {
     {
       dataField: 'no',
       text: 'No',
-      headerClasses: 'col-1',
-      classes: 'col-1',
+      // headerClasses: 'col-1',
+      // classes: 'col-1',
       sort: true
     },
     {
       dataField: 'frequency',
       text: 'Frequency',
-      headerClasses: 'col-2',
-      classes: 'col-2'
+      // headerClasses: 'col-2',
+      // classes: 'col-2'
     },
     {
       dataField: 'power',
       text: 'Power',
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      // headerClasses: 'col-1',
+      // classes: 'col-1'
     },
     {
       dataField: 'width',
       text: 'Width',
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      // headerClasses: 'col-1',
+      // classes: 'col-1'
     },
     {
       dataField: 'modulation',
@@ -77,15 +77,15 @@ export default function QAMTab(props) {
     {
       dataField: 'op_mode',
       text: 'OP Mode',
-      headerClasses: 'col-2',
-      classes: 'col-2'
+      // headerClasses: 'col-2',
+      // classes: 'col-2'
     },
     {
       dataField: 'muted',
       text: 'Muted',
       editable: false,
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      // headerClasses: 'col-1',
+      // classes: 'col-1'
     }
   ];
 
@@ -108,7 +108,6 @@ export default function QAMTab(props) {
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
-    bgColor: '#f1e4ff',
     classes: 'selection-row',
     clickToEdit: true,
     hideSelectColumn: true
@@ -224,7 +223,7 @@ export default function QAMTab(props) {
             selectRow={selectRow}
             cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
             headerClasses="table_header"
-            classes="mb-0 table-striped"
+            classes="mb-0"
             rowEvents={rowEvents}
           />
         </div>

@@ -22,6 +22,7 @@ const Downstream = (props) => {
         id="uncontrolled-tab-example"
         className="nav_tabs"
         onSelect={(eventKey) => handleTabChange(eventKey)}
+        unmountOnExit={true}
       >
         <Tab eventKey="RunningConfigPage" title="Running Configuration">
           <RunningConfigPage showAlertBox={props.showAlertBox}/>

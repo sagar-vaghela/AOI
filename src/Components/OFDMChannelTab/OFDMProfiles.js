@@ -70,7 +70,6 @@ const OFDMProfiles = () => {
     mode: 'checkbox',
     clickToSelect: true,
     hideSelectColumn: true,
-    bgColor: '#f1e4ff',
     classes: 'selection-row',
     clickToEdit: true
   };
@@ -126,7 +125,7 @@ const OFDMProfiles = () => {
         </div>
         <BootstrapTable
           id='manage_config_ofdm_table'
-          keyField="no"
+          keyField="channel"
           data={tableRow}
           columns={columns}
           cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}

@@ -12,10 +12,10 @@ import AlertBox from "../Alert/AlertBox";
 const Content = (props) => {
   const [alertMode, setAlertMode] = useState(null)
 
-  const showAlertBox = (msg,type) => {
+  const showAlertBox = (msg, type) => {
     setAlertMode({
       message: msg,
-      type : type
+      type: type
     })
   }
 
@@ -29,16 +29,16 @@ const Content = (props) => {
       fluid
       className={classNames("content", { "is-open": props.isOpen })}
     >
-      <Button variant="link" className="open_btn" onClick={props.toggle}><FontAwesomeIcon icon={faArrowRight} pull="right" size="lg" /></Button>
+      <Button variant="link" className="open_btn" onClick={props.toggle}>
+        <FontAwesomeIcon icon={faArrowRight} pull="right" size="lg" />
+      </Button>
 
       <AlertBox alertMode={alertMode} />
 
       {loaction.pathname !== '/' && (
-        <>
           <h3 className="main_title bg-light border-bottom border-dark fw-bold mb-0">CPSG 5102 Cable Plant Generator</h3>
-        </>
       )}
-      <Routes showAlertBox={showAlertBox}/>
+      <Routes showAlertBox={showAlertBox} />
     </Container>
   )
 }
