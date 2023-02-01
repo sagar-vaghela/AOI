@@ -41,27 +41,27 @@ export default function QAMTab() {
         <Table responsive bordered className='main_table mb-0' >
           <thead>
             <tr>
-              <th className='col-1'>No</th>
-              <th className='col-2'>Frequency</th>
-              <th className='col-1'>Power</th>
-              <th className='col-1'>Width</th>
-              <th className='col-2'>Modulation</th>
-              <th className='col-2'>Annex</th>
-              <th className='col-2'>OP Mode</th>
-              <th className='col-1'>Muted</th>
+              <th>No</th>
+              <th>Frequency</th>
+              <th>Power</th>
+              <th>Width</th>
+              <th>Modulation</th>
+              <th>Annex</th>
+              <th>OP Mode</th>
+              <th>Muted</th>
             </tr>
           </thead>
           <tbody className='bg-white'>
             {tablerow.map((item) => (
               <tr key={item.no}>
-                <td className='col-1'>{item.no}</td>
-                <td className='col-2'>{item.frequency}</td>
-                <td className='col-1'>{item.Power}</td>
-                <td className='col-1'>{item.width}</td>
-                <td className='col-2'>{item.modulation}</td>
-                <td className='col-2'>{item.annex}</td>
-                <td className='col-2'>{item.op_mode}</td>
-                <td className='col-1'>
+                <td>{item.no}</td>
+                <td>{item.frequency}</td>
+                <td>{item.Power}</td>
+                <td>{item.width}</td>
+                <td>{item.modulation}</td>
+                <td>{item.annex}</td>
+                <td>{item.op_mode}</td>
+                <td>
                   <label className="toggle_box">
                     <input type="checkbox" />
                     <span className="slider"></span>

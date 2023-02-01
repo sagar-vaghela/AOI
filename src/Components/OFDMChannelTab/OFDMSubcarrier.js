@@ -118,9 +118,6 @@ const OFDMSubcarrier = () => {
                         <label htmlFor="" className='text-nowrap me-2'>Type: </label>
                         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} >
                             <option>Specific</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
                         </Form.Select>
                     </div>
                     <div className='d-flex align-items-center mb-2 me-2 '>
@@ -139,9 +136,6 @@ const OFDMSubcarrier = () => {
                         <label htmlFor="" className='text-nowrap me-2'>Uses: </label>
                         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} >
                             <option >Spacific</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
                         </Form.Select>
                     </div>
                 </div>

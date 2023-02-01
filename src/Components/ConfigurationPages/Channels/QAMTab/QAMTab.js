@@ -112,27 +112,19 @@ const QAMTab = () => {
     {
       dataField: 'no',
       text: 'No',
-      headerClasses: 'col-1',
-      classes: 'col-1',
       sort: true
     },
     {
       dataField: 'frequency',
-      text: 'Frequency',
-      headerClasses: 'col-2',
-      classes: 'col-2'
+      text: 'Frequency'
     },
     {
       dataField: 'power',
-      text: 'Power',
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      text: 'Power'
     },
     {
       dataField: 'width',
-      text: 'Width',
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      text: 'Width'
     },
     {
       dataField: 'modulation',
@@ -144,16 +136,12 @@ const QAMTab = () => {
     },
     {
       dataField: 'op_mode',
-      text: 'OP Mode',
-      headerClasses: 'col-2',
-      classes: 'col-2'
+      text: 'OP Mode'
     },
     {
       dataField: 'muted',
       text: 'Muted',
-      editable: false,
-      headerClasses: 'col-1',
-      classes: 'col-1'
+      editable: false
     },
   ];
 

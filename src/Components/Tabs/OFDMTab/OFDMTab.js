@@ -14,14 +14,14 @@ export default function OFDMTab() {
         <Table responsive bordered className='main_table mb-0 ' >
           <thead>
             <tr>
-                <th className='col-1'>No</th>
-                <th className='col-2'>Subcarrier Zero Frequency</th>
-                <th className='col-2'>Cyclic Prefix</th>
-                <th className='col-2'>Roll Off Period</th>
-                <th className='col-2'>Time Interleaver Depth</th>
-                <th className='col-1 '>Subcarrier Spacing</th>
-                <th className='col-1'>Power</th>
-                <th className='col-1'>Mute</th>
+                <th>No</th>
+                <th>Subcarrier Zero Frequency</th>
+                <th>Cyclic Prefix</th>
+                <th>Roll Off Period</th>
+                <th>Time Interleaver Depth</th>
+                <th>Subcarrier Spacing</th>
+                <th>Power</th>
+                <th>Mute</th>
             </tr>
           </thead>
           <tbody className='bg-white'></tbody>

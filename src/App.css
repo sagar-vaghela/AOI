@@ -62,8 +62,11 @@ table tbody {
   border-color: rgba(0, 0, 0, 0.563) !important;
 }
 .form-control:focus {
-  border: none;
+  border: none; 
   box-shadow: none;
+}
+button:hover{
+  background-color: #d3d3d33c !important;
 }
 /* ---------------------------------------------------
     SIDEBAR STYLE
@@ -80,7 +83,7 @@ table tbody {
 }
 
 .close_btn {
-  /* display: none; */
+  display: none;
   position: absolute;
   right: 0;
   top: 0;
@@ -88,14 +91,11 @@ table tbody {
 .open_btn {
   /* display: none; */
   position: absolute;
-  left: -5px;
-  top: 14px;
+  left: 0px;
+  top: 6px;
 }
-button svg path{
+button svg path {
   fill: #5c478e;
-}
-.content.is-open .open_btn{
-  display: none;
 }
 
 .sidebar.is-open {
@@ -329,15 +329,15 @@ li a.dropdown-toggle::after {
 /* ******************** Table Css **************** */
 
 tbody tr {
-	display:table;
-	width:100%;
-	table-layout:fixed;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
-thead, tfoot  {
+thead,
+tfoot {
   background: #d3d3d363;
   display: table;
-  width: calc(100% - 15px);
-
+  width: 100%;
 }
 tbody {
   max-height: 300px;
@@ -348,8 +348,14 @@ tbody {
 tr th,
 tr td {
   word-wrap: break-word;
-  border-right:1px solid #000;
+  border-right: 1px solid #000;
   width: 8.16%;
+}
+tr th {
+  font-size: 14px;
+}
+tr td {
+  font-size: 13px;
 }
 .action,
 .table_header {
@@ -372,9 +378,13 @@ th.selection-cell-header {
   min-width: 150px;
   margin-bottom: 5px;
 }
-/* .tab-content button:hover{
-  background-color: #000;
-} */
+tbody {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+tbody::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
 /* ******************** Table Toggle Css **************** */
 .toggle_box {
   --width: 55px;
@@ -604,6 +614,10 @@ select:focus {
   .table > :not(caption) > * > * {
     padding: 4px !important;
   }
+  thead,
+  tfoot {
+    width: 100%;
+  }
 }
 
 @media (max-width: 991px) {
@@ -642,9 +656,10 @@ select:focus {
   .searchbar label {
     font-size: 14px;
   }
-  thead, tfoot {
+  thead,
+  tfoot {
     width: 100%;
-}
+  }
 }
 
 @media (max-width: 767px) {
@@ -675,13 +690,9 @@ select:focus {
     transition: all 0.5s;
   }
 
-  /* .sidebar.is-open {
-    min-width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    transition: all 0.5s, height 0s;
-    height: 100vh !important;
-  } */
+  .close_btn {
+    display: block;
+  }
 
   .sidebar.is-open > .sidebar-header button {
     display: block;
