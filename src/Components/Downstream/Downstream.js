@@ -20,7 +20,7 @@ const Downstream = (props) => {
         // defaultActiveKey="RunningConfigPage"
         activeKey={activeTab}
         id="uncontrolled-tab-example"
-        className="nav_tabs"
+        className="nav_tabs links-nav"
         onSelect={(eventKey) => handleTabChange(eventKey)}
         unmountOnExit={true}
       >

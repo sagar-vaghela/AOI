@@ -343,7 +343,6 @@ export default function ManageConfigurationPage({ setActiveTab }) {
       {
         editValue !== 0 ? <RunningCongigPage /> : null
       }
-      <OFDMTab />
       {
         visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null
       }

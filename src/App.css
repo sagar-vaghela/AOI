@@ -65,9 +65,18 @@ table tbody {
   border: none; 
   box-shadow: none;
 }
-button:hover{
+.left_btns button:hover{
   background-color: #d3d3d33c !important;
 }
+
+.right_btn button:hover{
+  background-color: #d3d3d33c !important;
+}
+
+.right_btn button:hover{
+  background-color: #d3d3d33c !important;
+}
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
@@ -252,7 +261,7 @@ li a.dropdown-toggle::after {
 }
 .nav_tabs .nav-link.active {
   color: #000;
-  background-color: #f5e5ba;
+  background-color: #f5e5ba; 
   border-color: #000;
   border: none;
   border-right: 1px solid;
