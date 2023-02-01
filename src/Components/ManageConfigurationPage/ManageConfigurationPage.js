@@ -5,6 +5,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import Visualize from '../Modal/Visualize';
 import ModalAoi from '../Modal/ModalAoi';
+import RunningCongigPage from '../RunningConfigPages/RunningConfigPage'
 
 const tablerow = [
   { no: 1, name: "david_lanum - Copy.db", editable: 'Yes' },
@@ -52,6 +53,8 @@ export default function ManageConfigurationPage({ setActiveTab }) {
   const [tableRow, setTableRow] = useState(tablerow)
   const [editModalShow, setEditModalShow] = useState(false);
   const [editValue, setEditValue] = useState(0)
+
+
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
@@ -115,13 +118,19 @@ export default function ManageConfigurationPage({ setActiveTab }) {
       }
     }
   ];
+  const selectionRow = () => {
+    console.log('select===' ,editValue );
+    const selectRowLength = document.querySelectorAll('#manage_config_table .selection-row').length + 1;
+    setEditValue(selectRowLength);
+  }
 
   const selectRow = {
-    mode: 'checkbox',
+    mode: 'radio',
     clickToSelect: true,
     hideSelectColumn: true,
     classes: 'selection-row',
-    clickToEdit: true
+    clickToEdit: true,
+    onSelect : selectionRow
   };
 
   const selectHandleClick = () => {
@@ -329,7 +338,11 @@ export default function ManageConfigurationPage({ setActiveTab }) {
             </div>
           </div>
         </div>
+
       </div>
+      {
+        editValue !== 0 ? <RunningCongigPage /> : null
+      }
       <OFDMTab />
       {
         visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null

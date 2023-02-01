@@ -142,7 +142,7 @@ const OFDMSubcarrier = () => {
             </div>
 
             <div className="mb-4 border border-dark ">
-                <div className='action p-2 '>
+                <div className='action p-2 border-bottom border-dark'>
                     <h5 className='d-inline-block fw-bold'>Subcurrier Usage Type</h5>
                 </div>
                 <BootstrapTable
