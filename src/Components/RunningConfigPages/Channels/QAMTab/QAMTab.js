@@ -233,7 +233,7 @@ export default function QAMTab(props) {
           <div className="action_btns justify-content-between">
             <div className="left_btns text-center">
               <Button label={'Edit'} handleClick={editHandleClick} />
-              <button onClick={selectHandleClick}>{selectBtn}</button>
+              {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
               <ModalAoi
                 show={modalShow}
                 onHide={() => setModalShow(false)}

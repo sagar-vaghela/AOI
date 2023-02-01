@@ -406,7 +406,7 @@ const QAMTab = () => {
                 modalFooter={tiltFooter}
               />
 
-              <button onClick={selectHandleClick}>{selectBtn}</button>
+              {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
             </div>
 
           </div>

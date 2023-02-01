@@ -282,7 +282,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
               modalBody={editBody()}
               modalFooter={editFooter()}
             />
-            <button onClick={selectHandleClick}>{selectBtn}</button>
+            {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
           </div>
           <div className="right_btn">
             <Button label={'Run'} />

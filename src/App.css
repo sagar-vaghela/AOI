@@ -231,6 +231,7 @@ li a.dropdown-toggle::after {
 ----------------------------------------------------- */
 .main_title {
   padding: 15px 50px 15px;
+  font-size: 20px;
 }
 /* ---------------------------------------------------
     NAV TABS STYLE
@@ -315,9 +316,9 @@ li a.dropdown-toggle::after {
 /* ---------------------------------------------------
     TABS TABLE STYLE
 ----------------------------------------------------- */
-.table_top_bar {
+/* .table_top_bar {
   background: #d3d3d363;
-}
+} */
 .searchbar {
   padding: 13px;
 }

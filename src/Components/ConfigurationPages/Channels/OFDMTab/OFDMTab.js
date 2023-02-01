@@ -283,7 +283,7 @@ const OFDMTab = () => {
                 modalFooter={deleteFooter}
               />
               <Button label={'Visualize'} handleClick={visualizeHandleClick} />
-              <button onClick={selectHandleClick}>{selectBtn}</button>
+              {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
             </div>
           </div>
           <div className="right_btn d-flex flex-column">
