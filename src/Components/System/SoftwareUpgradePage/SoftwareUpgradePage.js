@@ -10,7 +10,7 @@ export default function SoftwareUpgradePage() {
           <div className="action mb-4 border border-dark p-2">
             <h4 className='d-inline-block fw-bold'>Software Upgrade</h4>
             <h6 className='fw-bold'>Main Software Version</h6>
-            <div className="selected_channle mb-3 ">
+            <div className="selected_channel mb-3 ">
               <label htmlFor="" className='me-2 fw-bold'>Version: </label>
               <input type="text" placeholder='(1.0.0.12+cpsg_annex_a_3007)' style={{ width: 'calc(100% - 70px)' }} />
             </div>
@@ -18,7 +18,7 @@ export default function SoftwareUpgradePage() {
 
           <div className="action mb-4 border border-dark p-2">
             <h6 className='fw-bold'>Backup Software Version</h6>
-            <div className="selected_channle mb-3">
+            <div className="selected_channel mb-3">
               <label htmlFor="" className='me-2 fw-bold'>Version: </label>
               <input type="text" placeholder='(1.0.0.5+cpsg4.0_2858.unofficial)' style={{ width: 'calc(100% - 70px)' }} />
             </div>
