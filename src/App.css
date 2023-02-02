@@ -278,7 +278,7 @@ li a.dropdown-toggle::after {
 }
 .tabs_wrapper > .tab-content {
   padding: 15px;
-  height: 85vh;
+  height: calc(85vh - 15px);
   overflow-y: scroll;
 }
 .tab-content {

@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import ModalAoi from '../../../Modal/ModalAoi';
 
 export default function QAMTab(props) {
   const [search, setSearch] = useState('')
-  const [selectBtn, setSelectBtn] = useState('Select All')
-  const [modalShow, setModalShow] = useState(false);
-  const [saveAs, setSaveAs] = useState(false)
-  const [saveName, setSaveName] = useState('')
-  const [editValue, setEditValue] = useState(0)
 
   const muted = (<div><label className="toggle_box">
     <input type="checkbox" />
@@ -77,21 +70,6 @@ export default function QAMTab(props) {
   ];
 
 
-  const editHandleClick = () => {
-    const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
-    selectRowLength === 0 ? setModalShow(true) : setModalShow(true)  // changes on ticket 1
-    setEditValue(selectRowLength);
-  }
-
-  const saveHandleClick = () => {
-    setSaveAs(true)
-  }
-
-  const defaultHandleClick = () => {
-    console.log(props);
-    props.showAlertBox('Action was complete successfully!', 'success')
-  }
-
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -100,87 +78,7 @@ export default function QAMTab(props) {
     hideSelectColumn: true
   };
 
-  const selectHandleClick = () => {
-    var trElements = document.querySelectorAll("#running_qam_table tbody tr");
-    console.log(trElements);
 
-    if (selectBtn === 'Select All') {
-      trElements.forEach(function (element) {
-        element.classList.add("selection-row");
-      });
-      setSelectBtn('Deselect All')
-    } else {
-      trElements.forEach(function (element) {
-        element.classList.remove("selection-row");
-      });
-      setSelectBtn('Select All')
-    }
-  }
-
-  const editBody = () => {
-    return (
-
-      <>
-        {editValue === 0 ?
-
-          <div>Please Select at list one Row !</div>
-          :
-          <>
-
-            <div className="selected_channel mb-3">
-              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
-            </div>
-
-            <div className="d-flex justify-content-center mb-3">
-              <div className="me-3">
-                <label htmlFor="" className='me-2'>Power: </label>
-                <input type="text" />
-              </div>
-
-              <div>
-                <label htmlFor="" className='me-2'>Mute: </label>
-                <label className="toggle_box">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                  <span className="labels" data-on="Yes" data-off="No"></span>
-                </label>
-              </div>
-            </div>
-
-          </>
-        }
-      </>
-    )
-  }
-
-  const editFooter = () => {
-
-    return (
-      <>
-        {editValue === 0 ?
-          <></>
-          :
-          <div className='edit_btns'>
-            <Button label={'Edit'} />
-            <Button label={'Cancel'} handleClick={() => setModalShow(false)} />
-          </div>
-        }
-      </>
-    )
-
-  }
-
-
-  const saveBody = (
-    <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
-  )
-  const saveFooter = (
-    <div className='edit_btns'>
-      <Button label={'Save'} />
-      <Button label={'Cancel'} handleClick={() => setSaveAs(false)} />
-    </div>
-  )
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
       console.log(`clicked on row with index: ${rowIndex}`);
@@ -215,33 +113,6 @@ export default function QAMTab(props) {
           />
         </div>
 
-        <div className="action mb-4 border border-dark p-2">
-          {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
-          <div className="action_btns justify-content-between">
-            <div className="left_btns text-center">
-              <Button label={'Edit'} handleClick={editHandleClick} />
-              {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
-              <ModalAoi
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                modalTitle=''
-                modalBody={editBody()}
-                modalFooter={editFooter()}
-              />
-            </div>
-            <div className="right_btn text-center">
-              <Button label={'Save as'} handleClick={saveHandleClick} />
-              <ModalAoi
-                show={saveAs}
-                onHide={() => setSaveAs(false)}
-                modalTitle='Save As'
-                modalBody={saveBody}
-                modalFooter={saveFooter}
-              />
-              <Button label={'Make Default'} handleClick={defaultHandleClick} />
-            </div>
-          </div>
-        </div>
       </div >
     </>
   )

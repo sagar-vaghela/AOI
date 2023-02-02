@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import Button from '../Button';
-import OFDMTab from '../RunningConfigPages/Channels/OFDMTab/OFDMTab'
+import OFDMTab from './Channels/OFDMTab/OFDMTab'
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import Visualize from '../Modal/Visualize';
 import ModalAoi from '../Modal/ModalAoi';
-import RunningCongigPage from '../RunningConfigPages/RunningConfigPage'
+import { Tab, Tabs } from 'react-bootstrap';
+import QAMTab from './Channels/QAMTab/QAMTab';
 
 const tablerow = [
   { no: 1, name: "david_lanum - Copy.db", editable: 'Yes' },
@@ -51,17 +52,9 @@ export default function ManageConfigurationPage({ setActiveTab }) {
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [tableRow, setTableRow] = useState(tablerow)
-  const [editModalShow, setEditModalShow] = useState(false);
   const [editValue, setEditValue] = useState(0)
 
 
-
-  const editHandleClick = () => {
-    setEditModalShow(!editModalShow)
-    const selectRowLength = document.querySelectorAll('#manage_config_table .selection-row').length;
-    selectRowLength === 0 ? setEditModalShow(true) : setEditModalShow(true)
-    setEditValue(selectRowLength);
-  }
 
   const visualizeHandleClick = () => {
     setVisualizeModel(!visualizeModel)
@@ -119,7 +112,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     }
   ];
   const selectionRow = () => {
-    console.log('select===' ,editValue );
+    console.log('select===', editValue);
     const selectRowLength = document.querySelectorAll('#manage_config_table .selection-row').length + 1;
     setEditValue(selectRowLength);
   }
@@ -130,7 +123,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     hideSelectColumn: true,
     classes: 'selection-row',
     clickToEdit: true,
-    onSelect : selectionRow
+    onSelect: selectionRow
   };
 
   const selectHandleClick = () => {
@@ -195,55 +188,6 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     </div>
   )
 
-  const editBody = () => {
-    return (
-
-      <>
-        {editValue === 0 ?
-
-          <div>Please Select at list one Row !</div>
-          :
-          <>
-            <div className="selected_channel mb-3">
-              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
-            </div>
-            <div className="d-flex justify-content-center mb-3">
-              <div className="me-3">
-                <label htmlFor="" className='me-2'>Power: </label>
-                <input type="text" />
-              </div>
-              <div>
-                <label htmlFor="" className='me-2'>Mute: </label>
-                <label className="toggle_box">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                  <span className="labels" data-on="Yes" data-off="No"></span>
-                </label>
-              </div>
-            </div>
-          </>
-        }
-      </>
-    )
-  }
-
-  const editFooter = () => {
-    return (
-      <>
-        {editValue === 0 ?
-          <></>
-          :
-          <div className='edit_btns'>
-            <Button label={'Edit'} />
-            <Button label={'Cancel'} handleClick={() => setEditModalShow(false)} />
-          </div>
-        }
-      </>
-    )
-
-  }
-
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -283,15 +227,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
         <div className="action_btns justify-content-between">
           <div className="left_btns">
             <Button label={'New'} handleClick={newClick} />
-            <Button label={'Edit'} handleClick={editHandleClick} />
-            <ModalAoi
-              show={editModalShow}
-              onHide={() => setEditModalShow(false)}
-              modalTitle=''
-              modalBody={editBody()}
-              modalFooter={editFooter()}
-            />
-            {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
+            <Button label={'Edit'} handleClick={newClick} />
           </div>
           <div className="right_btn">
             <Button label={'Run'} />
@@ -341,7 +277,19 @@ export default function ManageConfigurationPage({ setActiveTab }) {
 
       </div>
       {
-        editValue !== 0 ? <RunningCongigPage /> : null
+        editValue !== 0 ? <Tabs
+          defaultActiveKey='QAMChannels'
+          id="uncontrolled-tab-example"
+          className="config_tabs border border-dark"
+          unmountOnExit={true}
+        >
+          <Tab eventKey="QAMChannels" tabClassName='fw-bold' title="QAM Channels">
+            <QAMTab />
+          </Tab>
+          <Tab eventKey="OFDMChannels" tabClassName='fw-bold' title="OFDM Channels">
+            <OFDMTab />
+          </Tab>
+        </Tabs> : null
       }
       {
         visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null
