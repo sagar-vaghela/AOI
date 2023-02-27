@@ -100,23 +100,6 @@ export default function QAMTab(props) {
     hideSelectColumn: true
   };
 
-  const selectHandleClick = () => {
-    var trElements = document.querySelectorAll("#running_qam_table tbody tr");
-    console.log(trElements);
-
-    if (selectBtn === 'Select All') {
-      trElements.forEach(function (element) {
-        element.classList.add("selection-row");
-      });
-      setSelectBtn('Deselect All')
-    } else {
-      trElements.forEach(function (element) {
-        element.classList.remove("selection-row");
-      });
-      setSelectBtn('Select All')
-    }
-  }
-
   const editBody = () => {
     return (
 
@@ -186,6 +169,13 @@ export default function QAMTab(props) {
       console.log(`clicked on row with index: ${rowIndex}`);
     }
   };
+  const filteredData = tablerow.filter((row) =>
+    (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
 
   return (
     <>
@@ -195,24 +185,18 @@ export default function QAMTab(props) {
             <label htmlFor="search">Search:</label>
             <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
           </div>
-          <BootstrapTable
-            id='running_qam_table'
-            keyField="no"
-            data={tablerow.filter((row) =>
-              (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-              (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-              (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-              (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-              (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-              (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
-            }
-            columns={columns}
-            selectRow={selectRow}
-            cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-            headerClasses="table_header"
-            classes="mb-0"
-            rowEvents={rowEvents}
-          />
+          {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+            <BootstrapTable
+              id='running_qam_table'
+              keyField="no"
+              data={filteredData}
+              columns={columns}
+              selectRow={selectRow}
+              cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+              headerClasses="table_header"
+              classes="mb-0"
+              rowEvents={rowEvents}
+            />}
         </div>
 
         <div className="action mb-4 border border-dark p-2">

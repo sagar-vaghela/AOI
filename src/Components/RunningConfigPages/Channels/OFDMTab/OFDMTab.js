@@ -240,6 +240,15 @@ export default function OFDMTab(props) {
     </div>
   )
 
+  const filteredData = tableRow.filter((row) =>
+    (row.subcarrierZeroFrequency.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row.cyclicPrefix.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row.rollOffPeriod.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row.timeInterleaverDepth.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row.subcarrierSpacing.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row.power.toUpperCase().indexOf(search.toUpperCase()) > -1)
+  )
+
   return (
     <div className='channel_tab OFDM_TAB'>
       <div className='border border-dark  mb-4'>
@@ -247,25 +256,18 @@ export default function OFDMTab(props) {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <BootstrapTable
-          id='running_ofdm_table'
-          keyField="no"
-          data={tableRow.filter((row) =>
-            (row?.subcarrierZeroFrequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.cyclicPrefix?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.rollOffPeriod?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.timeInterleaverDepth?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.subcarrierSpacing?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.mute?.toUpperCase().indexOf(search.toUpperCase()) > -1)
-          )}
-          columns={columns}
-          cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-          selectRow={selectRow}
-          headerClasses="table_header"
-          classes="mb-0 responsive table-striped"
-          rowEvents={rowEvents}
-        />
+        {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+          <BootstrapTable
+            id='running_ofdm_table'
+            keyField="no"
+            data={filteredData}
+            columns={columns}
+            cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+            selectRow={selectRow}
+            headerClasses="table_header"
+            classes="mb-0 responsive table-striped"
+            rowEvents={rowEvents}
+          />}
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}
       </div>
 

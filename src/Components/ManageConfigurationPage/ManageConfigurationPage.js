@@ -197,6 +197,10 @@ export default function ManageConfigurationPage({ setActiveTab }) {
     }
   };
 
+  const filteredData = tableRow && tableRow.filter((row) =>
+    (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.editable?.toUpperCase().indexOf(search.toUpperCase()) > -1)
+  )
 
   return (
     <div className='channel_tab'>
@@ -208,19 +212,17 @@ export default function ManageConfigurationPage({ setActiveTab }) {
             <input type="text" id='search' value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>
-        <BootstrapTable
-          id='manage_config_table'
-          keyField="no"
-          data={tableRow.filter((row) =>
-            (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.editable?.toUpperCase().indexOf(search.toUpperCase()) > -1)
-          )}
-          columns={columns}
-          cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-          selectRow={selectRow}
-          classes="mb-0"
-          rowEvents={rowEvents}
-        />
+        {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+          <BootstrapTable
+            id='manage_config_table'
+            keyField="no"
+            data={filteredData}
+            columns={columns}
+            cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+            selectRow={selectRow}
+            classes="mb-0"
+            rowEvents={rowEvents}
+          />}
       </div>
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}

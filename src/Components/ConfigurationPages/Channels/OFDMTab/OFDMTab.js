@@ -8,9 +8,9 @@ import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 
 const muted = (<div><label className="toggle_box">
-<input type="checkbox" />
-<span className="slider"></span>
-<span className="labels" data-on="Yes" data-off="No"></span>
+  <input type="checkbox" />
+  <span className="slider"></span>
+  <span className="labels" data-on="Yes" data-off="No"></span>
 </label></div>)
 
 const tablerow = [
@@ -47,14 +47,6 @@ const OFDMTab = () => {
   const deleteHandleClick = () => {
     setDeleteModalShow(true)
   }
-
-  // if (visualizeModel) {
-  //   document.getElementsByClassName('tab-content')[0].classList.add('overflow-hide')
-  // } else {
-  //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
-  // }
-
-
 
   const columns = [
     {
@@ -230,6 +222,14 @@ const OFDMTab = () => {
     }
   };
 
+  const filteredData = tableRow.filter((row) =>
+    (row?.subcarrierZeroFrequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.cyclicPrefix?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.rollOffPeriod?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.timeInterleaverDepth?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.subcarrierSpacing?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1)
+  )
 
   return (
     <div className='channel_tab OFDM_TAB'>
@@ -238,25 +238,18 @@ const OFDMTab = () => {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <BootstrapTable
-          id='config_ofdm_table'
-          keyField="no"
-          data={tableRow.filter((row) =>
-            (row?.subcarrierZeroFrequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.cyclicPrefix?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.rollOffPeriod?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.timeInterleaverDepth?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.subcarrierSpacing?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.mute?.toUpperCase().indexOf(search.toUpperCase()) > -1)
-          )}
-          columns={columns}
-          cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-          selectRow={selectRow}
-          headerClasses="table_header"
-          classes="mb-0"
-          rowEvents={rowEvents}
-        />
+        {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+          <BootstrapTable
+            id='config_ofdm_table'
+            keyField="no"
+            data={filteredData}
+            columns={columns}
+            cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+            selectRow={selectRow}
+            headerClasses="table_header"
+            classes="mb-0"
+            rowEvents={rowEvents}
+          />}
         {/* <div className='text-center p-2 bg-white'> No Data Available in table</div> */}
       </div>
 
