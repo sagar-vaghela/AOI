@@ -326,6 +326,13 @@ const QAMTab = () => {
     }
   };
 
+  const filteredData = tableRow.filter((row) =>
+    (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+    (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
 
   return (
     <div className='channel_tab '>
@@ -334,24 +341,18 @@ const QAMTab = () => {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
         </div>
-        <BootstrapTable
-          id='confinguration_qam_table'
-          keyField="no"
-          data={tableRow.filter((row) =>
-            (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-            (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
-          }
-          columns={columns}
-          cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-          selectRow={selectRow}
-          headerClasses="table_header"
-          classes="mb-0"
-          rowEvents={rowEvents}
-        />
+        {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+          <BootstrapTable
+            id='confinguration_qam_table'
+            keyField="no"
+            data={filteredData}
+            columns={columns}
+            cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+            selectRow={selectRow}
+            headerClasses="table_header"
+            classes="mb-0"
+            rowEvents={rowEvents}
+          />}
       </div>
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}

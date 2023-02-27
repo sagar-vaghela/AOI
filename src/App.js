@@ -36,8 +36,8 @@ function App() {
 
   return (
     <div className="App wrapper">
-      <SideBar toggle={toggle} isOpen={isOpen} />
-      <Content toggle={toggle} isOpen={isOpen} />
+      <SideBar toggle={toggle} isOpen={isOpen}/>
+      <Content toggle={toggle} isOpen={isOpen}/>
     </div>
   );
 }
