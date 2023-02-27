@@ -13,7 +13,9 @@ export default function Routes(props) {
   return (
     <Switch>
       <Route exact path="/" component={() => (<HomePage />)} />
-      <Route exact path="/downstream" component={() => (<Downstream showAlertBox={props.showAlertBox}/>)}></Route>
+      {/* <Route exact path="/downstream" component={() => <Downstream {...props.showAlertBox}/>} ></Route> */}
+      <Route exact path="/downstream" render={() => <Downstream {...props} />} ></Route>
+
       <Route exact path="/upstream" component={() => (<Upstream />)}></Route>
       <Route exact path="/maintenanace" component={() => (<MainTenanacePage />)} />
       <Route exact path="/softwareUpgrade" component={() => (<SoftwareUpgradePage />)} />

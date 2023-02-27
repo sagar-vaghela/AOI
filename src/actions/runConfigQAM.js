@@ -32,10 +32,10 @@ const getRunConfigQAMTableFailed = error => ({
 
 
 export const getRunConfigQAMTable = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(getRunConfigQAMTableStarted());
 
-    getTableRunConfigQAM().then(function (response) {
+    await getTableRunConfigQAM().then(function (response) {
       dispatch(getRunConfigQAMTableSucceeded(response));
     })
       .catch(function (error) {

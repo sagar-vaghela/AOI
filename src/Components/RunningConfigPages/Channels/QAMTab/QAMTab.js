@@ -7,6 +7,7 @@ import { getRunConfigQAMTable } from '../../../../actions/runConfigQAM';
 import { useSelector, useDispatch } from "react-redux";
 
 export default function QAMTab(props) {
+
   const dispatch = useDispatch();
 
   const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
@@ -16,23 +17,16 @@ export default function QAMTab(props) {
   const [modalShow, setModalShow] = useState(false);
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
-  const [editValue, setEditValue] = useState(0)
-
+  const [editValue, setEditValue] = useState(0);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    // dispatch(getRunConfigQAMTable());
-    console.log("api call thy che-----");
-
+    dispatch(getRunConfigQAMTable());
   }, []);
 
-
   const muted = (
-    <div>
-      <label className="toggle_box">
-        <input type="checkbox" />
-        <span className="slider"></span>
-        <span className="labels" data-on="Yes" data-off="No"></span>
-      </label>
+    <div class="custom-control custom-switch">
+      <input type="checkbox" class="custom-control-input" id="customSwitch1" />
     </div>
   )
 
@@ -59,7 +53,7 @@ export default function QAMTab(props) {
 
   ]
 
-  function numberFormatter(rowIndex) {
+  function numberFormatter(cell, row, rowIndex) {
 
     return (
       <span>
@@ -69,15 +63,12 @@ export default function QAMTab(props) {
   }
 
   function mutedFormatter(row) {
-    console.log("row----", row);
+
+    const checkSwitch = row === 'YES' ? true : false;
 
     return (
-      <div>
-        <label className="toggle_box">
-          <input type="checkbox" />
-          <span className="slider"></span>
-          <span className="labels" data-on="Yes" data-off="No"></span>
-        </label>
+      <div className="form-check form-switch">
+        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={checkSwitch} onChange={e => { }} />
       </div>
     );
   }
@@ -142,7 +133,8 @@ export default function QAMTab(props) {
     clickToSelect: true,
     classes: 'selection-row',
     clickToEdit: true,
-    hideSelectColumn: true
+    hideSelectColumn: true,
+    onSelect:((row, isSelected, rowIndex, e) => console.log("onSelect====",row,isSelected,rowIndex,e))
   };
 
   const editBody = () => {
@@ -212,16 +204,20 @@ export default function QAMTab(props) {
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
       console.log(`clicked on row with index: ${rowIndex}`);
+    },
+    bgColor: (row, rowIndex) => {
+      return 'red';  // return a color code
     }
   };
-  const filteredData = tablerow.filter((row) =>
-    (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-    (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-    (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-    (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-    (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-    (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
 
+  // const filteredData = tablerow.filter((row) =>
+  //   (row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+  //   (row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+  //   (row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+  //   (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+  //   (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
+  //   (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
+  
   return (
     <>
       < div className='channel_tab ' >
@@ -230,18 +226,23 @@ export default function QAMTab(props) {
             <label htmlFor="search">Search:</label>
             <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
           </div>
-          {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
-            <BootstrapTable
-              id='running_qam_table'
-              keyField="no"
-              data={filteredData}
-              columns={columns}
-              selectRow={selectRow}
-              cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
-              headerClasses="table_header"
-              classes="mb-0"
-              rowEvents={rowEvents}
-            />}
+
+          {
+            rcQAMTableData && rcQAMTableData.length > 0 ?
+              <BootstrapTable
+                id='running_qam_table'
+                keyField="no"
+                data={rcQAMTableData}
+                columns={columns}
+                selectRow={selectRow}
+                cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+                headerClasses="table_header"
+                classes="mb-0"
+                rowEvents={rowEvents}
+              />
+              :
+              <p className='text-center fw-bold mt-2'>No record found</p>
+          }
         </div>
 
         <div className="action mb-4 border border-dark p-2">
