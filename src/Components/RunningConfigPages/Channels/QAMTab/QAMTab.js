@@ -3,8 +3,14 @@ import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
+import { getRunConfigQAMTable } from '../../../../actions/runConfigQAM';
+import { useSelector, useDispatch } from "react-redux";
 
 export default function QAMTab(props) {
+  const dispatch = useDispatch();
+
+  const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
+
   const [search, setSearch] = useState('')
   const [selectBtn, setSelectBtn] = useState('Select All')
   const [modalShow, setModalShow] = useState(false);
@@ -12,11 +18,23 @@ export default function QAMTab(props) {
   const [saveName, setSaveName] = useState('')
   const [editValue, setEditValue] = useState(0)
 
-  const muted = (<div><label className="toggle_box">
-    <input type="checkbox" />
-    <span className="slider"></span>
-    <span className="labels" data-on="Yes" data-off="No"></span>
-  </label></div>)
+
+  useEffect(() => {
+    // dispatch(getRunConfigQAMTable());
+    console.log("api call thy che-----");
+
+  }, []);
+
+
+  const muted = (
+    <div>
+      <label className="toggle_box">
+        <input type="checkbox" />
+        <span className="slider"></span>
+        <span className="labels" data-on="Yes" data-off="No"></span>
+      </label>
+    </div>
+  )
 
   const tablerow = [
     { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
@@ -37,13 +55,39 @@ export default function QAMTab(props) {
     { no: 16, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
     { no: 17, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
     { no: 18, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 19, frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
+    { no: 19, frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+
   ]
+
+  function numberFormatter(rowIndex) {
+
+    return (
+      <span>
+        {rowIndex + 1}
+      </span>
+    );
+  }
+
+  function mutedFormatter(row) {
+    console.log("row----", row);
+
+    return (
+      <div>
+        <label className="toggle_box">
+          <input type="checkbox" />
+          <span className="slider"></span>
+          <span className="labels" data-on="Yes" data-off="No"></span>
+        </label>
+      </div>
+    );
+  }
+
   const columns = [
     {
       dataField: 'no',
       text: 'No',
-      sort: true
+      sort: true,
+      formatter: numberFormatter,
     },
     {
       dataField: 'frequency',
@@ -66,13 +110,14 @@ export default function QAMTab(props) {
       text: 'Annex'
     },
     {
-      dataField: 'op_mode',
+      dataField: 'operMode',
       text: 'OP Mode'
     },
     {
-      dataField: 'muted',
+      dataField: 'mute',
       text: 'Muted',
-      editable: false
+      editable: false,
+      formatter: mutedFormatter,
     }
   ];
 
