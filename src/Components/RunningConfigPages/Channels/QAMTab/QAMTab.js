@@ -13,12 +13,10 @@ export default function QAMTab(props) {
   const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
 
   const [search, setSearch] = useState('')
-  const [selectBtn, setSelectBtn] = useState('Select All')
   const [modalShow, setModalShow] = useState(false);
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [editValue, setEditValue] = useState(0);
-  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     dispatch(getRunConfigQAMTable());
@@ -134,7 +132,6 @@ export default function QAMTab(props) {
     classes: 'selection-row',
     clickToEdit: true,
     hideSelectColumn: true,
-    onSelect:((row, isSelected, rowIndex, e) => console.log("onSelect====",row,isSelected,rowIndex,e))
   };
 
   const editBody = () => {
@@ -205,9 +202,6 @@ export default function QAMTab(props) {
     onClick: (e, row, rowIndex) => {
       console.log(`clicked on row with index: ${rowIndex}`);
     },
-    bgColor: (row, rowIndex) => {
-      return 'red';  // return a color code
-    }
   };
 
   // const filteredData = tablerow.filter((row) =>
@@ -217,7 +211,7 @@ export default function QAMTab(props) {
   //   (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
-  
+
   return (
     <>
       < div className='channel_tab ' >
@@ -231,7 +225,7 @@ export default function QAMTab(props) {
             rcQAMTableData && rcQAMTableData.length > 0 ?
               <BootstrapTable
                 id='running_qam_table'
-                keyField="no"
+                keyField="ch_index"
                 data={rcQAMTableData}
                 columns={columns}
                 selectRow={selectRow}
@@ -247,8 +241,10 @@ export default function QAMTab(props) {
 
         <div className="action mb-4 border border-dark p-2">
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
+
           <div className="action_btns justify-content-between">
             <div className="left_btns text-center">
+
               <Button label={'Edit'} handleClick={editHandleClick} />
               {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
               <ModalAoi
@@ -259,6 +255,7 @@ export default function QAMTab(props) {
                 modalFooter={editFooter()}
               />
             </div>
+
             <div className="right_btn text-center">
               <Button label={'Save as'} handleClick={saveHandleClick} />
               <ModalAoi
