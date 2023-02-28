@@ -15,22 +15,6 @@ const getRunConfigQAMTableFailed = error => ({
   error: true
 });
 
-// export const getRunConfigQAMTable = () => async (dispatch, getState) => {
-
-//   dispatch(getRunConfigQAMTableStarted());
-
-//   await getTableRunConfigQAM({dispatch})
-//     .then((res) => {
-//       const { rcQAMTable } = getState().runCongifQAMTable;
-//       dispatch(getRunConfigQAMTableSucceeded(res));
-//     })
-
-//     .catch(() => {
-//       dispatch(getRunConfigQAMTableFailed('error.response'));
-//     });
-// };
-
-
 export const getRunConfigQAMTable = () => {
   return async dispatch => {
     dispatch(getRunConfigQAMTableStarted());
