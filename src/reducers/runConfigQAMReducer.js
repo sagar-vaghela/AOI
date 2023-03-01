@@ -20,6 +20,7 @@ const runConfigQAMReducer = (state = initialState.runCongifQAMTable, action) => 
         isLoading: false,
         error: action.payload
       };
+      
     default:
       return state;
   }
