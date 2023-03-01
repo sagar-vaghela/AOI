@@ -3,24 +3,48 @@ import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
-import { getRunConfigQAMTable } from '../../../../actions/runConfigQAM';
+import { getRunConfigQAMTable } from '../../../../actions/drcQAMTable';
 import { useSelector, useDispatch } from "react-redux";
+import { getRCQAMEditTableRow } from '../../../../actions/drcQAMTableRowEdit';
+import { getRCQAMCreateTableRow } from '../../../../actions/drcQAMTableRowCreate';
+import { getRCQAMDeleteTableRowCell } from '../../../../actions/drcQAMTableRowDelete';
+
+let editRowData = [];
 
 export default function QAMTab(props) {
 
   const dispatch = useDispatch();
 
   const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
+  const rcQAMTableUpdateData = useSelector((state) => state.drcQAMTableRowEditReducer.rcQAMEditRow);
+  const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
+  const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
+
 
   const [search, setSearch] = useState('')
   const [modalShow, setModalShow] = useState(false);
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [editValue, setEditValue] = useState(0);
+  const [updateRowData, setUpdateRowData] = useState([]);
+  const [powerValue, setPowerValue] = useState();
+  const [muteValue, setMuteValue] = useState();
+
 
   useEffect(() => {
     dispatch(getRunConfigQAMTable());
   }, []);
+
+  useEffect(() => {
+    if ((rcQAMTableUpdateData.data && rcQAMTableUpdateData.data.success === true) ||
+      (rcQAMTableCreateData.data && rcQAMTableCreateData.data.success === true) ||
+      (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true)
+    ) {
+      dispatch(getRunConfigQAMTable());
+      setModalShow(false);
+    }
+  }, [rcQAMTableUpdateData, rcQAMTableCreateData, rcQAMTableDeleteData])
+
 
   const muted = (
     <div class="custom-control custom-switch">
@@ -76,6 +100,7 @@ export default function QAMTab(props) {
       dataField: 'no',
       text: 'No',
       sort: true,
+      editable: false,
       formatter: numberFormatter,
     },
     {
@@ -112,6 +137,7 @@ export default function QAMTab(props) {
 
 
   const editHandleClick = () => {
+    setPowerValue();
     const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
     selectRowLength === 0 ? setModalShow(true) : setModalShow(true)  // changes on ticket 1
     setEditValue(selectRowLength);
@@ -126,12 +152,25 @@ export default function QAMTab(props) {
     props.showAlertBox('Action was complete successfully!', 'success')
   }
 
+
+  const handleOnSelect = (row, isSelect) => {
+    if (isSelect) {
+      editRowData.push(row);
+    } else {
+      const updateRowData = editRowData.filter(item => item.ch_index !== row.ch_index);
+      editRowData = updateRowData;
+    }
+    setUpdateRowData(editRowData);
+
+  }
+
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
     classes: 'selection-row',
     clickToEdit: true,
     hideSelectColumn: true,
+    onSelect: handleOnSelect,
   };
 
   const editBody = () => {
@@ -152,16 +191,14 @@ export default function QAMTab(props) {
             <div className="d-flex justify-content-center mb-3">
               <div className="me-3">
                 <label htmlFor="" className='me-2'>Power: </label>
-                <input type="text" />
+                <input type="text" value={powerValue} onChange={(e) => setPowerValue(e.target.value)} />
               </div>
 
-              <div>
+              <div className='d-flex'>
                 <label htmlFor="" className='me-2'>Mute: </label>
-                <label className="toggle_box">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                  <span className="labels" data-on="Yes" data-off="No"></span>
-                </label>
+                <div className="form-check form-switch">
+                  <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onChange={e => setMuteValue(e.target.checked)} />
+                </div>
               </div>
             </div>
 
@@ -169,6 +206,25 @@ export default function QAMTab(props) {
         }
       </>
     )
+  }
+
+  const upateRow = () => {
+
+    const checkSwitch = (muteValue === true ? 'YES' : 'NO')
+
+    editRowData.forEach((item, index) => {
+      const payload = {
+        modulation: item.modulation,
+        power: powerValue,
+        interleave: item.interleave,
+        annex: item.annex,
+        operMode: item.operMode,
+        mute: checkSwitch,
+        width: item.width,
+        frequency: item.frequency,
+      }
+      dispatch(getRCQAMEditTableRow(item.ch_index, payload));
+    });
   }
 
   const editFooter = () => {
@@ -179,7 +235,7 @@ export default function QAMTab(props) {
           <></>
           :
           <div className='edit_btns'>
-            <Button label={'Edit'} />
+            <Button label={'Edit'} handleClick={upateRow} />
             <Button label={'Cancel'} handleClick={() => setModalShow(false)} />
           </div>
         }
@@ -200,7 +256,7 @@ export default function QAMTab(props) {
   )
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      console.log(`clicked on row with index: ${rowIndex}`);
+      console.log(`clicked on row with index: ${rowIndex}`, row);
     },
   };
 
@@ -211,6 +267,43 @@ export default function QAMTab(props) {
   //   (row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
+
+  const dbSaveCell = (row, newValue) => {
+
+    const payload = {
+      modulation: row.modulation,
+      power: row.power,
+      interleave: row.interleave,
+      annex: row.annex,
+      operMode: row.operMode,
+      mute: row.mute,
+      width: row.width,
+      frequency: row.frequency,
+    }
+    dispatch(getRCQAMEditTableRow(row.ch_index, payload));
+  }
+
+  const addRowCell = () => {
+    const payload = {
+      modulation: "QAM256",
+      power: "",
+      interleave: "INTERLEAVER_8_16",
+      annex: 'ANNEX_B',
+      operMode: "MPEG_VIDEO",
+      mute: "NO",
+      width: "6",
+      frequency: "0",
+    }
+    dispatch(getRCQAMCreateTableRow(payload));
+
+  }
+
+  const deleteRowCell = () => {
+    editRowData.forEach((item, index) => {
+      dispatch(getRCQAMDeleteTableRowCell(item.ch_index));
+    });
+  }
+
 
   return (
     <>
@@ -229,7 +322,12 @@ export default function QAMTab(props) {
                 data={rcQAMTableData}
                 columns={columns}
                 selectRow={selectRow}
-                cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+                cellEdit={cellEditFactory({
+                  mode: 'dbclick',
+                  blurToSave: true,
+                  onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
+                  afterSaveCell: (oldValue, newValue, row, column) => { dbSaveCell(row, newValue) }
+                })}
                 headerClasses="table_header"
                 classes="mb-0"
                 rowEvents={rowEvents}
@@ -246,7 +344,11 @@ export default function QAMTab(props) {
             <div className="left_btns text-center">
 
               <Button label={'Edit'} handleClick={editHandleClick} />
+              <Button label={'Add Channel'} handleClick={addRowCell} />
+              <Button label={'Delete Channel'} handleClick={deleteRowCell} />
+
               {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}
+
               <ModalAoi
                 show={modalShow}
                 onHide={() => setModalShow(false)}
