@@ -22,7 +22,6 @@ export default function QAMTab(props) {
 
 
   const [search, setSearch] = useState('')
-  const [selectBtn, setSelectBtn] = useState('Select All')
   const [modalShow, setModalShow] = useState(false);
   const [saveAs, setSaveAs] = useState(false)
   const [saveName, setSaveName] = useState('')
@@ -340,6 +339,7 @@ export default function QAMTab(props) {
 
         <div className="action mb-4 border border-dark p-2">
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
+
           <div className="action_btns justify-content-between">
             <div className="left_btns text-center">
 
@@ -357,6 +357,7 @@ export default function QAMTab(props) {
                 modalFooter={editFooter()}
               />
             </div>
+
             <div className="right_btn text-center">
               <Button label={'Save as'} handleClick={saveHandleClick} />
               <ModalAoi
