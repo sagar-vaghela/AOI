@@ -5,19 +5,19 @@ import {
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer
 } from './drcQAMchannelsReducer';
-import manageConfigReducer from './dmcCurrentFilesReducer';
-import popupReducer from './popupReducer';
-import ConfigurationQAMReducer from "./dConfigurationReducer";
+import {dmcTableReducer, dmcNewDataBaseAddReducer} from './dmcCurrentFilesReducer';
+import { popupReducer } from './popupReducer';
+import {ConfigurationQAMReducer} from "./dConfigurationReducer";
 
 const rootReducer = combineReducers({
     drcQAMTableReducer,
     drcQAMTableRowEditReducer,
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer,
-    manageConfigReducer,
+    dmcTableReducer,
     popupReducer,
     ConfigurationQAMReducer,
-
+    dmcNewDataBaseAddReducer,
 });
 
 export default rootReducer;

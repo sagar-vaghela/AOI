@@ -12,7 +12,7 @@ import { addRangeQAMConfiguration } from "../../../../actions/dConfiguration";
 
 let manageConfigTableIndex = []
 
-const QAMTab = () => {
+const QAMTab = ({dataBaseName}) => {
   const [search, setSearch] = useState('')
   const [selectBtn, setSelectBtn] = useState('Select All')
   const [editModalShow, setEditModalShow] = useState(false);

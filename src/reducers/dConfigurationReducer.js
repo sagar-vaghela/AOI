@@ -1,7 +1,7 @@
 import { POST_CONFIG_QAM_TABLE_ADD_RANGE } from "../lib/constants";
 import initialState from "./initialState";
 
-const ConfigurationQAMReducer = (state = initialState.ConfigurationQAMTable, action) => {
+export const ConfigurationQAMReducer = (state = initialState.configurationQAMTable, action) => {
   switch (action.type) {
     case POST_CONFIG_QAM_TABLE_ADD_RANGE:
       return {

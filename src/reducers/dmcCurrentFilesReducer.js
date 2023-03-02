@@ -2,14 +2,12 @@ import {
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
     GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
-    GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED
+    GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED,
+    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED
 } from "../lib/constants";
 import initialState from "./initialState";
 
-const manageConfigReducer = (
-    state = initialState.manageConfigTable,
-    action
-) => {
+export const dmcTableReducer = (state = initialState.manageConfigTable, action) => {
     switch (action.type) {
         case GET_MANAGE_CONFIG_QAM_TABLE_STARTED:
             return {
@@ -41,4 +39,16 @@ const manageConfigReducer = (
     }
 };
 
-export default manageConfigReducer;
+export const dmcNewDataBaseAddReducer = (state = initialState.dmcNewDataBaseAdd, action) => {
+    switch (action.type) {
+
+        case GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED:
+            return {
+                ...state,
+                dmcNewDataBase: action.payload,
+                isLoading: false
+            };
+        default:
+            return state;
+    }
+};

@@ -7,11 +7,15 @@ import Configuration from '../ConfigurationPages/Configuration';
 
 
 const Downstream = (props) => {
+
   const [activeTab, setActiveTab] = useState('RunningConfigPage');
+  const [dataBaseName, setDataBaseName] = useState('');
 
   const handleTabChange = (eventKey) => {
     setActiveTab(eventKey);
-  }
+  };
+
+console.log("activeTab=====",activeTab);
 
   return (
     <div className='tabs_wrapper'>
@@ -27,10 +31,10 @@ const Downstream = (props) => {
           <RunningConfigPage />
         </Tab>
         <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-          <ManageConfigurationPage setActiveTab={setActiveTab} />
+          <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} />
         </Tab>
         <Tab eventKey="configuration" title="Configuration">
-          <Configuration />
+          <Configuration dataBaseName={dataBaseName} />
         </Tab>
       </Tabs>
     </div>

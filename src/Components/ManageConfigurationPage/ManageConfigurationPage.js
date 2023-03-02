@@ -77,13 +77,12 @@ const tablerow = [
 
 let manageConfigTableIndex = [];
 
-export default function ManageConfigurationPage({ setActiveTab }) {
-  const mcTableUser = useSelector(
-    (state) => state.manageConfigReducer.mcTableUser.data
-  );
-  const mcTableSystem = useSelector(
-    (state) => state.manageConfigReducer.mcTableSystem.data
-  );
+export default function ManageConfigurationPage({ setActiveTab, setDataBaseName }) {
+
+  const mcTableUser = useSelector((state) => state.dmcTableReducer.mcTableUser.data);
+  const mcTableSystem = useSelector((state) => state.dmcTableReducer.mcTableSystem.data);
+  const mcNewDataBase = useSelector((state) => state.dmcNewDataBaseAddReducer.dmcNewDataBase);
+
   const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [dbName, setDBName] = useState('');
@@ -96,6 +95,10 @@ export default function ManageConfigurationPage({ setActiveTab }) {
   const [saveName, setSaveName] = useState("");
   const [tableRow, setTableRow] = useState(tablerow);
   const [editValue, setEditValue] = useState(0);
+  const [checkNewDataBase, setCheckNewDataBase] = useState(false);
+  const [checkSameDataBase, setCheckSameDataBase] = useState(false);
+
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -221,25 +224,49 @@ export default function ManageConfigurationPage({ setActiveTab }) {
 
   const deleteBody = <p>Delete the entry?</p>;
   const newBody = (
-    <input
-      type="text"
-      placeholder="Enter a database name"
-      className="w-100"
-      value={dbName}
-      onChange={(e) => setDBName(e.target.value)}
-      style={{ maxWidth: "100%" }}
-    />
+    checkSameDataBase  ? 
+    <div>This name is already exists. Please enter different name.</div>
+    :
+      <input
+        type="text"
+        placeholder="Enter a database name"
+        className="w-100"
+        value={dbName}
+        onChange={(e) => setDBName(e.target.value)}
+        style={{ maxWidth: "100%" }}
+      />
   );
 
+
+  const newDatabaseAdd = async () => {
+
+    if(tableData.map(item => item.name).includes(dbName)){
+      setCheckSameDataBase(true);
+    }
+    else{
+      await dispatch(newDataBase(dbName));
+      setCheckNewDataBase(true);
+      setNewModalShow(false);
+    }
+
+  }
+
+  useEffect(() => {
+
+    if ((mcNewDataBase && mcNewDataBase.data && mcNewDataBase.data.success === true) && checkNewDataBase) {
+      setDataBaseName(dbName)
+      setActiveTab("configuration");
+      setCheckNewDataBase(false);
+    }
+  }, [mcNewDataBase, checkNewDataBase])
+
+
   const newFooter = (
+    !checkSameDataBase && 
     <div className="edit_btns">
       <Button
         label={"Add"}
-        handleClick={async () => {
-          dispatch(newDataBase(dbName));
-          setNewModalShow(false);
-          // setActiveTab("configuration");
-        }}
+        handleClick={newDatabaseAdd}
       />
       <Button label={"Cancel"} handleClick={() => setNewModalShow(false)} />
     </div>
@@ -336,7 +363,7 @@ export default function ManageConfigurationPage({ setActiveTab }) {
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
         <div className="action_btns justify-content-between">
           <div className="left_btns">
-            <Button label={"New"} handleClick={() => { setNewModalShow(true) }} />
+            <Button label={"New"} handleClick={() => {setNewModalShow(true); setCheckSameDataBase(false); setDBName(''); }} />
             <ModalAoi
               show={newModalShow}
               onHide={() => setNewModalShow(false)}

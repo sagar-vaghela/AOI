@@ -1,4 +1,7 @@
 const initialState = {
+
+    popup: null,
+
     runCongifQAMTable: {
         rcQAMTable: [],
         isLoading: false,
@@ -26,13 +29,16 @@ const initialState = {
         error: null
     },
 
-    ConfigurationQAMTable: {
-        addRange: {},
+    configurationQAMTable: {
+        addRange: [],
         error: null
-
     },
 
-    popup: null,
+    dmcNewDataBaseAdd: {
+        dmcNewDataBase: [],
+        error: null
+    },
+
 };
 
 export default initialState;

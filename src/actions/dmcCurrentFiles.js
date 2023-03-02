@@ -2,7 +2,8 @@ import {
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
     GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
-    GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED
+    GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED,
+    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED
 } from "../lib/constants";
 import {
     getTableManageConfigQAM,
@@ -14,13 +15,18 @@ const getManageConfigQAMTableStarted = () => ({
     type: GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
 });
 
-const getManageConfigQAMTableSyatemSucceeded = (data) => ({
+const getManageConfigQAMTableSystemSucceeded = (data) => ({
     type: GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
     payload: data,
 });
 
 const getManageConfigQAMTableUserSucceeded = (data) => ({
     type: GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED,
+    payload: data,
+});
+
+const getNewDataBaseAddSuccess = (data) => ({
+    type: GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED,
     payload: data,
 });
 
@@ -37,7 +43,7 @@ export const getManageConfigQAMTable = (db_default_type) => {
         await getTableManageConfigQAM(db_default_type)
             .then(function (response) {
                 if (db_default_type === 1) {
-                    dispatch(getManageConfigQAMTableSyatemSucceeded(response));
+                    dispatch(getManageConfigQAMTableSystemSucceeded(response));
                 }
                 if (db_default_type === 0) {
                     dispatch(getManageConfigQAMTableUserSucceeded(response));
@@ -53,6 +59,7 @@ export const newDataBase = (name) => {
     return async dispatch => {
 
         await postNewDataBaseAPI(name).then(function (response) {
+            dispatch(getNewDataBaseAddSuccess(response))
             dispatch(showPopup({ message: "save as successfully", type: "success" }))
         })
             .catch(function (error) {
