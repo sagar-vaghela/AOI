@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
-import runConfigQAMReducer from "./runConfigQAMReducer";
-import drcQAMTableRowEditReducer from "./drcQAMTableRowEditReducer";
-import drcQAMTableRowCreateReducer from "./drcQAMTableRowCreateReducer";
-import drcQAMTableRowDeleteReducer from "./drcQAMTableRowDeleteReducer";
-
+import {
+    drcQAMTableReducer,
+    drcQAMTableRowEditReducer,
+    drcQAMTableRowCreateReducer,
+    drcQAMTableRowDeleteReducer
+} from './drcQAMchannelsReducer';
 
 const rootReducer = combineReducers({
-    runConfigQAMReducer,
+    drcQAMTableReducer,
     drcQAMTableRowEditReducer,
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer

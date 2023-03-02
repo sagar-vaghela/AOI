@@ -3,11 +3,8 @@ import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
-import { getRunConfigQAMTable } from '../../../../actions/drcQAMTable';
+import { getRCQAMCreateTableRow, getRCQAMDeleteTableRowCell, getRCQAMEditTableRow, getRunConfigQAMTable } from '../../../../actions/drcQAMchannels';
 import { useSelector, useDispatch } from "react-redux";
-import { getRCQAMEditTableRow } from '../../../../actions/drcQAMTableRowEdit';
-import { getRCQAMCreateTableRow } from '../../../../actions/drcQAMTableRowCreate';
-import { getRCQAMDeleteTableRowCell } from '../../../../actions/drcQAMTableRowDelete';
 
 let editRowData = [];
 
@@ -15,7 +12,7 @@ export default function QAMTab(props) {
 
   const dispatch = useDispatch();
 
-  const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
+  const rcQAMTableData = useSelector((state) => state.drcQAMTableReducer.rcQAMTable.data);
   const rcQAMTableUpdateData = useSelector((state) => state.drcQAMTableRowEditReducer.rcQAMEditRow);
   const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
