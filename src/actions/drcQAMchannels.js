@@ -10,8 +10,11 @@ import {
     getRCQAMAddTableRow,
     getRCQAMDeleteTableRow,
     getRCQAMUpdateTableRow,
-    getTableRunConfigQAM
+    getTableRunConfigQAM,
+    makeDefaultAPI,
+    postSaveAsAPI
 } from "../services/api";
+import { showPopup } from "./popupAction";
 
 const getRunConfigQAMTableStarted = () => ({
     type: GET_RUN_CONFIG_QAM_TABLE_STARTED
@@ -90,6 +93,30 @@ export const getRCQAMEditTableRow = (ch_id, payload) => {
         })
             .catch(function (error) {
                 console.log("getRCQAMUpdateTableRow error");
+            });
+    };
+}
+
+export const postSaveAs = (filename) => {
+    return async dispatch => {
+
+        await postSaveAsAPI(filename).then(function (response) {
+            dispatch(showPopup({ message: "save as successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+export const makeDefault = () => {
+    return async dispatch => {
+
+        await makeDefaultAPI().then(function (response) {
+            dispatch(showPopup({ message: "Action was complete successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
             });
     };
 }

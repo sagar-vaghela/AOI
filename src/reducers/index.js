@@ -5,12 +5,19 @@ import {
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer
 } from './drcQAMchannelsReducer';
+import manageConfigReducer from './dmcCurrentFilesReducer';
+import popupReducer from './popupReducer';
+import ConfigurationQAMReducer from "./dConfigurationReducer";
 
 const rootReducer = combineReducers({
     drcQAMTableReducer,
     drcQAMTableRowEditReducer,
     drcQAMTableRowCreateReducer,
-    drcQAMTableRowDeleteReducer
+    drcQAMTableRowDeleteReducer,
+    manageConfigReducer,
+    popupReducer,
+    ConfigurationQAMReducer,
+
 });
 
 export default rootReducer;
