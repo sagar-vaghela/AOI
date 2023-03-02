@@ -7,8 +7,6 @@ import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 import { Accordion, Nav } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
-import { addRangeQAMConfiguration } from "../../../../actions/dConfiguration";
-
 
 let manageConfigTableIndex = []
 
@@ -248,7 +246,6 @@ const QAMTab = () => {
             symbolFreqDenominator: "149",
           };
 
-          dispatch(addRangeQAMConfiguration("cpsg2", 0, payload));
         }}
       />
       <Button label={'Cancel'} handleClick={() => setRangeModalShow(false)} />

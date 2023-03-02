@@ -20,18 +20,6 @@ const initialState = {
         error: null
     },
 
-    manageConfigTable: {
-        mcTableUser: [],
-        mcTableSystem: [],
-        error: null
-    },
-
-    ConfigurationQAMTable: {
-        addRange: {},
-        error: null
-
-    },
-
     popup: null,
 };
 

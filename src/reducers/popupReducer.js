@@ -13,11 +13,12 @@ const popupReducer = (state = initialState.popup, action) => {
     case HIDE_POP_UP:
       return {
         ...state,
-        popup: {},
+        popup: null,
       };
 
     default:
       return state;
   }
+
 };
 export default popupReducer;
