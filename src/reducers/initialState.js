@@ -1,5 +1,4 @@
 const initialState = {
-
     runCongifQAMTable: {
         rcQAMTable: [],
         isLoading: false,
@@ -8,22 +7,20 @@ const initialState = {
 
     rcQAMEditRowTable: {
         rcQAMEditRow: [],
-        isLoading: false,
         error: null
     },
 
     rcQAMCreateRowTable: {
         rcQAMCreateRow: [],
-        isLoading: false,
         error: null
     },
 
     rcQAMDeleteRowTable: {
         rcQAMDeleteRow: [],
-        isLoading: false,
         error: null
     },
 
+    popup: null,
 };
 
 export default initialState;

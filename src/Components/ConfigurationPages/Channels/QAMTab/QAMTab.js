@@ -6,6 +6,7 @@ import Visualize from '../../../Modal/Visualize';
 import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 import { Accordion, Nav } from 'react-bootstrap';
+import { useDispatch } from "react-redux";
 
 let manageConfigTableIndex = []
 
@@ -19,6 +20,11 @@ const QAMTab = () => {
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [saveModal, setSaveModal] = useState(false)
   const [editValue, setEditValue] = useState(0)
+  const [nofChannel, setNOFChannel] = useState();
+  const [power, setPower] = useState();
+  const [frequency, setFrequency] = useState();
+  const [mute, setMute] = useState(false);
+  const dispatch = useDispatch();
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
@@ -52,11 +58,15 @@ const QAMTab = () => {
   }
 
 
-  const muted = (<div><label className="toggle_box">
-    <input type="checkbox" />
-    <span className="slider"></span>
-    <span className="labels" data-on="Yes" data-off="No"></span>
-  </label></div>)
+  const muted = (
+    <div>
+      <label className="toggle_box">
+        <input type="checkbox" />
+        <span className="slider"></span>
+        <span className="labels" data-on="Yes" data-off="No"></span>
+      </label>
+    </div>
+  )
 
   const tablerow = [
     { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
@@ -151,23 +161,39 @@ const QAMTab = () => {
         <div className="mb-3 d-flex flex-column align-items-end me-3">
           <div className='mb-2'>
             <label htmlFor="" className='me-2'>Number of Channels: </label>
-            <input type="number" />
+            <input
+              type="number"
+              value={nofChannel}
+              onChange={(e) => setNOFChannel(e.target.value)}
+            />
           </div>
           <div className='mb-2'>
             <label htmlFor="" className='me-2'>Power: </label>
-            <input type="text" />
+            <input
+              type="text"
+              value={power}
+              onChange={(e) => setPower(e.target.value)}
+            />
           </div>
 
         </div>
         <div className="mb-3 d-flex flex-column align-items-start">
           <div className='me-2 mb-3'>
             <label htmlFor="" className='me-2'>Starting Frequency: </label>
-            <input type="number" />
+            <input
+              type="number"
+              value={frequency}
+              onChange={(e) => setFrequency(e.target.value)}
+            />
           </div>
           <div>
             <label htmlFor="" className='me-2'>Mute: </label>
             <label className="toggle_box">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={mute}
+                onChange={(e) => setMute(!mute)}
+              />
               <span className="slider"></span>
               <span className="labels" data-on="Yes" data-off="No"></span>
             </label>
@@ -202,7 +228,26 @@ const QAMTab = () => {
 
   const rangeFooter = (
     <div className='edit_btns'>
-      <Button label={'Add Range'} />
+      <Button
+        label={"Add Range"}
+        handleClick={() => {
+          const payload = {
+
+            modulation: "QAM256",
+            power: power,
+            interleave: "INTERLEAVER_8_16",
+            ch_index: nofChannel,
+            annex: "ANNEX_B",
+            operMode: "MPEG_VIDEO",
+            mute: mute === true ? "YES" : "NO",
+            width: "6",
+            frequency: frequency,
+            symbolFreqNumerator: "78",
+            symbolFreqDenominator: "149",
+          };
+
+        }}
+      />
       <Button label={'Cancel'} handleClick={() => setRangeModalShow(false)} />
     </div>
   )
@@ -216,7 +261,13 @@ const QAMTab = () => {
           <>
             <div className="selected_channel mb-3">
               <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+              <input
+                type="text"
+                value={editValue}
+                readOnly
+                className="bg-secondary text-light border-0"
+                disabled
+              />
             </div>
             <div className="d-flex justify-content-center mb-3">
               <div className="me-3">
@@ -320,7 +371,10 @@ const QAMTab = () => {
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      manageConfigTableIndex.includes({ selectRow: row.no }) ? manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1) : manageConfigTableIndex.push({ selectRow: row.no })
+      manageConfigTableIndex.includes({ selectRow: row.no }) ?
+        manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1)
+        :
+        manageConfigTableIndex.push({ selectRow: row.no })
       console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
 
     }

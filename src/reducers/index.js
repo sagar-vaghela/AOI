@@ -1,15 +1,19 @@
 import { combineReducers } from 'redux';
-import runConfigQAMReducer from "./runConfigQAMReducer";
-import drcQAMTableRowEditReducer from "./drcQAMTableRowEditReducer";
-import drcQAMTableRowCreateReducer from "./drcQAMTableRowCreateReducer";
-import drcQAMTableRowDeleteReducer from "./drcQAMTableRowDeleteReducer";
-
-
-const rootReducer = combineReducers({
-    runConfigQAMReducer,
+import {
+    drcQAMTableReducer,
     drcQAMTableRowEditReducer,
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer
+} from './drcQAMchannelsReducer';
+import popupReducer from './popupReducer';
+
+const rootReducer = combineReducers({
+    drcQAMTableReducer,
+    drcQAMTableRowEditReducer,
+    drcQAMTableRowCreateReducer,
+    drcQAMTableRowDeleteReducer,
+    popupReducer,
+
 });
 
 export default rootReducer;

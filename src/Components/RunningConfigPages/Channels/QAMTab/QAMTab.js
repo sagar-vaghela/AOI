@@ -3,32 +3,37 @@ import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
-import { getRunConfigQAMTable } from '../../../../actions/drcQAMTable';
+import { getRCQAMCreateTableRow, getRCQAMDeleteTableRowCell, getRCQAMEditTableRow, getRunConfigQAMTable, makeDefault, postSaveAs } from '../../../../actions/drcQAMchannels';
 import { useSelector, useDispatch } from "react-redux";
-import { getRCQAMEditTableRow } from '../../../../actions/drcQAMTableRowEdit';
-import { getRCQAMCreateTableRow } from '../../../../actions/drcQAMTableRowCreate';
-import { getRCQAMDeleteTableRowCell } from '../../../../actions/drcQAMTableRowDelete';
+import { showPopup } from '../../../../actions/popupAction';
 
 let editRowData = [];
 
 export default function QAMTab(props) {
-
   const dispatch = useDispatch();
 
-  const rcQAMTableData = useSelector((state) => state.runConfigQAMReducer.rcQAMTable.data);
+  const rcQAMTableData = useSelector((state) => state.drcQAMTableReducer.rcQAMTable.data);
   const rcQAMTableUpdateData = useSelector((state) => state.drcQAMTableRowEditReducer.rcQAMEditRow);
   const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
 
 
-  const [search, setSearch] = useState('')
+  const [tableData, setTableData] = useState(rcQAMTableData);
+  const [search, setSearch] = useState("");
+  const [selectBtn, setSelectBtn] = useState("Select All");
   const [modalShow, setModalShow] = useState(false);
-  const [saveAs, setSaveAs] = useState(false)
-  const [saveName, setSaveName] = useState('')
+  const [saveAs, setSaveAs] = useState(false);
+  const [saveName, setSaveName] = useState("");
   const [editValue, setEditValue] = useState(0);
   const [updateRowData, setUpdateRowData] = useState([]);
   const [powerValue, setPowerValue] = useState();
   const [muteValue, setMuteValue] = useState();
+
+  let Reg = new RegExp(search, "i");
+
+  useEffect(() => {
+    setTableData(rcQAMTableData);
+  }, [rcQAMTableData])
 
 
   useEffect(() => {
@@ -45,112 +50,297 @@ export default function QAMTab(props) {
     }
   }, [rcQAMTableUpdateData, rcQAMTableCreateData, rcQAMTableDeleteData])
 
-
   const muted = (
     <div class="custom-control custom-switch">
       <input type="checkbox" class="custom-control-input" id="customSwitch1" />
     </div>
-  )
+  );
 
   const tablerow = [
-    { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 2, frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 3, frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 4, frequency: "test4", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 5, frequency: "test5", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 6, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 7, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 8, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 9, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 10, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 11, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 12, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 13, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 14, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 15, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 16, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 17, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 18, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-    { no: 19, frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
+    {
+      no: 1,
+      frequency: "test1",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 2,
+      frequency: "test2",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 3,
+      frequency: "test3",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 4,
+      frequency: "test4",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 5,
+      frequency: "test5",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 6,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 7,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 8,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 9,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 10,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 11,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 12,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 13,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 14,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 15,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 16,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 17,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 18,
+      frequency: "test",
+      power: "25",
+      width: "10",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+    {
+      no: 19,
+      frequency: "test",
+      power: "25",
+      width: "11",
+      modulation: "test",
+      annex: "test",
+      op_mode: "test",
+      muted: muted,
+    },
+  ];
 
-  ]
+  useEffect(() => {
+    if (search.length > 0) {
+      let data =
+        rcQAMTableData.length > 0 &&
+        rcQAMTableData.filter(
+          (data) =>
+            Reg.test(data.frequency) ||
+            Reg.test(data.power) ||
+            Reg.test(data.width) ||
+            Reg.test(data.modulation) ||
+            Reg.test(data.annex) ||
+            Reg.test(data.operMode)
+        );
+      setTableData(data);
+    }
+  }, [search]);
 
   function numberFormatter(cell, row, rowIndex) {
-
-    return (
-      <span>
-        {rowIndex + 1}
-      </span>
-    );
+    return <span>{rowIndex + 1}</span>;
   }
 
   function mutedFormatter(row) {
-
-    const checkSwitch = row === 'YES' ? true : false;
+    const checkSwitch = row === "YES" ? true : false;
 
     return (
       <div className="form-check form-switch">
-        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={checkSwitch} onChange={e => { }} />
+        <input
+          className="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckChecked"
+          checked={checkSwitch}
+          onChange={(e) => { }}
+        />
       </div>
     );
   }
 
   const columns = [
     {
-      dataField: 'no',
-      text: 'No',
+      dataField: "no",
+      text: "No",
       sort: true,
       editable: false,
       formatter: numberFormatter,
     },
     {
-      dataField: 'frequency',
-      text: 'Frequency'
+      dataField: "frequency",
+      text: "Frequency",
     },
     {
-      dataField: 'power',
-      text: 'Power'
+      dataField: "power",
+      text: "Power",
     },
     {
-      dataField: 'width',
-      text: 'Width'
+      dataField: "width",
+      text: "Width",
     },
     {
-      dataField: 'modulation',
-      text: 'Modulation'
+      dataField: "modulation",
+      text: "Modulation",
     },
     {
-      dataField: 'annex',
-      text: 'Annex'
+      dataField: "annex",
+      text: "Annex",
     },
     {
-      dataField: 'operMode',
-      text: 'OP Mode'
+      dataField: "operMode",
+      text: "OP Mode",
     },
     {
-      dataField: 'mute',
-      text: 'Muted',
+      dataField: "mute",
+      text: "Muted",
       editable: false,
       formatter: mutedFormatter,
-    }
+    },
   ];
-
 
   const editHandleClick = () => {
     setPowerValue();
     const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
-    selectRowLength === 0 ? setModalShow(true) : setModalShow(true)  // changes on ticket 1
+    selectRowLength === 0 ? setModalShow(true) : setModalShow(true); // changes on ticket 1
     setEditValue(selectRowLength);
-  }
+  };
 
   const saveHandleClick = () => {
-    setSaveAs(true)
-  }
+    setSaveAs(true);
+  };
 
   const defaultHandleClick = () => {
-    console.log(props);
-    props.showAlertBox('Action was complete successfully!', 'success')
-  }
+    dispatch(makeDefault());
+  };
 
 
   const handleOnSelect = (row, isSelect) => {
@@ -165,9 +355,9 @@ export default function QAMTab(props) {
   }
 
   const selectRow = {
-    mode: 'checkbox',
+    mode: "checkbox",
     clickToSelect: true,
-    classes: 'selection-row',
+    classes: "selection-row",
     clickToEdit: true,
     hideSelectColumn: true,
     onSelect: handleOnSelect,
@@ -175,17 +365,22 @@ export default function QAMTab(props) {
 
   const editBody = () => {
     return (
-
       <>
-        {editValue === 0 ?
-
+        {editValue === 0 ? (
           <div>Please Select at list one Row !</div>
-          :
+        ) : (
           <>
-
             <div className="selected_channel mb-3">
-              <label htmlFor="" className='me-2'>Number of Selected Channels: </label>
-              <input type="text" value={editValue} readOnly className='bg-secondary text-light border-0' disabled />
+              <label htmlFor="" className="me-2">
+                Number of Selected Channels:{" "}
+              </label>
+              <input
+                type="text"
+                value={editValue}
+                readOnly
+                className="bg-secondary text-light border-0"
+                disabled
+              />
             </div>
 
             <div className="d-flex justify-content-center mb-3">
@@ -201,12 +396,11 @@ export default function QAMTab(props) {
                 </div>
               </div>
             </div>
-
           </>
-        }
+        )}
       </>
-    )
-  }
+    );
+  };
 
   const upateRow = () => {
 
@@ -228,7 +422,6 @@ export default function QAMTab(props) {
   }
 
   const editFooter = () => {
-
     return (
       <>
         {editValue === 0 ?
@@ -240,23 +433,37 @@ export default function QAMTab(props) {
           </div>
         }
       </>
-    )
-
-  }
-
+    );
+  };
 
   const saveBody = (
-    <input type="text" placeholder='Enter a name' className='w-100' value={saveName} onChange={(e) => setSaveName(e.target.value)} style={{ maxWidth: '100%' }} />
-  )
+    <input
+      type="text"
+      placeholder="Enter a name"
+      className="w-100"
+      value={saveName}
+      onChange={(e) => setSaveName(e.target.value)}
+      style={{ maxWidth: "100%" }}
+    />
+  );
   const saveFooter = (
-    <div className='edit_btns'>
-      <Button label={'Save'} />
-      <Button label={'Cancel'} handleClick={() => setSaveAs(false)} />
+    <div className="edit_btns">
+      <Button
+        label={"Save"}
+        handleClick={async () => {
+          dispatch(postSaveAs(saveName));
+          setSaveAs(false);
+        }}
+      />
+      <Button label={"Cancel"} handleClick={() => setSaveAs(false)} />
     </div>
-  )
+  );
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
       console.log(`clicked on row with index: ${rowIndex}`, row);
+    },
+    bgColor: (row, rowIndex) => {
+      return "red"; // return a color code
     },
   };
 
@@ -304,22 +511,26 @@ export default function QAMTab(props) {
     });
   }
 
-
   return (
     <>
-      < div className='channel_tab ' >
-        <div className='border border-dark mb-4'>
-          <div className='searchbar table_top_bar d-flex justify-content-end align-items-center border-bottom border-dark'>
+      <div className="channel_tab ">
+        <div className="border border-dark mb-4">
+          <div className="searchbar table_top_bar d-flex justify-content-end align-items-center border-bottom border-dark">
             <label htmlFor="search">Search:</label>
-            <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
+            <input
+              type="text"
+              id="search"
+              value={search || ""}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
 
           {
-            rcQAMTableData && rcQAMTableData.length > 0 ?
+            tableData && tableData.length > 0 ?
               <BootstrapTable
                 id='running_qam_table'
                 keyField="ch_index"
-                data={rcQAMTableData}
+                data={tableData}
                 columns={columns}
                 selectRow={selectRow}
                 cellEdit={cellEditFactory({
@@ -352,26 +563,26 @@ export default function QAMTab(props) {
               <ModalAoi
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                modalTitle=''
+                modalTitle=""
                 modalBody={editBody()}
                 modalFooter={editFooter()}
               />
             </div>
 
             <div className="right_btn text-center">
-              <Button label={'Save as'} handleClick={saveHandleClick} />
+              <Button label={"Save as"} handleClick={saveHandleClick} />
               <ModalAoi
                 show={saveAs}
                 onHide={() => setSaveAs(false)}
-                modalTitle='Save As'
+                modalTitle="Save As"
                 modalBody={saveBody}
                 modalFooter={saveFooter}
               />
-              <Button label={'Make Default'} handleClick={defaultHandleClick} />
+              <Button label={"Make Default"} handleClick={defaultHandleClick} />
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
-  )
+  );
 }
