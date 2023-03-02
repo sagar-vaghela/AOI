@@ -17,7 +17,7 @@ export default function QAMTab(props) {
   const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
 
-  
+
   const [tableData, setTableData] = useState(rcQAMTableData);
   const [search, setSearch] = useState("");
   const [selectBtn, setSelectBtn] = useState("Select All");
@@ -30,6 +30,11 @@ export default function QAMTab(props) {
   const [muteValue, setMuteValue] = useState();
 
   let Reg = new RegExp(search, "i");
+
+  useEffect(() => {
+    setTableData(rcQAMTableData);
+  }, [rcQAMTableData])
+
 
   useEffect(() => {
     dispatch(getRunConfigQAMTable());
@@ -276,7 +281,7 @@ export default function QAMTab(props) {
           role="switch"
           id="flexSwitchCheckChecked"
           checked={checkSwitch}
-          onChange={(e) => {}}
+          onChange={(e) => { }}
         />
       </div>
     );
@@ -419,7 +424,7 @@ export default function QAMTab(props) {
   const editFooter = () => {
     return (
       <>
-        {editValue === 0 ? 
+        {editValue === 0 ?
           <></>
           :
           <div className='edit_btns'>
@@ -506,7 +511,6 @@ export default function QAMTab(props) {
     });
   }
 
-
   return (
     <>
       <div className="channel_tab ">
@@ -522,11 +526,11 @@ export default function QAMTab(props) {
           </div>
 
           {
-            rcQAMTableData && rcQAMTableData.length > 0 ?
+            tableData && tableData.length > 0 ?
               <BootstrapTable
                 id='running_qam_table'
                 keyField="ch_index"
-                data={rcQAMTableData}
+                data={tableData}
                 columns={columns}
                 selectRow={selectRow}
                 cellEdit={cellEditFactory({
