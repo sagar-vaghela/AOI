@@ -11,7 +11,7 @@ const Downstream = (props) => {
 
   const handleTabChange = (eventKey) => {
     setActiveTab(eventKey);
-  }
+  };
 
   return (
     <div className='tabs_wrapper'>

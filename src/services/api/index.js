@@ -36,3 +36,18 @@ export const addRangeConfiguration = (dbname, db_default_type, payload) => {
   return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}&db_default_type=${db_default_type}`, payload)
 };
 
+export const systemSettingsSplit = (split) => {
+  return createAxiosFor.post(`/downstream_config/split?split=${split}`);
+};
+
+export const systemSettingsAnnex = (annex) => {
+  return createAxiosFor.post(`/downstream_config/annex?annex=${annex}`);
+};
+
+export const getSystemSettingsSplitData = () => {
+  return createAxiosFor.get('/downstream_config/split')
+};
+
+export const getSystemSettingsAnnexData = () => {
+  return createAxiosFor.get('/downstream_config/annex')
+};

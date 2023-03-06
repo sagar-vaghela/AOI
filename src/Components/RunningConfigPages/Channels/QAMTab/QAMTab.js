@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
-import cellEditFactory from 'react-bootstrap-table2-editor';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
 import { getRCQAMCreateTableRow, getRCQAMDeleteTableRowCell, getRCQAMEditTableRow, getRunConfigQAMTable, makeDefault, postSaveAs } from '../../../../actions/drcQAMchannels';
 import { useSelector, useDispatch } from "react-redux";
 import { showPopup } from '../../../../actions/popupAction';
+import { getSystemSettingsAnnex } from '../../../../actions/systemSettings';
 
 let editRowData = [];
 
@@ -16,6 +17,8 @@ export default function QAMTab(props) {
   const rcQAMTableUpdateData = useSelector((state) => state.drcQAMTableRowEditReducer.rcQAMEditRow);
   const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
+  const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
+
 
 
   const [tableData, setTableData] = useState(rcQAMTableData);
@@ -38,11 +41,13 @@ export default function QAMTab(props) {
 
   useEffect(() => {
     dispatch(getRunConfigQAMTable());
+    dispatch(getSystemSettingsAnnex());
+
   }, []);
 
   useEffect(() => {
     if ((rcQAMTableUpdateData.data && rcQAMTableUpdateData.data.success === true) ||
-      (rcQAMTableCreateData.data && rcQAMTableCreateData.data.success === true) ||
+      (rcQAMTableCreateData.data && rcQAMTableCreateData.status === 200) ||
       (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true)
     ) {
       dispatch(getRunConfigQAMTable());
@@ -288,13 +293,13 @@ export default function QAMTab(props) {
   }
 
   const columns = [
-    {
-      dataField: "no",
-      text: "No",
-      sort: true,
-      editable: false,
-      formatter: numberFormatter,
-    },
+    // {
+    //   dataField: "no",
+    //   text: "No",
+    //   sort: true,
+    //   editable: false,
+    //   formatter: numberFormatter,
+    // },
     {
       dataField: "frequency",
       text: "Frequency",
@@ -303,14 +308,14 @@ export default function QAMTab(props) {
       dataField: "power",
       text: "Power",
     },
-    {
-      dataField: "width",
-      text: "Width",
-    },
-    {
-      dataField: "modulation",
-      text: "Modulation",
-    },
+    // {
+    //   dataField: "width",
+    //   text: "Width",
+    // },
+    // {
+    //   dataField: "modulation",
+    //   text: "Modulation",
+    // },
     {
       dataField: "annex",
       text: "Annex",
@@ -318,6 +323,23 @@ export default function QAMTab(props) {
     {
       dataField: "operMode",
       text: "OP Mode",
+      editor: {
+        type: Type.SELECT,
+        options: [
+          {
+          value: 'QAM64',
+          label: 'QAM64'
+        },
+         {
+          value: 'QAM256',
+          label: 'QAM256'
+        },
+        {
+          value: 'CW_CARRIER',
+          label: 'CW_CARRIER'
+        }
+      ],
+      }
     },
     {
       dataField: "mute",
@@ -408,13 +430,10 @@ export default function QAMTab(props) {
 
     editRowData.forEach((item, index) => {
       const payload = {
-        modulation: item.modulation,
         power: powerValue,
-        interleave: item.interleave,
         annex: item.annex,
         operMode: item.operMode,
         mute: checkSwitch,
-        width: item.width,
         frequency: item.frequency,
       }
       dispatch(getRCQAMEditTableRow(item.ch_index, payload));
@@ -492,13 +511,10 @@ export default function QAMTab(props) {
 
   const addRowCell = () => {
     const payload = {
-      modulation: "QAM256",
-      power: "",
-      interleave: "INTERLEAVER_8_16",
-      annex: 'ANNEX_B',
-      operMode: "MPEG_VIDEO",
+      power: "0",
+      annex: rcQAMAnnexData && rcQAMAnnexData.data,
+      operMode: "QAM256",
       mute: "NO",
-      width: "6",
       frequency: "0",
     }
     dispatch(getRCQAMCreateTableRow(payload));
@@ -516,6 +532,8 @@ export default function QAMTab(props) {
       <div className="channel_tab ">
         <div className="border border-dark mb-4">
           <div className="searchbar table_top_bar d-flex justify-content-end align-items-center border-bottom border-dark">
+
+            <label htmlFor="search">Annex: {rcQAMAnnexData && rcQAMAnnexData.data}</label>
             <label htmlFor="search">Search:</label>
             <input
               type="text"
@@ -537,7 +555,15 @@ export default function QAMTab(props) {
                   mode: 'dbclick',
                   blurToSave: true,
                   onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
-                  afterSaveCell: (oldValue, newValue, row, column) => { dbSaveCell(row, newValue) }
+                  afterSaveCell: (oldValue, newValue, row, column) => { 
+                    
+                    console.log("newValue=======",newValue, row, column);
+                    if(column.dataField === 'frequency' && (newValue < 0 || newValue > 1800)){
+                      console.log("error!!!!!!!!!!!");
+                    }
+                    dbSaveCell(row, newValue)
+                  
+                  }
                 })}
                 headerClasses="table_header"
                 classes="mb-0"

@@ -5,7 +5,9 @@ import {
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer
 } from './drcQAMchannelsReducer';
-import popupReducer from './popupReducer';
+import {popupReducer}  from './popupReducer';
+import { settingSplitReducer, settingAnnexReducer, settingSplitDataReducer, settingAnnexDataReducer } from './systemSettingsReducer';
+
 
 const rootReducer = combineReducers({
     drcQAMTableReducer,
@@ -13,7 +15,10 @@ const rootReducer = combineReducers({
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer,
     popupReducer,
-
+    settingSplitReducer,
+    settingAnnexReducer,
+    settingSplitDataReducer,
+    settingAnnexDataReducer
 });
 
 export default rootReducer;

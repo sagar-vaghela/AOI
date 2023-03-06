@@ -21,6 +21,29 @@ const initialState = {
     },
 
     popup: null,
+
+    SystemSettingSplit: {
+        settingSplitPost: [],
+        error: null
+    },
+
+    SystemSettingAnnex: {
+        settingAnnexPost: [],
+        error: null
+    },
+
+    SystemSettingSplitData: {
+        settingSplitGet: [],
+        isLoading: false,
+        error: null
+    },
+
+    SystemSettingAnnexData: {
+        settingAnnexGet: [],
+        isLoading: false,
+        error: null
+    },
+
 };
 
 export default initialState;

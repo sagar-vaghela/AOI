@@ -40,7 +40,6 @@ export const drcQAMTableRowCreateReducer = (state = initialState.rcQAMCreateRowT
             return {
                 ...state,
                 rcQAMCreateRow: action.payload,
-                isLoading: false
             };
         default:
             return state;
@@ -54,7 +53,6 @@ export const drcQAMTableRowDeleteReducer = (state = initialState.rcQAMDeleteRowT
             return {
                 ...state,
                 rcQAMDeleteRow: action.payload,
-                isLoading: false
             };
 
         default:
@@ -69,7 +67,6 @@ export const drcQAMTableRowEditReducer = (state = initialState.rcQAMEditRowTable
             return {
                 ...state,
                 rcQAMEditRow: action.payload,
-                isLoading: false
             };
 
         default:

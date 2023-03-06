@@ -1,7 +1,7 @@
 import { HIDE_POP_UP, SHOW_POP_UP } from "../lib/constants";
 import initialState from "./initialState";
 
-const popupReducer = (state = initialState.popup, action) => {
+export const popupReducer = (state = initialState.popup, action) => {
   switch (action.type) {
 
     case SHOW_POP_UP:
@@ -21,4 +21,3 @@ const popupReducer = (state = initialState.popup, action) => {
   }
 
 };
-export default popupReducer;
