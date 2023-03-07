@@ -31,6 +31,9 @@ export default function QAMTab(props) {
   const [updateRowData, setUpdateRowData] = useState([]);
   const [powerValue, setPowerValue] = useState();
   const [muteValue, setMuteValue] = useState();
+  const [validationQAMTable, setValidationQAMTable] = useState(false);
+  const [validationField, setValidationField] = useState('');
+
 
   let Reg = new RegExp(search, "i");
 
@@ -327,18 +330,18 @@ export default function QAMTab(props) {
         type: Type.SELECT,
         options: [
           {
-          value: 'QAM64',
-          label: 'QAM64'
-        },
-         {
-          value: 'QAM256',
-          label: 'QAM256'
-        },
-        {
-          value: 'CW_CARRIER',
-          label: 'CW_CARRIER'
-        }
-      ],
+            value: 'QAM64',
+            label: 'QAM64'
+          },
+          {
+            value: 'QAM256',
+            label: 'QAM256'
+          },
+          {
+            value: 'CW_CARRIER',
+            label: 'CW_CARRIER'
+          }
+        ],
       }
     },
     {
@@ -527,6 +530,24 @@ export default function QAMTab(props) {
     });
   }
 
+  const validationModal = () => {
+
+    let validationMessage;
+
+    if (validationField === 'frequency') {
+      validationMessage = "Frequency should be in between 0 and 1800";
+    }
+    else if (validationField === 'power') {
+      validationMessage = "Power Range should be in between -12 and 12";
+
+    }
+    return (
+
+      <div>{validationMessage}</div>
+
+    )
+  }
+
   return (
     <>
       <div className="channel_tab ">
@@ -555,14 +576,24 @@ export default function QAMTab(props) {
                   mode: 'dbclick',
                   blurToSave: true,
                   onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
-                  afterSaveCell: (oldValue, newValue, row, column) => { 
-                    
-                    console.log("newValue=======",newValue, row, column);
-                    if(column.dataField === 'frequency' && (newValue < 0 || newValue > 1800)){
-                      console.log("error!!!!!!!!!!!");
+                  afterSaveCell: (oldValue, newValue, row, column) => {
+
+                    if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
+                      setValidationField('frequency');
+                      setValidationQAMTable(true);
+                      dispatch(getRunConfigQAMTable());
+
                     }
-                    dbSaveCell(row, newValue)
-                  
+                    else if (column.dataField === 'power' && (newValue < -12 || newValue > 12 || newValue === '')) {
+                      setValidationField('power');
+                      setValidationQAMTable(true);
+                      dispatch(getRunConfigQAMTable());
+
+                    }
+                    else {
+                      dbSaveCell(row, newValue)
+                    }
+
                   }
                 })}
                 headerClasses="table_header"
@@ -573,6 +604,13 @@ export default function QAMTab(props) {
               <p className='text-center fw-bold mt-2'>No record found</p>
           }
         </div>
+
+        <ModalAoi
+          show={validationQAMTable}
+          onHide={() => setValidationQAMTable(false)}
+          modalTitle=""
+          modalBody={validationModal()}
+        />
 
         <div className="action mb-4 border border-dark p-2">
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
