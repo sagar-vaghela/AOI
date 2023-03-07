@@ -20,7 +20,6 @@ export default function QAMTab(props) {
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
 
 
-
   const [tableData, setTableData] = useState(rcQAMTableData);
   const [search, setSearch] = useState("");
   const [selectBtn, setSelectBtn] = useState("Select All");

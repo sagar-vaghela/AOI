@@ -51,3 +51,7 @@ export const getSystemSettingsSplitData = () => {
 export const getSystemSettingsAnnexData = () => {
   return createAxiosFor.get('/downstream_config/annex')
 };
+
+export const getMangeConfigRowAPI = (dbname, db_default_type) => {
+  return createAxiosFor.get(`/downstream_qams?dbname=${dbname}&db_default_type=${db_default_type}`)
+};
