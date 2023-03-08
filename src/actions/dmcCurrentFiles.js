@@ -1,4 +1,6 @@
 import {
+    GET_ADD_RANGE_SUCCEEDED,
+    GET_CHANGE_NAME,
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
     GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
@@ -11,7 +13,11 @@ import {
 import {
     getMangeConfigRowAPI,
     getTableManageConfigQAM,
-    postNewDataBaseAPI
+    postNewDataBaseAPI,
+    addRangeConfiguration,
+    deletesingledatabse,
+    renamedbname,
+    deleteDatabase
 } from "../services/api";
 import { showPopup } from ".//popupAction";
 
@@ -53,6 +59,16 @@ const getManageConfigRowSelectFailed = error => ({
     type: GET_MANAGE_CONFIG_ROW_SELECT_FAILED,
     payload: error,
     error: true
+});
+
+const getAddNewRangedataSuccess = (data) => ({
+    type: GET_ADD_RANGE_SUCCEEDED,
+    payload: data,
+});
+
+const renameDatabaseName = (data) => ({
+    type: GET_CHANGE_NAME,
+    payload: data
 });
 
 export const getManageConfigQAMTable = (db_default_type) => {
@@ -97,6 +113,61 @@ export const getManageConfigRowSelect = (dbname, db_default_type) => {
         })
             .catch(function (error) {
                 dispatch(getManageConfigRowSelectFailed(error));
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+export const addRange = (dbname, payload) => {
+    return async dispatch => {
+
+        await addRangeConfiguration(dbname, payload).then(function (response) {
+            dispatch(getAddNewRangedataSuccess(response))
+            dispatch(showPopup({ message: "Add as successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+export const removedatabase = (dbname,ch_id) => {
+    
+    return async dispatch => {
+
+        await deletesingledatabse(dbname, ch_id).then(function (response) {
+            // dispatch(getAddNewRangedataSuccess(response))
+            dispatch(showPopup({ message: "Add as successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+export const changeDataBaseName = (dbname,copyname) => {
+    return async dispatch => {
+
+        await renamedbname(dbname, copyname).then(function (response) {
+            dispatch(renameDatabaseName(response))
+            dispatch(showPopup({ message: " Change name successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+
+}
+
+export const removeDatabase = (dbname) => {
+    return async dispatch => {
+
+        await deleteDatabase(dbname).then(function (response) {
+            // dispatch(deleteDatabaseRecord(response))
+            dispatch(showPopup({ message: " Deleted successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
             });
     };
 }

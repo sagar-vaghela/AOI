@@ -324,7 +324,7 @@ export default function QAMTab(props) {
     },
     {
       dataField: "operMode",
-      text: "OP Mode",
+      text: "Oper Mode",
       editor: {
         type: Type.SELECT,
         options: [
@@ -512,6 +512,7 @@ export default function QAMTab(props) {
   }
 
   const addRowCell = () => {
+
     const payload = {
       power: "0",
       annex: rcQAMAnnexData && rcQAMAnnexData.data,
@@ -521,6 +522,11 @@ export default function QAMTab(props) {
     }
     dispatch(getRCQAMCreateTableRow(payload));
 
+  }
+
+  const handleChangemodul = (event) => {
+    //  console.log("value",event.target.value);
+    // setOperModeValue(event.target.value);
   }
 
   const deleteRowCell = () => {
@@ -618,7 +624,7 @@ export default function QAMTab(props) {
             <div className="left_btns text-center">
 
               <Button label={'Edit'} handleClick={editHandleClick} />
-              <Button label={'Add Channel'} handleClick={addRowCell} />
+              <Button label={'Add Range'} handleClick={addRowCell} />
               <Button label={'Delete Channel'} handleClick={deleteRowCell} />
 
               {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}

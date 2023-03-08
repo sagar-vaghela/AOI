@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 import { Accordion, Nav } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
+import { addRange, removedatabase } from '../../../../actions/dmcCurrentFiles';
 
 let manageConfigTableIndex = []
 
@@ -23,6 +24,8 @@ const QAMTab = () => {
   const [nofChannel, setNOFChannel] = useState();
   const [power, setPower] = useState();
   const [frequency, setFrequency] = useState();
+  const [operModeValue, setOperModeValue] = useState();
+  const [annexSelectType, setannexSelectType] = useState();
   const [mute, setMute] = useState(false);
   const dispatch = useDispatch();
 
@@ -56,8 +59,14 @@ const QAMTab = () => {
   const saveHandleClick = () => {
     setSaveModal(true)
   }
+  const handleChangemodul = (event) => {
+    //  console.log("value",event.target.value);
+    setOperModeValue(event.target.value);
+  }
 
-
+  const handlechangeannex = (event) => {
+    setannexSelectType(event.target.value)
+  }
   const muted = (
     <div>
       <label className="toggle_box">
@@ -122,31 +131,30 @@ const QAMTab = () => {
     {
       dataField: 'no',
       text: 'No',
-      sort: true
     },
     {
       dataField: 'frequency',
-      text: 'Frequency'
+      text: 'Frequency',
     },
     {
       dataField: 'power',
-      text: 'Power'
+      text: 'Power',
     },
     {
       dataField: 'width',
-      text: 'Width'
+      text: 'Width',
     },
     {
       dataField: 'modulation',
-      text: 'Modulation'
+      text: 'Modulation',
     },
     {
       dataField: 'annex',
-      text: 'Annex'
+      text: 'Annex',
     },
     {
       dataField: 'op_mode',
-      text: 'OP Mode'
+      text: 'OP Mode',
     },
     {
       dataField: 'muted',
@@ -175,8 +183,8 @@ const QAMTab = () => {
               onChange={(e) => setPower(e.target.value)}
             />
           </div>
-
         </div>
+
         <div className="mb-3 d-flex flex-column align-items-start">
           <div className='me-2 mb-3'>
             <label htmlFor="" className='me-2'>Starting Frequency: </label>
@@ -198,9 +206,7 @@ const QAMTab = () => {
               <span className="labels" data-on="Yes" data-off="No"></span>
             </label>
           </div>
-
         </div>
-
       </div>
       <Accordion defaultActiveKey="1" className='advance_setting'>
         <Accordion.Item eventKey="0">
@@ -208,21 +214,24 @@ const QAMTab = () => {
           <Accordion.Body>
             <div className='d-flex mb-2'>
               <label htmlFor="" className='text-nowrap me-2'>Modulation Type: </label>
-              <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }}>
+              <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
                 <option></option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="QAM64">QAM64</option>
+                <option value="QAM256">QAM256 </option>
+                <option value="CW_CARRIER">CW_CARRIER</option>
               </Form.Select>
             </div>
             <div className='mb-2 d-flex'>
               <label htmlFor="" className='me-2'>Annex Type: </label>
-              <input type="text" />
+              <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handlechangeannex} value={annexSelectType}>
+                <option></option>
+                <option value="ANNEX_A">ANNEX_A</option>
+                <option value="ANNEX_B">ANNEX_B </option>
+              </Form.Select>
             </div>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-
     </>
   )
 
@@ -231,21 +240,23 @@ const QAMTab = () => {
       <Button
         label={"Add Range"}
         handleClick={() => {
+
           const payload = {
-
-            modulation: "QAM256",
             power: power,
-            interleave: "INTERLEAVER_8_16",
-            ch_index: nofChannel,
-            annex: "ANNEX_B",
-            operMode: "MPEG_VIDEO",
+            numofchannels: Number(nofChannel),
+            annex: 'ANNEX_A',
+            operMode: operModeValue,
             mute: mute === true ? "YES" : "NO",
-            width: "6",
             frequency: frequency,
-            symbolFreqNumerator: "78",
-            symbolFreqDenominator: "149",
           };
-
+          dispatch(addRange('cpsg2.db', payload))
+          setRangeModalShow(false);
+          setNOFChannel('');
+          setPower('');
+          setFrequency('');
+          setMute(false);
+          setOperModeValue('');
+          setannexSelectType('');
         }}
       />
       <Button label={'Cancel'} handleClick={() => setRangeModalShow(false)} />
@@ -345,6 +356,7 @@ const QAMTab = () => {
     const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
     setTableRow(results);
     setDeleteModalShow(false)
+    // dispatch(removedatabase('cpsg2.db', 50))
   }
 
   const deleteBody = (
@@ -376,7 +388,7 @@ const QAMTab = () => {
         :
         manageConfigTableIndex.push({ selectRow: row.no })
       console.log(`clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`);
-
+      console.log("frequency", row.frequency);
     }
   };
 

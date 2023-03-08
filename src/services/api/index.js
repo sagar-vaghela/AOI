@@ -32,8 +32,12 @@ export const postNewDataBaseAPI = (name) => {
   return createAxiosFor.post(`/downstream_config/new?dbname=${name}`);
 };
 
-export const addRangeConfiguration = (dbname, db_default_type, payload) => {
-  return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}&db_default_type=${db_default_type}`, payload)
+export const addRangeConfiguration = (dbname, payload) => {
+  return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}`, payload)
+};
+
+export const addRangeSingleCreate = (dbname, payload) => {
+  return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}`, payload)
 };
 
 export const systemSettingsSplit = (split) => {
@@ -54,4 +58,16 @@ export const getSystemSettingsAnnexData = () => {
 
 export const getMangeConfigRowAPI = (dbname, db_default_type) => {
   return createAxiosFor.get(`/downstream_qams?dbname=${dbname}&db_default_type=${db_default_type}`)
+};
+
+export const deletesingledatabse = (dbname, ch_id) => {
+  return createAxiosFor.post(`/downstream_qams_single/delete?dbname=${dbname}&ch_id=${ch_id}`)
+};
+
+export const renamedbname = (dbname,copyname) => {
+  return createAxiosFor.post(`/downstream_config/copy?from_db=${dbname}&to_db=${copyname}`)  
+};
+
+export const deleteDatabase = (dbname) => {
+  return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`) 
 };

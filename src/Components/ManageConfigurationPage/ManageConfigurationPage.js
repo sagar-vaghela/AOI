@@ -8,7 +8,7 @@ import ModalAoi from "../Modal/ModalAoi";
 import { Tab, Tabs } from "react-bootstrap";
 import QAMTab from "./Channels/QAMTab/QAMTab";
 import { useDispatch, useSelector } from "react-redux";
-import { getManageConfigQAMTable, getManageConfigRowSelect, newDataBase } from "../../actions/dmcCurrentFiles";
+import { changeDataBaseName, getManageConfigQAMTable, getManageConfigRowSelect, newDataBase, removeDatabase } from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
 
 const tablerow = [
@@ -103,6 +103,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const [checkSameDataBase, setCheckSameDataBase] = useState(false);
   const [annexModal, setAnnexModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
+  const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
+  const [editablebody, seteditablebody] = useState('');
+  const [dbRename, setdbRename] = useState('');
 
 
   const dispatch = useDispatch();
@@ -142,11 +145,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const deleteHandleClick = () => {
     setDeleteModalShow(true);
   };
-
   const renameHandleClick = () => {
+    if (editValue !== 0) {
     setRenameModalShow(true);
+    setCheckSameDataBase(false); 
+    setdbRename(selectedRow.name);
+    }else{
+    seteditablebody('Please select at list one Row !');
+    setdbRename('');
+    setOfdmEditModalShow(true);
+    }
   };
-
   // if (visualizeModel) {
   //   document.getElementsByClassName('tab-content')[0].classList.add('overflow-hide')
   // } else {
@@ -181,6 +190,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     setEditValue(selectRowLength);
     const dbName = row.name;
     const dbType = row.editable === 'no' ? 1 : 0;
+    console.log("row",row.name);
     setSelectedRow(row);
     dispatch(getManageConfigRowSelect(dbName, dbType));
     dispatch(getSystemSettingsAnnex());
@@ -262,6 +272,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   useEffect(() => {
 
     if ((mcNewDataBase && mcNewDataBase.data && mcNewDataBase.data.success === true) && checkNewDataBase) {
+      console.log("dbname",dbName);
       setDataBaseName(dbName)
       setActiveTab("configuration");
       setCheckNewDataBase(false);
@@ -291,6 +302,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     setDeleteModalShow(false);
   };
 
+
+  const renamedatabase = async() => {
+    if (tableData.map(item => item.name).includes(dbRename)) {
+      setCheckSameDataBase(true);
+    }else{
+      await dispatch(changeDataBaseName(selectedRow.name,dbRename));
+      dispatch(removeDatabase(selectedRow.name));
+      setRenameModalShow(false);
+    }
+  }
+
   const deleteFooter = (
     <div className="edit_btns">
       <Button
@@ -300,23 +322,26 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
       <Button label={"Cancel"} handleClick={() => setDeleteModalShow(false)} />
     </div>
   );
-
-  const renameBody = (
+  const renameBody = ( checkSameDataBase ?
+    <div>This name is already exists. Please enter different name.</div>
+    :
     <input
       type="text"
       placeholder="Enter a new file name"
       className="w-100"
       style={{ maxWidth: "100%" }}
+      value={dbRename}
+      onChange={(e) => setdbRename(e.target.value)}
     />
   );
 
   const renameFooter = (
+    !checkSameDataBase &&
     <div className="edit_btns">
-      <Button label={"Save"} />
+      <Button label={"Save"}   handleClick={() => renamedatabase()} />
       <Button label={"Cancel"} handleClick={() => setRenameModalShow(false)} />
     </div>
   );
-
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -346,7 +371,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
       const rowAnnex = mcTableRowData && mcTableRowData.data[0] && mcTableRowData.data[0].annex;
 
       if (rowAnnex && selectedRow.editable === 'yes') {
-
         if (settingAnnex === rowAnnex) {
           setActiveTab("configuration");
         }
@@ -354,7 +378,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
           setAnnexModal(true);
         }
 
+      }else{
+        seteditablebody('This Row is not editable!');
+        setOfdmEditModalShow(true);
       }
+    }
+    else {
+      seteditablebody('Please select at list one Row !');
+      setOfdmEditModalShow(true);
     }
 
   }
@@ -363,6 +394,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   //   (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.editable?.toUpperCase().indexOf(search.toUpperCase()) > -1)
   // )
+  // console.log("selectedRow",selectedRow.name);
 
   return (
     <div className="channel_tab">
@@ -407,6 +439,13 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
               modalFooter={newFooter}
             />
             <Button label={"Edit"} handleClick={rowEditHandler} />
+            <ModalAoi
+              show={OfdmEditModalShow}
+              onHide={() => setOfdmEditModalShow(false)}
+              modalTitle=''
+              modalBody={editablebody}
+              modalFooter=''
+            />
           </div>
           <div className="right_btn">
             <Button label={"Run"} />
@@ -474,11 +513,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
             tabClassName="fw-bold"
             title="OFDM Channels"
           >
-            <OFDMTab />
-          </Tab>
-        </Tabs>
-      ) : null}
-      {visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null}
+            <OFDMTab /> </Tab> </Tabs> ) : null} {visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null}
       <ModalAoi
         show={annexModal}
         onHide={() => setAnnexModal(false)}

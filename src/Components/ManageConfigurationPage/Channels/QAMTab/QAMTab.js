@@ -66,11 +66,11 @@ export default function QAMTab({ mcTableRowData }) {
     // },
     {
       dataField: 'frequency',
-      text: 'Frequency'
+      text: 'Frequency',
     },
     {
       dataField: 'power',
-      text: 'Power'
+      text: 'Power',
     },
     // {
     //   dataField: 'width',
@@ -82,7 +82,7 @@ export default function QAMTab({ mcTableRowData }) {
     // },
     {
       dataField: 'annex',
-      text: 'Annex'
+      text: 'Annex',
     },
     {
       dataField: "operMode",
@@ -118,7 +118,7 @@ export default function QAMTab({ mcTableRowData }) {
     mode: 'checkbox',
     clickToSelect: true,
     classes: 'selection-row',
-    clickToEdit: true,
+    clickToEdit: false,
     hideSelectColumn: true
   };
 
