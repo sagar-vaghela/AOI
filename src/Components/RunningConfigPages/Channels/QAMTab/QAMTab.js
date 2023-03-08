@@ -20,7 +20,6 @@ export default function QAMTab(props) {
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
 
 
-
   const [tableData, setTableData] = useState(rcQAMTableData);
   const [search, setSearch] = useState("");
   const [selectBtn, setSelectBtn] = useState("Select All");
@@ -31,6 +30,9 @@ export default function QAMTab(props) {
   const [updateRowData, setUpdateRowData] = useState([]);
   const [powerValue, setPowerValue] = useState();
   const [muteValue, setMuteValue] = useState();
+  const [validationQAMTable, setValidationQAMTable] = useState(false);
+  const [validationField, setValidationField] = useState('');
+
 
   let Reg = new RegExp(search, "i");
 
@@ -322,23 +324,23 @@ export default function QAMTab(props) {
     },
     {
       dataField: "operMode",
-      text: "OP Mode",
+      text: "Oper Mode",
       editor: {
         type: Type.SELECT,
         options: [
           {
-          value: 'QAM64',
-          label: 'QAM64'
-        },
-         {
-          value: 'QAM256',
-          label: 'QAM256'
-        },
-        {
-          value: 'CW_CARRIER',
-          label: 'CW_CARRIER'
-        }
-      ],
+            value: 'QAM64',
+            label: 'QAM64'
+          },
+          {
+            value: 'QAM256',
+            label: 'QAM256'
+          },
+          {
+            value: 'CW_CARRIER',
+            label: 'CW_CARRIER'
+          }
+        ],
       }
     },
     {
@@ -510,6 +512,7 @@ export default function QAMTab(props) {
   }
 
   const addRowCell = () => {
+
     const payload = {
       power: "0",
       annex: rcQAMAnnexData && rcQAMAnnexData.data,
@@ -521,10 +524,33 @@ export default function QAMTab(props) {
 
   }
 
+  const handleChangemodul = (event) => {
+    //  console.log("value",event.target.value);
+    // setOperModeValue(event.target.value);
+  }
+
   const deleteRowCell = () => {
     editRowData.forEach((item, index) => {
       dispatch(getRCQAMDeleteTableRowCell(item.ch_index));
     });
+  }
+
+  const validationModal = () => {
+
+    let validationMessage;
+
+    if (validationField === 'frequency') {
+      validationMessage = "Frequency should be in between 0 and 1800";
+    }
+    else if (validationField === 'power') {
+      validationMessage = "Power Range should be in between -12 and 12";
+
+    }
+    return (
+
+      <div>{validationMessage}</div>
+
+    )
   }
 
   return (
@@ -555,14 +581,24 @@ export default function QAMTab(props) {
                   mode: 'dbclick',
                   blurToSave: true,
                   onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
-                  afterSaveCell: (oldValue, newValue, row, column) => { 
-                    
-                    console.log("newValue=======",newValue, row, column);
-                    if(column.dataField === 'frequency' && (newValue < 0 || newValue > 1800)){
-                      console.log("error!!!!!!!!!!!");
+                  afterSaveCell: (oldValue, newValue, row, column) => {
+
+                    if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
+                      setValidationField('frequency');
+                      setValidationQAMTable(true);
+                      dispatch(getRunConfigQAMTable());
+
                     }
-                    dbSaveCell(row, newValue)
-                  
+                    else if (column.dataField === 'power' && (newValue < -12 || newValue > 12 || newValue === '')) {
+                      setValidationField('power');
+                      setValidationQAMTable(true);
+                      dispatch(getRunConfigQAMTable());
+
+                    }
+                    else {
+                      dbSaveCell(row, newValue)
+                    }
+
                   }
                 })}
                 headerClasses="table_header"
@@ -574,6 +610,13 @@ export default function QAMTab(props) {
           }
         </div>
 
+        <ModalAoi
+          show={validationQAMTable}
+          onHide={() => setValidationQAMTable(false)}
+          modalTitle=""
+          modalBody={validationModal()}
+        />
+
         <div className="action mb-4 border border-dark p-2">
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
 
@@ -581,7 +624,7 @@ export default function QAMTab(props) {
             <div className="left_btns text-center">
 
               <Button label={'Edit'} handleClick={editHandleClick} />
-              <Button label={'Add Channel'} handleClick={addRowCell} />
+              <Button label={'Add Range'} handleClick={addRowCell} />
               <Button label={'Delete Channel'} handleClick={deleteRowCell} />
 
               {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}

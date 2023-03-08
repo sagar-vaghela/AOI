@@ -1,4 +1,7 @@
 const initialState = {
+
+    popup: null,
+
     runCongifQAMTable: {
         rcQAMTable: [],
         isLoading: false,
@@ -20,8 +23,6 @@ const initialState = {
         error: null
     },
 
-    popup: null,
-
     SystemSettingSplit: {
         settingSplitPost: [],
         error: null
@@ -40,6 +41,23 @@ const initialState = {
 
     SystemSettingAnnexData: {
         settingAnnexGet: [],
+        isLoading: false,
+        error: null
+    },
+
+    manageConfigTable: {
+        mcTableUser: [],
+        mcTableSystem: [],
+        error: null
+    },
+
+    dmcNewDataBaseAdd: {
+        dmcNewDataBase: [],
+        error: null
+    },
+
+    dmcRowSelectData: {
+        dmcRowData: [],
         isLoading: false,
         error: null
     },

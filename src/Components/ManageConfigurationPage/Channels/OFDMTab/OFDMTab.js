@@ -62,7 +62,7 @@ export default function OFDMTab(props) {
     clickToSelect: true,
     hideSelectColumn: true,
     classes: 'selection-row',
-    clickToEdit: true
+    clickToEdit: false
   };
 
   const rowEvents = {
