@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
@@ -6,12 +6,20 @@ import Visualize from '../../../Modal/Visualize';
 import Form from 'react-bootstrap/Form';
 import ModalAoi from '../../../Modal/ModalAoi';
 import { Accordion, Nav } from 'react-bootstrap';
-import { useDispatch } from "react-redux";
-import { addRange, removedatabase } from '../../../../actions/dmcCurrentFiles';
+import { useDispatch, useSelector } from "react-redux";
+import { addRangeQAMConfiguration, getConfigurationQAMTable } from '../../../../actions/dConfiguration';
 
-let manageConfigTableIndex = []
+let manageConfigTableIndex = [];
+let data = [];
 
-const QAMTab = () => {
+const QAMTab = ({ dataBaseName }) => {
+
+  const dispatch = useDispatch();
+
+  const addRangeData = useSelector((state) => state.dcAddRangeReducer.dcAddRangeData);
+  const configQAMTableData = useSelector((state) => state.dcSingleQAMTableReducer.dcSingleQAMTableData);
+
+
   const [search, setSearch] = useState('')
   const [selectBtn, setSelectBtn] = useState('Select All')
   const [editModalShow, setEditModalShow] = useState(false);
@@ -21,13 +29,32 @@ const QAMTab = () => {
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [saveModal, setSaveModal] = useState(false)
   const [editValue, setEditValue] = useState(0)
-  const [nofChannel, setNOFChannel] = useState();
+  const [nofChannel, setNOFChannel] = useState('');
   const [power, setPower] = useState();
   const [frequency, setFrequency] = useState();
-  const [operModeValue, setOperModeValue] = useState();
+  const [operModeValue, setOperModeValue] = useState('');
   const [annexSelectType, setannexSelectType] = useState();
   const [mute, setMute] = useState(false);
-  const dispatch = useDispatch();
+  const [tableData, setTableData] = useState([]);
+
+
+  useEffect(() => {
+    const chId = addRangeData && addRangeData.data && addRangeData.data.ch_id;
+    if (addRangeData && addRangeData.status === 200) {
+
+      for (let i = 0; i <= Number(nofChannel); i++) {
+        dispatch(getConfigurationQAMTable(dataBaseName, chId));
+      }
+    }
+  }, [addRangeData]);
+
+  useEffect(() => {
+    if (configQAMTableData && configQAMTableData.data) {
+      data.push(configQAMTableData.data[0]);
+    }
+    setTableData(data);
+  }, [configQAMTableData]);
+
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow)
@@ -53,7 +80,7 @@ const QAMTab = () => {
   }
 
   const deleteHandleClick = () => {
-    setDeleteModalShow(true)
+    setDeleteModalShow(true);
   }
 
   const saveHandleClick = () => {
@@ -106,7 +133,8 @@ const QAMTab = () => {
     clickToSelect: true,
     hideSelectColumn: true,
     classes: 'selection-row',
-    clickToEdit: true
+    clickToEdit: true,
+    hideSelectColumn: true,
   };
 
 
@@ -127,39 +155,61 @@ const QAMTab = () => {
     }
   }
 
+  function mutedFormatter(row) {
+    const checkSwitch = row === "YES" ? true : false;
+
+    return (
+      <div className="form-check form-switch">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckChecked"
+          checked={checkSwitch}
+          onChange={(e) => { }}
+        />
+      </div>
+    );
+  }
+
   const columns = [
-    {
-      dataField: 'no',
-      text: 'No',
-    },
+    // {
+    //   dataField: 'no',
+    //   text: 'No',
+    // },
     {
       dataField: 'frequency',
       text: 'Frequency',
+      sort: true,
     },
     {
       dataField: 'power',
       text: 'Power',
+      sort: true,
     },
-    {
-      dataField: 'width',
-      text: 'Width',
-    },
-    {
-      dataField: 'modulation',
-      text: 'Modulation',
-    },
+    // {
+    //   dataField: 'width',
+    //   text: 'Width',
+    // },
+    // {
+    //   dataField: 'modulation',
+    //   text: 'Modulation',
+    // },
     {
       dataField: 'annex',
       text: 'Annex',
+      sort: true,
     },
     {
-      dataField: 'op_mode',
+      dataField: 'operMode',
       text: 'OP Mode',
+      sort: true,
     },
     {
-      dataField: 'muted',
+      dataField: 'mute',
       text: 'Muted',
-      editable: false
+      editable: false,
+      formatter: mutedFormatter,
     },
   ];
 
@@ -176,7 +226,7 @@ const QAMTab = () => {
             />
           </div>
           <div className='mb-2'>
-            <label htmlFor="" className='me-2'>Power: </label>
+            <label htmlFor="" className='me-2' title='value from -12 to 12 dB' >Power: </label>
             <input
               type="text"
               value={power}
@@ -187,7 +237,7 @@ const QAMTab = () => {
 
         <div className="mb-3 d-flex flex-column align-items-start">
           <div className='me-2 mb-3'>
-            <label htmlFor="" className='me-2'>Starting Frequency: </label>
+            <label htmlFor="" className='me-2' title='value from 0 to 1800 MHz' >Starting Frequency: </label>
             <input
               type="number"
               value={frequency}
@@ -208,7 +258,17 @@ const QAMTab = () => {
           </div>
         </div>
       </div>
-      <Accordion defaultActiveKey="1" className='advance_setting'>
+
+      <div className='d-flex mb-2 advance_setting'>
+        <label htmlFor="" className='text-nowrap me-2'>Oper Mode: </label>
+        <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
+          <option value="QAM64">QAM64</option>
+          <option value="QAM256">QAM256 </option>
+          <option value="CW_CARRIER">CW_CARRIER</option>
+        </Form.Select>
+      </div>
+
+      {/* <Accordion defaultActiveKey="1" className='advance_setting'>
         <Accordion.Item eventKey="0">
           <Accordion.Header >Advanced Settings</Accordion.Header>
           <Accordion.Body>
@@ -231,37 +291,46 @@ const QAMTab = () => {
             </div>
           </Accordion.Body>
         </Accordion.Item>
-      </Accordion>
+      </Accordion> */}
+
     </>
   )
 
-  const rangeFooter = (
-    <div className='edit_btns'>
-      <Button
-        label={"Add Range"}
-        handleClick={() => {
+  const rangeFooter = () => {
 
-          const payload = {
-            power: power,
-            numofchannels: Number(nofChannel),
-            annex: 'ANNEX_A',
-            operMode: operModeValue,
-            mute: mute === true ? "YES" : "NO",
-            frequency: frequency,
-          };
-          dispatch(addRange('cpsg2.db', payload))
-          setRangeModalShow(false);
-          setNOFChannel('');
-          setPower('');
-          setFrequency('');
-          setMute(false);
-          setOperModeValue('');
-          setannexSelectType('');
-        }}
-      />
-      <Button label={'Cancel'} handleClick={() => setRangeModalShow(false)} />
-    </div>
-  )
+    const opMode = operModeValue === '' ? 'QAM64' : operModeValue;
+
+    return (
+
+      <div className='edit_btns'>
+        <Button
+          label={"Add Range"}
+          handleClick={() => {
+
+            const payload = {
+              power: power,
+              numofchannels: Number(nofChannel),
+              annex: 'ANNEX_A',
+              operMode: opMode,
+              mute: mute === true ? "YES" : "NO",
+              frequency: frequency,
+            };
+
+            dispatch(addRangeQAMConfiguration(dataBaseName, payload));
+            setRangeModalShow(false);
+            // setNOFChannel(''); 
+            setPower('');
+            setFrequency('');
+            setMute(false);
+            setOperModeValue('');
+            setannexSelectType('');
+          }}
+        />
+        <Button label={'Cancel'} handleClick={() => setRangeModalShow(false)} />
+      </div>
+    )
+  }
+
 
   const editBody = () => {
     return (
@@ -356,7 +425,6 @@ const QAMTab = () => {
     const results = tableRow.filter(({ no: id1 }) => !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1));
     setTableRow(results);
     setDeleteModalShow(false)
-    // dispatch(removedatabase('cpsg2.db', 50))
   }
 
   const deleteBody = (
@@ -407,18 +475,21 @@ const QAMTab = () => {
           <label htmlFor="search">Search:</label>
           <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
         </div>
-        {filteredData.length === 0 ? <p className='text-center fw-bold mt-2'>No record found</p> :
+        {tableData && tableData.length > 0 ?
           <BootstrapTable
             id='confinguration_qam_table'
-            keyField="no"
-            data={filteredData}
+            keyField="frequency"
+            data={tableData}
             columns={columns}
             cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
             selectRow={selectRow}
             headerClasses="table_header"
             classes="mb-0"
             rowEvents={rowEvents}
-          />}
+          />
+          :
+          <p className='text-center fw-bold mt-2'>No record found</p>
+        }
       </div>
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
@@ -431,7 +502,7 @@ const QAMTab = () => {
                 onHide={() => setRangeModalShow(false)}
                 modalTitle='Add Range'
                 modalBody={rangeBody}
-                modalFooter={rangeFooter}
+                modalFooter={rangeFooter()}
               />
 
               <Button label={'Edit'} handleClick={editHandleClick} />

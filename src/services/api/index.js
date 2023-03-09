@@ -71,3 +71,12 @@ export const renamedbname = (dbname,copyname) => {
 export const deleteDatabase = (dbname) => {
   return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`) 
 };
+
+export const deleteConfiguration = (dbname, ch_id) => {
+  return createAxiosFor.post(`/downstream_qams_single/delete?dbname=${dbname}&ch_id=${ch_id}`)
+};
+
+
+export const configSingleQAMTableData = (dbname, ch_id) => {
+  return createAxiosFor.get(`/downstream_qams_single?dbname=${dbname}&db_default_type=0&ch_id=${ch_id}`)
+};

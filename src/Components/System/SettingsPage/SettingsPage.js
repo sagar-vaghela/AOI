@@ -50,19 +50,19 @@ export default function SettingsPage() {
                 <div style={{ width: '100%' }}>
                   <Form.Select aria-label="Default select example" placeholder='Select Splits' style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Splits')}>
                     <option >Select Splits</option>
-                    <option value='Low_split'>Low_split(42Mhz-54Mhz)</option>
-                    <option value="Mid_Split">Mid_Split(85Mhz-102Mhz)</option>
-                    <option value="High_split">High_split(204Mhz-258Mhz)</option>
-                    <option value="UHS_300">UHS_300(300Mhz-372Mhz)</option>
-                    <option value="UHS_396">UHS_396(396Mhz-492Mhz)</option>
-                    <option value="UHS_492">UHS_492(492Mhz-606Mhz)</option>
-                    <option value="UHS_684">UHS_684(684Mhz-834Mhz)</option>
+                    <option value='Low_split'>Low_split (42Mhz-54Mhz)</option>
+                    <option value="Mid_Split">Mid_Split (85Mhz-102Mhz)</option>
+                    <option value="High_split">High_split (204Mhz-258Mhz)</option>
+                    <option value="UHS_300">UHS_300 (300Mhz-372Mhz)</option>
+                    <option value="UHS_396">UHS_396 (396Mhz-492Mhz)</option>
+                    <option value="UHS_492">UHS_492 (492Mhz-606Mhz)</option>
+                    <option value="UHS_684">UHS_684 (684Mhz-834Mhz)</option>
 
                   </Form.Select>
                 </div>
               </div>
 
-              <div>
+              <div className='dropdownSpace'>
                 <h6 className='fw-bold'>Annex</h6>
                 <div style={{ width: '100%' }}>
                   <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Annex')}>
