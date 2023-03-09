@@ -8,6 +8,11 @@ import {
 import { popupReducer } from './popupReducer';
 import { settingSplitReducer, settingAnnexReducer, settingSplitDataReducer, settingAnnexDataReducer } from './systemSettingsReducer';
 import { dmcTableReducer, dmcNewDataBaseAddReducer, dmcTableRowReducer } from './dmcCurrentFilesReducer';
+import {
+    dcAddRangeReducer,
+    dcDeleteConfigurationReducer,
+    dcSingleQAMTableReducer
+} from './dConfigurationReducer';
 
 const rootReducer = combineReducers({
     drcQAMTableReducer,
@@ -21,7 +26,10 @@ const rootReducer = combineReducers({
     settingAnnexDataReducer,
     dmcTableReducer,
     dmcNewDataBaseAddReducer,
-    dmcTableRowReducer
+    dmcTableRowReducer,
+    dcAddRangeReducer,
+    dcDeleteConfigurationReducer,
+    dcSingleQAMTableReducer,
 });
 
 export default rootReducer;
