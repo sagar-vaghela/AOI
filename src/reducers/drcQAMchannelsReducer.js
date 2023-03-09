@@ -5,10 +5,13 @@ import {
     GET_RC_QAM_EDIT_TABLE_ROW_SUCCEEDED,
     GET_RUN_CONFIG_QAM_TABLE_FAILED,
     GET_RUN_CONFIG_QAM_TABLE_STARTED,
-    GET_RUN_CONFIG_QAM_TABLE_SUCCEEDED
+    GET_RUN_CONFIG_QAM_TABLE_SUCCEEDED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_FAILED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_STARTED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED
 } from "../lib/constants";
 
-export const drcQAMTableReducer = (state = initialState.runCongifQAMTable, action) => {
+export const drcQAMTableReducer = (state = initialState.runConfigQAMTable, action) => {
     switch (action.type) {
         case GET_RUN_CONFIG_QAM_TABLE_STARTED:
             return {
@@ -69,6 +72,31 @@ export const drcQAMTableRowEditReducer = (state = initialState.rcQAMEditRowTable
                 rcQAMEditRow: action.payload,
             };
 
+        default:
+            return state;
+    }
+};
+
+export const drcSingleQAMTableReducer = (state = initialState.drcSinglelQAMTable, action) => {
+    switch (action.type) {
+        case GET_RUN_CONFIG_SINGLE_QAM_TABLE_STARTED:
+            return {
+                ...state,
+                isLoading: true,
+                error: null
+            };
+        case GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED:
+            return {
+                ...state,
+                drcSinglelQAMTableData: action.payload,
+                isLoading: false
+            };
+        case GET_RUN_CONFIG_SINGLE_QAM_TABLE_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload
+            };
         default:
             return state;
     }

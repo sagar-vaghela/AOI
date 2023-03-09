@@ -2,7 +2,7 @@ const initialState = {
 
     popup: null,
 
-    runCongifQAMTable: {
+    runConfigQAMTable: {
         rcQAMTable: [],
         isLoading: false,
         error: null
@@ -62,6 +62,41 @@ const initialState = {
         error: null
     },
 
+    dmcRenameDataBase: {
+        dmcRenameDataBaseData: [],
+        error: null
+    },
+
+    dmcRenameDeleteDB: {
+        dmcRenameDeleteDBData: [],
+        error: null
+    },
+
+    dcAddRange: {
+        dcAddRangeData: [],
+        error: null
+    },
+
+    dcDeleteConfiguration: {
+        dcDeleteConfigurationData: [],
+        error: null
+    },
+
+    dcSingleQAMTable: {
+        dcSingleQAMTableData: [],
+        isLoading: false,
+        error: null
+    },
+
+    drcSinglelQAMTable: {
+        drcSinglelQAMTableData: [],
+        isLoading: false,
+        error: null
+    },
+
+    dmcDeleteDataBase:{
+        dmcDeleteDataBaseData: [],
+    }
 };
 
 export default initialState;

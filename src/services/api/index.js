@@ -4,6 +4,10 @@ export const getTableRunConfigQAM = () => {
   return createAxiosFor.get('/downstream_qams/running')
 };
 
+export const getTableRunConfigQAMSingle = (ch_id) => {
+  return createAxiosFor.get(`/downstream_qams_single/running?ch_id=${ch_id}`)
+};
+
 export const getRCQAMUpdateTableRow = (ch_id, payload) => {
   return createAxiosFor.post(`/downstream_qams_single/running/update?ch_id=${ch_id}`, payload)
 };
@@ -36,10 +40,6 @@ export const addRangeConfiguration = (dbname, payload) => {
   return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}`, payload)
 };
 
-export const addRangeSingleCreate = (dbname, payload) => {
-  return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}`, payload)
-};
-
 export const systemSettingsSplit = (split) => {
   return createAxiosFor.post(`/downstream_config/split?split=${split}`);
 };
@@ -60,14 +60,22 @@ export const getMangeConfigRowAPI = (dbname, db_default_type) => {
   return createAxiosFor.get(`/downstream_qams?dbname=${dbname}&db_default_type=${db_default_type}`)
 };
 
-export const deletesingledatabse = (dbname, ch_id) => {
+export const deleteConfiguration = (dbname, ch_id) => {
   return createAxiosFor.post(`/downstream_qams_single/delete?dbname=${dbname}&ch_id=${ch_id}`)
 };
 
-export const renamedbname = (dbname,copyname) => {
-  return createAxiosFor.post(`/downstream_config/copy?from_db=${dbname}&to_db=${copyname}`)  
+export const renameDbName = (dbname, copyname) => {
+  return createAxiosFor.post(`/downstream_config/copy?from_db=${dbname}&to_db=${copyname}`)
 };
 
-export const deleteDatabase = (dbname) => {
-  return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`) 
+export const deleteRenameConfig = (dbname) => {
+  return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`)
+};
+
+export const configSingleQAMTableData = (dbname, ch_id) => {
+  return createAxiosFor.get(`/downstream_qams_single?dbname=${dbname}&db_default_type=0&ch_id=${ch_id}`)
+};
+
+export const deleteDataBase = (dbname) => {
+  return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`)
 };

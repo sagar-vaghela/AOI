@@ -1,5 +1,6 @@
 import {
-    GET_ADD_RANGE_SUCCEEDED,
+    CHANGE_DELETE_DATABASE_SUCCEEDED,
+    DELETE_DATABASE_SUCCEEDED,
     GET_CHANGE_NAME,
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
@@ -14,10 +15,9 @@ import {
     getMangeConfigRowAPI,
     getTableManageConfigQAM,
     postNewDataBaseAPI,
-    addRangeConfiguration,
-    deletesingledatabse,
-    renamedbname,
-    deleteDatabase
+    renameDbName,
+    deleteRenameConfig,
+    deleteDataBase
 } from "../services/api";
 import { showPopup } from ".//popupAction";
 
@@ -61,15 +61,24 @@ const getManageConfigRowSelectFailed = error => ({
     error: true
 });
 
-const getAddNewRangedataSuccess = (data) => ({
-    type: GET_ADD_RANGE_SUCCEEDED,
-    payload: data,
-});
 
-const renameDatabaseName = (data) => ({
+const renameDatabaseSuccess = (data) => ({
     type: GET_CHANGE_NAME,
     payload: data
 });
+
+const changeDeleteDatabaseSuccess = (data) => ({
+    type: CHANGE_DELETE_DATABASE_SUCCEEDED,
+    payload: data
+});
+
+
+const deleteDatabaseSuccess = (data) => ({
+    type: DELETE_DATABASE_SUCCEEDED,
+    payload: data
+});
+
+
 
 export const getManageConfigQAMTable = (db_default_type) => {
     return async (dispatch) => {
@@ -118,38 +127,11 @@ export const getManageConfigRowSelect = (dbname, db_default_type) => {
     };
 }
 
-export const addRange = (dbname, payload) => {
+export const mcChangeDataBaseName = (dbname, copyname) => {
     return async dispatch => {
 
-        await addRangeConfiguration(dbname, payload).then(function (response) {
-            dispatch(getAddNewRangedataSuccess(response))
-            dispatch(showPopup({ message: "Add as successfully", type: "success" }))
-        })
-            .catch(function (error) {
-                dispatch(showPopup({ message: error.message, type: "danger" }))
-            });
-    };
-}
-
-export const removedatabase = (dbname,ch_id) => {
-    
-    return async dispatch => {
-
-        await deletesingledatabse(dbname, ch_id).then(function (response) {
-            // dispatch(getAddNewRangedataSuccess(response))
-            dispatch(showPopup({ message: "Add as successfully", type: "success" }))
-        })
-            .catch(function (error) {
-                dispatch(showPopup({ message: error.message, type: "danger" }))
-            });
-    };
-}
-
-export const changeDataBaseName = (dbname,copyname) => {
-    return async dispatch => {
-
-        await renamedbname(dbname, copyname).then(function (response) {
-            dispatch(renameDatabaseName(response))
+        await renameDbName(dbname, copyname).then(function (response) {
+            dispatch(renameDatabaseSuccess(response))
             dispatch(showPopup({ message: " Change name successfully", type: "success" }))
         })
             .catch(function (error) {
@@ -159,15 +141,29 @@ export const changeDataBaseName = (dbname,copyname) => {
 
 }
 
-export const removeDatabase = (dbname) => {
+export const mcChangeRemoveDataBase = (dbname, ch_id) => {
+
     return async dispatch => {
 
-        await deleteDatabase(dbname).then(function (response) {
-            // dispatch(deleteDatabaseRecord(response))
-            dispatch(showPopup({ message: " Deleted successfully", type: "success" }))
+        await deleteRenameConfig(dbname, ch_id).then(function (response) {
+            dispatch(changeDeleteDatabaseSuccess(response))
         })
             .catch(function (error) {
-                dispatch(showPopup({ message: error.message, type: "danger" }))
+                console.log("mcChangeRemoveDataBase error");
             });
     };
 }
+
+export const mcDeleteDataBase = (dbname) => {
+
+    return async dispatch => {
+
+        await deleteDataBase(dbname).then(function (response) {
+            dispatch(deleteDatabaseSuccess(response))
+        })
+            .catch(function (error) {
+                console.log("mcDeleteDataBase error");
+            });
+    };
+}
+

@@ -3,12 +3,23 @@ import Button from '../../../Button';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
-import { getRCQAMCreateTableRow, getRCQAMDeleteTableRowCell, getRCQAMEditTableRow, getRunConfigQAMTable, makeDefault, postSaveAs } from '../../../../actions/drcQAMchannels';
+import {
+  drcSingleQAMTable,
+  getRCQAMCreateTableRow,
+  getRCQAMDeleteTableRowCell,
+  getRCQAMEditTableRow,
+  getRunConfigQAMTable,
+  makeDefault,
+  postSaveAs
+} from '../../../../actions/drcQAMchannels';
 import { useSelector, useDispatch } from "react-redux";
 import { showPopup } from '../../../../actions/popupAction';
 import { getSystemSettingsAnnex } from '../../../../actions/systemSettings';
+import Form from 'react-bootstrap/Form';
+import { addRangeQAMConfiguration } from '../../../../actions/dConfiguration';
 
 let editRowData = [];
+let data = [];
 
 export default function QAMTab(props) {
   const dispatch = useDispatch();
@@ -18,9 +29,9 @@ export default function QAMTab(props) {
   const rcQAMTableCreateData = useSelector((state) => state.drcQAMTableRowCreateReducer.rcQAMCreateRow);
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
+  const rcQAMTableSingleData = useSelector((state) => state.drcSingleQAMTableReducer.drcSinglelQAMTableData);
 
-
-  const [tableData, setTableData] = useState(rcQAMTableData);
+  const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
   const [selectBtn, setSelectBtn] = useState("Select All");
   const [modalShow, setModalShow] = useState(false);
@@ -32,12 +43,20 @@ export default function QAMTab(props) {
   const [muteValue, setMuteValue] = useState();
   const [validationQAMTable, setValidationQAMTable] = useState(false);
   const [validationField, setValidationField] = useState('');
+  const [rangeModalOpen, setRangeModalOpen] = useState(false);
+  const [nofChannel, setNOFChannel] = useState('');
+  const [power, setPower] = useState();
+  const [frequency, setFrequency] = useState();
+  const [mute, setMute] = useState(false);
+  const [operModeValue, setOperModeValue] = useState('');
 
 
   let Reg = new RegExp(search, "i");
 
   useEffect(() => {
-    setTableData(rcQAMTableData);
+    if (rcQAMTableData) {
+      setTableData(rcQAMTableData);
+    }
   }, [rcQAMTableData])
 
 
@@ -49,13 +68,33 @@ export default function QAMTab(props) {
 
   useEffect(() => {
     if ((rcQAMTableUpdateData.data && rcQAMTableUpdateData.data.success === true) ||
-      (rcQAMTableCreateData.data && rcQAMTableCreateData.status === 200) ||
       (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true)
     ) {
       dispatch(getRunConfigQAMTable());
       setModalShow(false);
     }
-  }, [rcQAMTableUpdateData, rcQAMTableCreateData, rcQAMTableDeleteData])
+  }, [rcQAMTableUpdateData, rcQAMTableDeleteData]);
+
+  useEffect(() => {
+    const chId = rcQAMTableCreateData && rcQAMTableCreateData.data && rcQAMTableCreateData.data.ch_id;
+    if (rcQAMTableCreateData && rcQAMTableCreateData.status === 200) {
+      for (let i = 1; i <= Number(nofChannel); i++) {
+        dispatch(drcSingleQAMTable(chId));
+      }
+    }
+  }, [rcQAMTableCreateData]);
+
+  useEffect(() => {
+    if (rcQAMTableSingleData && rcQAMTableSingleData.data) {
+      data.push(rcQAMTableSingleData.data[0]);
+    }
+    console.log("data=====", data);
+
+  }, [rcQAMTableSingleData]);
+
+  useEffect(() => {
+    setTableData(tableData);
+  }, [tableData])
 
   const muted = (
     <div class="custom-control custom-switch">
@@ -305,10 +344,12 @@ export default function QAMTab(props) {
     {
       dataField: "frequency",
       text: "Frequency",
+      sort: true,
     },
     {
       dataField: "power",
       text: "Power",
+      sort: true,
     },
     // {
     //   dataField: "width",
@@ -321,10 +362,12 @@ export default function QAMTab(props) {
     {
       dataField: "annex",
       text: "Annex",
+      sort: true,
     },
     {
       dataField: "operMode",
       text: "Oper Mode",
+      sort: true,
       editor: {
         type: Type.SELECT,
         options: [
@@ -483,9 +526,6 @@ export default function QAMTab(props) {
     onClick: (e, row, rowIndex) => {
       console.log(`clicked on row with index: ${rowIndex}`, row);
     },
-    bgColor: (row, rowIndex) => {
-      return "red"; // return a color code
-    },
   };
 
   // const filteredData = tablerow.filter((row) =>
@@ -512,21 +552,12 @@ export default function QAMTab(props) {
   }
 
   const addRowCell = () => {
-
-    const payload = {
-      power: "0",
-      annex: rcQAMAnnexData && rcQAMAnnexData.data,
-      operMode: "QAM256",
-      mute: "NO",
-      frequency: "0",
-    }
-    dispatch(getRCQAMCreateTableRow(payload));
-
+    setRangeModalOpen(!rangeModalOpen);
   }
 
   const handleChangemodul = (event) => {
     //  console.log("value",event.target.value);
-    // setOperModeValue(event.target.value);
+    setOperModeValue(event.target.value);
   }
 
   const deleteRowCell = () => {
@@ -550,6 +581,94 @@ export default function QAMTab(props) {
 
       <div>{validationMessage}</div>
 
+    )
+  }
+
+  const rangeBody = (
+    <>
+      <div className='d-flex justify-content-center'>
+        <div className="mb-3 d-flex flex-column align-items-end me-3">
+          <div className='mb-2'>
+            <label htmlFor="" className='me-2'>Number of Channels: </label>
+            <input
+              type="number"
+              value={nofChannel}
+              onChange={(e) => setNOFChannel(e.target.value)}
+            />
+          </div>
+          <div className='mb-2'>
+            <label htmlFor="" className='me-2' title='value from -12 to 12 dB'>Power: </label>
+            <input
+              type="text"
+              value={power}
+              onChange={(e) => setPower(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="mb-3 d-flex flex-column align-items-start">
+          <div className='me-2 mb-3'>
+            <label htmlFor="" className='me-2' title='value from 0 to 1800 MHz'>Starting Frequency: </label>
+            <input
+              type="number"
+              value={frequency}
+              onChange={(e) => setFrequency(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="" className='me-2'>Mute: </label>
+            <label className="toggle_box">
+              <input
+                type="checkbox"
+                checked={mute}
+                onChange={(e) => setMute(!mute)}
+              />
+              <span className="slider"></span>
+              <span className="labels" data-on="Yes" data-off="No"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className='d-flex mb-2 advance_setting'>
+        <label htmlFor="" className='text-nowrap me-2'>Oper Mode: </label>
+        <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
+          <option value="QAM64">QAM64</option>
+          <option value="QAM256">QAM256 </option>
+          <option value="CW_CARRIER">CW_CARRIER</option>
+        </Form.Select>
+      </div>
+    </>
+  )
+  const rangeFooter = () => {
+
+    const opMode = operModeValue === '' ? 'QAM64' : operModeValue;
+
+    return (
+
+      <div className='edit_btns'>
+        <Button
+          label={"Add Range"}
+          handleClick={() => {
+
+            const payload = {
+              power: power,
+              numofchannels: Number(nofChannel),
+              annex: rcQAMAnnexData && rcQAMAnnexData.data,
+              operMode: opMode,
+              mute: mute === true ? "YES" : "NO",
+              frequency: frequency,
+            };
+            dispatch(getRCQAMCreateTableRow(payload));
+            setRangeModalOpen(false);
+            // setNOFChannel('');
+            setPower('');
+            setFrequency('');
+            setMute(false);
+            setOperModeValue('');
+          }}
+        />
+        <Button label={'Cancel'} handleClick={() => setRangeModalOpen(false)} />
+      </div>
     )
   }
 
@@ -624,7 +743,16 @@ export default function QAMTab(props) {
             <div className="left_btns text-center">
 
               <Button label={'Edit'} handleClick={editHandleClick} />
+
               <Button label={'Add Range'} handleClick={addRowCell} />
+              <ModalAoi
+                show={rangeModalOpen}
+                onHide={() => setRangeModalOpen(false)}
+                modalTitle='Add Range'
+                modalBody={rangeBody}
+                modalFooter={rangeFooter()}
+              />
+
               <Button label={'Delete Channel'} handleClick={deleteRowCell} />
 
               {/* <button onClick={selectHandleClick}>{selectBtn}</button> */}

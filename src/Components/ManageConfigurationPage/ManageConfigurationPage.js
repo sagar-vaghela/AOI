@@ -8,7 +8,14 @@ import ModalAoi from "../Modal/ModalAoi";
 import { Tab, Tabs } from "react-bootstrap";
 import QAMTab from "./Channels/QAMTab/QAMTab";
 import { useDispatch, useSelector } from "react-redux";
-import { changeDataBaseName, getManageConfigQAMTable, getManageConfigRowSelect, newDataBase, removeDatabase } from "../../actions/dmcCurrentFiles";
+import {
+  mcChangeDataBaseName,
+  getManageConfigQAMTable,
+  getManageConfigRowSelect,
+  newDataBase,
+  mcChangeRemoveDataBase,
+  mcDeleteDataBase
+} from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
 
 const tablerow = [
@@ -85,6 +92,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const mcNewDataBase = useSelector((state) => state.dmcNewDataBaseAddReducer.dmcNewDataBase);
   let mcTableRowData = useSelector((state) => state.dmcTableRowReducer.dmcRowData);
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
+  const mcDeleteConfigData = useSelector((state) => state.dmcDeleteDatabaseReducer.dmcDeleteDataBaseData
+  );
 
 
   const [tableData, setTableData] = useState([]);
@@ -105,8 +114,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const [selectedRow, setSelectedRow] = useState({});
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
   const [editablebody, seteditablebody] = useState('');
-  const [dbRename, setdbRename] = useState('');
+  const [dbRename, setdbRename] = useState(''); 
 
+  let Reg = new RegExp(search, "i");
 
   const dispatch = useDispatch();
 
@@ -114,6 +124,16 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     dispatch(getManageConfigQAMTable(0));
     dispatch(getManageConfigQAMTable(1));
   }, []);
+
+
+  useEffect(() => {
+    if (mcDeleteConfigData && mcDeleteConfigData.data && mcDeleteConfigData.data.success === true) {
+      dispatch(getManageConfigQAMTable(0));
+      dispatch(getManageConfigQAMTable(1));
+      setEditValue(0);
+    }
+  }, [mcDeleteConfigData])
+
 
   useEffect(() => {
     let newdata = [];
@@ -147,13 +167,13 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   };
   const renameHandleClick = () => {
     if (editValue !== 0) {
-    setRenameModalShow(true);
-    setCheckSameDataBase(false); 
-    setdbRename(selectedRow.name);
-    }else{
-    seteditablebody('Please select at list one Row !');
-    setdbRename('');
-    setOfdmEditModalShow(true);
+      setRenameModalShow(true);
+      setCheckSameDataBase(false);
+      setdbRename(selectedRow.name);
+    } else {
+      seteditablebody('Please select at list one Row !');
+      setdbRename('');
+      setOfdmEditModalShow(true);
     }
   };
   // if (visualizeModel) {
@@ -166,10 +186,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     {
       dataField: "name",
       text: "Name",
+      sort: true
     },
     {
       dataField: "editable",
       text: "Editable",
+      sort: true,
       editor: {
         type: Type.SELECT,
         options: [
@@ -190,7 +212,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     setEditValue(selectRowLength);
     const dbName = row.name;
     const dbType = row.editable === 'no' ? 1 : 0;
-    console.log("row",row.name);
+    console.log("row", row);
     setSelectedRow(row);
     dispatch(getManageConfigRowSelect(dbName, dbType));
     dispatch(getSystemSettingsAnnex());
@@ -272,7 +294,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   useEffect(() => {
 
     if ((mcNewDataBase && mcNewDataBase.data && mcNewDataBase.data.success === true) && checkNewDataBase) {
-      console.log("dbname",dbName);
+      console.log("dbname", dbName);
       setDataBaseName(dbName)
       setActiveTab("configuration");
       setCheckNewDataBase(false);
@@ -291,24 +313,20 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     </div>
   );
 
-  const deleteItem = (manageConfigTableIndex) => {
-    console.log("table row====", tableRow);
-    console.log("manageConfigTableIndex====", manageConfigTableIndex);
-    const results = tableRow.filter(
-      ({ no: id1 }) =>
-        !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1)
-    );
-    setTableRow(results);
-    setDeleteModalShow(false);
+  const deleteItem = () => {
+    if (editValue !== 0) {
+      dispatch(mcDeleteDataBase(selectedRow.name));
+      setDeleteModalShow(false);
+    }
   };
 
 
-  const renamedatabase = async() => {
+  const renamedatabase = async () => {
     if (tableData.map(item => item.name).includes(dbRename)) {
       setCheckSameDataBase(true);
-    }else{
-      await dispatch(changeDataBaseName(selectedRow.name,dbRename));
-      dispatch(removeDatabase(selectedRow.name));
+    } else {
+      await dispatch(mcChangeDataBaseName(selectedRow.name, dbRename));
+      dispatch(mcChangeRemoveDataBase(selectedRow.name));
       setRenameModalShow(false);
     }
   }
@@ -317,12 +335,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     <div className="edit_btns">
       <Button
         label={"Yes"}
-        handleClick={() => deleteItem(manageConfigTableIndex)}
+        handleClick={deleteItem}
       />
       <Button label={"Cancel"} handleClick={() => setDeleteModalShow(false)} />
     </div>
   );
-  const renameBody = ( checkSameDataBase ?
+  const renameBody = (checkSameDataBase ?
     <div>This name is already exists. Please enter different name.</div>
     :
     <input
@@ -338,7 +356,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const renameFooter = (
     !checkSameDataBase &&
     <div className="edit_btns">
-      <Button label={"Save"}   handleClick={() => renamedatabase()} />
+      <Button label={"Save"} handleClick={() => renamedatabase()} />
       <Button label={"Cancel"} handleClick={() => setRenameModalShow(false)} />
     </div>
   );
@@ -378,7 +396,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
           setAnnexModal(true);
         }
 
-      }else{
+      } else {
         seteditablebody('This Row is not editable!');
         setOfdmEditModalShow(true);
       }
@@ -389,6 +407,30 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     }
 
   }
+
+  useEffect(() => {
+
+    let manageConfigData = [];
+
+    if (mcTableSystem) {
+      mcTableSystem.map((data) => {
+        manageConfigData.push({ name: data, editable: "no" });
+      });
+    }
+    if (mcTableUser) {
+      mcTableUser.map((data) => {
+        manageConfigData.push({ name: data, editable: "yes" });
+      });
+    }
+
+    if (search.length > 0) {
+      let data = manageConfigData.length > 0 && manageConfigData.filter((item) =>
+        Reg.test(item.name) ||
+        Reg.test(item.editable)
+      );
+      setTableData(data);
+    }
+  }, [search]);
 
   // const filteredData = tableRow && tableRow.filter((row) =>
   //   (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
@@ -406,7 +448,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
             <input
               type="text"
               id="search"
-              value={search}
+              value={search || ""}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
@@ -456,6 +498,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
         {/* <h5 className='d-inline-block fw-bold'>Manage Actions</h5> */}
         <div className="action_btns justify-content-between align-items-end">
           <div className="left_btns">
+
             <Button label={"Delete"} handleClick={deleteHandleClick} />
             <ModalAoi
               show={deleteModalShow}
@@ -464,6 +507,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
               modalBody={deleteBody}
               modalFooter={deleteFooter}
             />
+
             <Button label={"Archive"} />
             <Button label={"Visualize"} handleClick={visualizeHandleClick} />
             <Button label={"Rename"} handleClick={renameHandleClick} />
@@ -513,7 +557,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
             tabClassName="fw-bold"
             title="OFDM Channels"
           >
-            <OFDMTab /> </Tab> </Tabs> ) : null} {visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null}
+            <OFDMTab /> </Tab> </Tabs>) : null} {visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null}
       <ModalAoi
         show={annexModal}
         onHide={() => setAnnexModal(false)}
