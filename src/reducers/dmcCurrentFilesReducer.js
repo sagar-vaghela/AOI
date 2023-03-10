@@ -1,4 +1,7 @@
 import {
+    CHANGE_DELETE_DATABASE_SUCCEEDED,
+    DELETE_DATABASE_SUCCEEDED,
+    GET_CHANGE_NAME,
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
     GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
@@ -49,7 +52,6 @@ export const dmcNewDataBaseAddReducer = (state = initialState.dmcNewDataBaseAdd,
             return {
                 ...state,
                 dmcNewDataBase: action.payload,
-                isLoading: false
             };
         default:
             return state;
@@ -78,6 +80,46 @@ export const dmcTableRowReducer = (state = initialState.dmcRowSelectData, action
                 error: action.payload,
             };
 
+        default:
+            return state;
+    }
+};
+
+export const dmcRenameDataBaseReducer = (state = initialState.dmcRenameDataBase, action) => {
+    switch (action.type) {
+
+        case GET_CHANGE_NAME:
+            return {
+                ...state,
+                dmcRenameDataBaseData: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
+
+export const dmcRenameDeleteDBReducer = (state = initialState.dmcRenameDeleteDB, action) => {
+    switch (action.type) {
+
+        case CHANGE_DELETE_DATABASE_SUCCEEDED:
+            return {
+                ...state,
+                dmcRenameDeleteDBData: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
+export const dmcDeleteDatabaseReducer = (state = initialState.dmcDeleteDataBase, action) => {
+    switch (action.type) {
+
+        case DELETE_DATABASE_SUCCEEDED:
+            return {
+                ...state,
+                dmcDeleteDataBaseData: action.payload,
+            };
         default:
             return state;
     }

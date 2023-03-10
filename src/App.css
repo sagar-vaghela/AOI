@@ -239,7 +239,7 @@ li a.dropdown-toggle::after {
     TITLE STYLE
 ----------------------------------------------------- */
 .main_title {
-  padding: 15px 50px 15px;
+  padding: 15px 50px 15px !important;
   font-size: 20px;
 }
 /* ---------------------------------------------------

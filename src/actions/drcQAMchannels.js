@@ -4,13 +4,17 @@ import {
     GET_RC_QAM_EDIT_TABLE_ROW_SUCCEEDED,
     GET_RUN_CONFIG_QAM_TABLE_FAILED,
     GET_RUN_CONFIG_QAM_TABLE_STARTED,
-    GET_RUN_CONFIG_QAM_TABLE_SUCCEEDED
+    GET_RUN_CONFIG_QAM_TABLE_SUCCEEDED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_FAILED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_STARTED,
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED
 } from "../lib/constants";
 import {
     getRCQAMAddTableRow,
     getRCQAMDeleteTableRow,
     getRCQAMUpdateTableRow,
     getTableRunConfigQAM,
+    getTableRunConfigQAMSingle,
     makeDefaultAPI,
     postSaveAsAPI
 } from "../services/api";
@@ -44,6 +48,21 @@ const getRCQAMDeleteTableRowSucceeded = data => ({
 const getRCQAMEditTableRowSucceeded = data => ({
     type: GET_RC_QAM_EDIT_TABLE_ROW_SUCCEEDED,
     payload: data
+});
+
+const getRunConfigSingleQAMTableStarted = () => ({
+    type: GET_RUN_CONFIG_SINGLE_QAM_TABLE_STARTED
+});
+
+const getRunConfigSingleQAMTableSucceeded = data => ({
+    type: GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED,
+    payload: data
+});
+
+const getRunConfigSingleQAMTableFailed = error => ({
+    type: GET_RUN_CONFIG_SINGLE_QAM_TABLE_FAILED,
+    payload: error,
+    error: true
 });
 
 
@@ -117,6 +136,20 @@ export const makeDefault = () => {
         })
             .catch(function (error) {
                 dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+export const drcSingleQAMTable = (ch_id) => {
+    return async dispatch => {
+        dispatch(getRunConfigSingleQAMTableStarted());
+
+        await getTableRunConfigQAMSingle(ch_id).then(function (response) {
+            dispatch(getRunConfigSingleQAMTableSucceeded(response));
+            dispatch(showPopup({ message: "save as successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(getRunConfigSingleQAMTableFailed(error));
             });
     };
 }
