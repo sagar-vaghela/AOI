@@ -61,6 +61,21 @@ const initialState = {
         isLoading: false,
         error: null
     },
+    dcAddRange: {
+        dcAddRangeData: [],
+        error: null
+    },
+
+    dcDeleteConfiguration: {
+        dcDeleteConfigurationData: [],
+        error: null
+    },
+
+    dcSingleQAMTable: {
+        dcSingleQAMTableData: [],
+        isLoading: false,
+        error: null
+    },
 
     dmcRenameDataBase: {
         dmcRenameDataBaseData: [],

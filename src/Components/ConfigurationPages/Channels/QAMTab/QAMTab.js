@@ -356,6 +356,23 @@ const QAMTab = ({ dataBaseName, chID }) => {
     );
   }
 
+  function mutedFormatter(row) {
+    const checkSwitch = row === "YES" ? true : false;
+
+    return (
+      <div className="form-check form-switch">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckChecked"
+          checked={checkSwitch}
+          onChange={(e) => { }}
+        />
+      </div>
+    );
+  }
+
   const columns = [
     // {
     //   dataField: 'no',
@@ -411,10 +428,8 @@ const QAMTab = ({ dataBaseName, chID }) => {
               onChange={(e) => setNOFChannel(e.target.value)}
             />
           </div>
-          <div className="mb-2">
-            <label htmlFor="" className="me-2" title="value from -12 to 12 dB">
-              Power:{" "}
-            </label>
+          <div className='mb-2'>
+            <label htmlFor="" className='me-2' title='value from -12 to 12 dB' >Power: </label>
             <input
               type="text"
               value={power}
@@ -424,10 +439,8 @@ const QAMTab = ({ dataBaseName, chID }) => {
         </div>
 
         <div className="mb-3 d-flex flex-column align-items-start">
-          <div className="me-2 mb-3">
-            <label htmlFor="" className="me-2" title="value from 0 to 1800 MHz">
-              Starting Frequency:{" "}
-            </label>
+          <div className='me-2 mb-3'>
+            <label htmlFor="" className='me-2' title='value from 0 to 1800 MHz' >Starting Frequency: </label>
             <input
               type="number"
               value={frequency}
@@ -451,20 +464,9 @@ const QAMTab = ({ dataBaseName, chID }) => {
         </div>
       </div>
 
-      <div className="d-flex mb-2 advance_setting">
-        <label htmlFor="" className="text-nowrap me-2">
-          Oper Mode:{" "}
-        </label>
-        <Form.Select
-          aria-label="Default select example"
-          style={{
-            padding: "2px 36px 2px 12px",
-            borderRadius: "2px",
-            border: "1px solid",
-          }}
-          onChange={handleChangemodul}
-          value={operModeValue}
-        >
+      <div className='d-flex mb-2 advance_setting'>
+        <label htmlFor="" className='text-nowrap me-2'>Oper Mode: </label>
+        <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
           <option value="QAM64">QAM64</option>
           <option value="QAM256">QAM256 </option>
           <option value="CW_CARRIER">CW_CARRIER</option>
