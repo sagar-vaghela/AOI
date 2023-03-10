@@ -14,7 +14,8 @@ import {
   getManageConfigRowSelect,
   newDataBase,
   mcChangeRemoveDataBase,
-  mcDeleteDataBase
+  mcDeleteDataBase,
+  mcArchiveDataBase,
 } from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
 
@@ -85,7 +86,7 @@ const tablerow = [
 
 let manageConfigTableIndex = [];
 
-export default function ManageConfigurationPage({ setActiveTab, setDataBaseName }) {
+export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID }) {
 
   const mcTableUser = useSelector((state) => state.dmcTableReducer.mcTableUser.data);
   const mcTableSystem = useSelector((state) => state.dmcTableReducer.mcTableSystem.data);
@@ -412,6 +413,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
 
           if (settingAnnex === rowAnnex) {
             setActiveTab("configuration");
+            setDataBaseName(selectedRow.name);
+            setChID(1);
           }
           else {
             setAnnexModal(true);
@@ -450,6 +453,16 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
       setTableData(data);
     }
   }, [search]);
+
+  const archiveHandleClick = () => {
+    if (selectedRow.name) {
+      dispatch(mcArchiveDataBase(selectedRow.name));
+    } else {
+      seteditablebody("Please select at list one Row !");
+      setOfdmEditModalShow(true);
+    }
+  };
+
 
   // const filteredData = tableRow && tableRow.filter((row) =>
   //   (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
@@ -527,7 +540,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
               modalFooter={deleteFooter}
             />
 
-            <Button label={"Archive"} />
+            <Button label={"Archive"} handleClick={archiveHandleClick}/>
             <Button label={"Visualize"} handleClick={visualizeHandleClick} />
             <Button label={"Rename"} handleClick={renameHandleClick} />
             <ModalAoi

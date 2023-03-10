@@ -9,7 +9,8 @@ import {
     GET_MANAGE_CONFIG_ROW_SELECT_FAILED,
     GET_MANAGE_CONFIG_ROW_SELECT_STARTED,
     GET_MANAGE_CONFIG_ROW_SELECT_SUCCEEDED,
-    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED
+    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED,
+    ARCHIVE_DATABASE_SUCCEEDED
 } from "../lib/constants";
 import {
     getMangeConfigRowAPI,
@@ -17,7 +18,8 @@ import {
     postNewDataBaseAPI,
     renameDbName,
     deleteRenameConfig,
-    deleteDataBase
+    deleteDataBase,
+    archiveDataBase
 } from "../services/api";
 import { showPopup } from ".//popupAction";
 
@@ -78,6 +80,10 @@ const deleteDatabaseSuccess = (data) => ({
     payload: data
 });
 
+const archiveDatabaseSuccess = (data) => ({
+    type: ARCHIVE_DATABASE_SUCCEEDED,
+    payload: data
+});
 
 
 export const getManageConfigQAMTable = (db_default_type) => {
@@ -167,3 +173,16 @@ export const mcDeleteDataBase = (dbname) => {
     };
 }
 
+export const mcArchiveDataBase = (dbname) => {
+
+    return async dispatch => {
+
+        await archiveDataBase(dbname).then(function (response) {
+            dispatch(archiveDatabaseSuccess(response));
+            dispatch(showPopup({ message: " Archive as Successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                console.log("mcArchiveDataBase error");
+            });
+    };
+}

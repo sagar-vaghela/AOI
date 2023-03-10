@@ -9,6 +9,7 @@ import Configuration from '../ConfigurationPages/Configuration';
 const Downstream = (props) => {
   const [activeTab, setActiveTab] = useState('RunningConfigPage');
   const [dataBaseName, setDataBaseName] = useState('');
+  const [chID, setChID] = useState('');
 
   const handleTabChange = (eventKey) => {
     setActiveTab(eventKey);
@@ -28,10 +29,10 @@ const Downstream = (props) => {
           <RunningConfigPage />
         </Tab>
         <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-          <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} />
+          <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} setChID={setChID}/>
         </Tab>
         <Tab eventKey="configuration" title="Configuration">
-          <Configuration dataBaseName={dataBaseName}/>
+          <Configuration dataBaseName={dataBaseName} chID={chID}/>
         </Tab>
       </Tabs>
     </div>

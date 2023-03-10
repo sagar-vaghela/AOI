@@ -79,3 +79,7 @@ export const configSingleQAMTableData = (dbname, ch_id) => {
 export const deleteDataBase = (dbname) => {
   return createAxiosFor.post(`/downstream_config/delete?dbname=${dbname}`)
 };
+
+export const archiveDataBase = (dbname) => {
+  return createAxiosFor.post(`/downstream_config/archive?dbname=${dbname}`)
+};
