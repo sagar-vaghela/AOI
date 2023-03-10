@@ -90,10 +90,11 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const mcTableUser = useSelector((state) => state.dmcTableReducer.mcTableUser.data);
   const mcTableSystem = useSelector((state) => state.dmcTableReducer.mcTableSystem.data);
   const mcNewDataBase = useSelector((state) => state.dmcNewDataBaseAddReducer.dmcNewDataBase);
-  let mcTableRowData = useSelector((state) => state.dmcTableRowReducer.dmcRowData);
+  const mcTableRowData = useSelector((state) => state.dmcTableRowReducer.dmcRowData);
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
-  const mcDeleteConfigData = useSelector((state) => state.dmcDeleteDatabaseReducer.dmcDeleteDataBaseData
-  );
+  const mcDeleteConfigData = useSelector((state) => state.dmcDeleteDatabaseReducer.dmcDeleteDataBaseData);
+  const mcRenameDatabase = useSelector((state) => state.dmcRenameDataBaseReducer.dmcRenameDataBaseData);
+  const mcRenameDeleteDatabase = useSelector((state) => state.dmcRenameDeleteDBReducer.dmcRenameDeleteDBData);
 
 
   const [tableData, setTableData] = useState([]);
@@ -114,7 +115,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   const [selectedRow, setSelectedRow] = useState({});
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
   const [editablebody, seteditablebody] = useState('');
-  const [dbRename, setdbRename] = useState(''); 
+  const [dbRename, setdbRename] = useState('');
 
   let Reg = new RegExp(search, "i");
 
@@ -123,16 +124,18 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
   useEffect(() => {
     dispatch(getManageConfigQAMTable(0));
     dispatch(getManageConfigQAMTable(1));
+
   }, []);
 
 
   useEffect(() => {
-    if (mcDeleteConfigData && mcDeleteConfigData.data && mcDeleteConfigData.data.success === true) {
+    if ((mcDeleteConfigData && mcDeleteConfigData.data && mcDeleteConfigData.data.success === true) ||
+      (mcRenameDeleteDatabase && mcRenameDeleteDatabase.data && mcRenameDeleteDatabase.data.success === true)) {
       dispatch(getManageConfigQAMTable(0));
       dispatch(getManageConfigQAMTable(1));
       setEditValue(0);
     }
-  }, [mcDeleteConfigData])
+  }, [mcDeleteConfigData, mcRenameDeleteDatabase])
 
 
   useEffect(() => {
@@ -320,13 +323,19 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
     }
   };
 
+  useEffect(() => {
+    console.log("mcRenameDatabase=======", mcRenameDatabase);
+    if (mcRenameDatabase && mcRenameDatabase.data && mcRenameDatabase.data.success === true) {
+      dispatch(mcChangeRemoveDataBase(selectedRow.name));
+    }
+  }, [mcRenameDatabase]);
+
 
   const renamedatabase = async () => {
     if (tableData.map(item => item.name).includes(dbRename)) {
       setCheckSameDataBase(true);
     } else {
       await dispatch(mcChangeDataBaseName(selectedRow.name, dbRename));
-      dispatch(mcChangeRemoveDataBase(selectedRow.name));
       setRenameModalShow(false);
     }
   }
@@ -385,22 +394,32 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName 
 
     if (editValue !== 0) {
 
-      const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
-      const rowAnnex = mcTableRowData && mcTableRowData.data[0] && mcTableRowData.data[0].annex;
-
-      if (rowAnnex && selectedRow.editable === 'yes') {
-        if (settingAnnex === rowAnnex) {
-          setActiveTab("configuration");
-        }
-        else if (settingAnnex !== rowAnnex) {
-          setAnnexModal(true);
-        }
-
-      } else {
-        seteditablebody('This Row is not editable!');
+      if (selectedRow.editable === 'no') {
         setOfdmEditModalShow(true);
+        seteditablebody('This Database is System Database That is not Editable.');
+
+      }
+      else {
+
+        if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length === 0) {
+          setOfdmEditModalShow(true);
+          seteditablebody('This DataBase is Empty.');
+        }
+        else if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length > 0) {
+
+          const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
+          const rowAnnex = mcTableRowData && mcTableRowData.data[0] && mcTableRowData.data[0].annex;
+
+          if (settingAnnex === rowAnnex) {
+            setActiveTab("configuration");
+          }
+          else {
+            setAnnexModal(true);
+          }
+        }
       }
     }
+
     else {
       seteditablebody('Please select at list one Row !');
       setOfdmEditModalShow(true);

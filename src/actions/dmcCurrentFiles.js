@@ -141,11 +141,11 @@ export const mcChangeDataBaseName = (dbname, copyname) => {
 
 }
 
-export const mcChangeRemoveDataBase = (dbname, ch_id) => {
+export const mcChangeRemoveDataBase = (dbname) => {
 
     return async dispatch => {
 
-        await deleteRenameConfig(dbname, ch_id).then(function (response) {
+        await deleteRenameConfig(dbname).then(function (response) {
             dispatch(changeDeleteDatabaseSuccess(response))
         })
             .catch(function (error) {

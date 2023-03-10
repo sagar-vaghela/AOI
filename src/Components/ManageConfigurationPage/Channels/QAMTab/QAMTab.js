@@ -117,7 +117,7 @@ export default function QAMTab({ mcTableRowData }) {
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
-    classes: 'selection-row',
+    // classes: 'selection-row',
     clickToEdit: false,
     hideSelectColumn: true
   };
@@ -144,7 +144,7 @@ export default function QAMTab({ mcTableRowData }) {
           {
             tableData && tableData.length > 0 ? <BootstrapTable
               id='running_qam_table'
-              keyField="frequency"
+              keyField="ch_index"
               data={tableData}
               columns={columns}
               selectRow={selectRow}

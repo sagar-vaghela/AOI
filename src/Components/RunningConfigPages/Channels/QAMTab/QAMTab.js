@@ -19,7 +19,6 @@ import Form from 'react-bootstrap/Form';
 import { addRangeQAMConfiguration } from '../../../../actions/dConfiguration';
 
 let editRowData = [];
-let data = [];
 
 export default function QAMTab(props) {
   const dispatch = useDispatch();
@@ -68,12 +67,13 @@ export default function QAMTab(props) {
 
   useEffect(() => {
     if ((rcQAMTableUpdateData.data && rcQAMTableUpdateData.data.success === true) ||
-      (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true)
+      (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true) ||
+      (rcQAMTableSingleData && rcQAMTableSingleData.status === 200)
     ) {
       dispatch(getRunConfigQAMTable());
       setModalShow(false);
     }
-  }, [rcQAMTableUpdateData, rcQAMTableDeleteData]);
+  }, [rcQAMTableUpdateData, rcQAMTableDeleteData, rcQAMTableSingleData]);
 
   useEffect(() => {
     const chId = rcQAMTableCreateData && rcQAMTableCreateData.data && rcQAMTableCreateData.data.ch_id;
@@ -83,14 +83,6 @@ export default function QAMTab(props) {
       }
     }
   }, [rcQAMTableCreateData]);
-
-  useEffect(() => {
-    if (rcQAMTableSingleData && rcQAMTableSingleData.data) {
-      data.push(rcQAMTableSingleData.data[0]);
-    }
-    console.log("data=====", data);
-
-  }, [rcQAMTableSingleData]);
 
   useEffect(() => {
     setTableData(tableData);
