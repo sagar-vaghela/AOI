@@ -9,7 +9,8 @@ import {
     GET_MANAGE_CONFIG_ROW_SELECT_FAILED,
     GET_MANAGE_CONFIG_ROW_SELECT_STARTED,
     GET_MANAGE_CONFIG_ROW_SELECT_SUCCEEDED,
-    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED
+    GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED,
+    ARCHIVE_DATABASE_SUCCEEDED
 } from "../lib/constants";
 import initialState from "./initialState";
 
@@ -119,6 +120,19 @@ export const dmcDeleteDatabaseReducer = (state = initialState.dmcDeleteDataBase,
             return {
                 ...state,
                 dmcDeleteDataBaseData: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
+export const dmcArchiveDatabaseReducer = (state = initialState.dmcArchiveDataBase, action) => {
+    switch (action.type) {
+
+        case ARCHIVE_DATABASE_SUCCEEDED:
+            return {
+                ...state,
+                dmcArchiveDataBaseData: action.payload,
             };
         default:
             return state;

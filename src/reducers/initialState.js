@@ -96,7 +96,15 @@ const initialState = {
 
     dmcDeleteDataBase:{
         dmcDeleteDataBaseData: [],
-    }
+    },
+
+    dmcArchiveDataBase:{
+        dmcArchiveDataBaseData: [],
+    },
+
+    dcUpdateConfiguration:{
+        dcUpdateConfigurationData: [],
+    },
 };
 
 export default initialState;

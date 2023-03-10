@@ -3,9 +3,10 @@ import {
     DELETE_CONFIGURATION_SUCCESSED,
     GET_CONFIGURATION_QAM_TABLE_STARTED,
     GET_CONFIGURATION_QAM_TABLE_SUCCEEDED,
-    GET_CONFIGURATION_QAM_TABLE_FAILED
+    GET_CONFIGURATION_QAM_TABLE_FAILED,
+    UPDATE_CONFIGURATION_SUCCESSED
 } from "../lib/constants";
-import { addRangeConfiguration, configSingleQAMTableData, deleteConfiguration } from "../services/api";
+import { addRangeConfiguration, configSingleQAMTableData, deleteConfiguration, updateConfiguration } from "../services/api";
 import { showPopup } from "./popupAction";
 
 const addRangeConfigurationSucceded = (data) => ({
@@ -31,6 +32,11 @@ const getConfigurationQAMtableFailed = error => ({
     type: GET_CONFIGURATION_QAM_TABLE_FAILED,
     payload: error,
     error: true
+});
+
+const updateConfigurationSuccessed = (data) => ({
+    type: UPDATE_CONFIGURATION_SUCCESSED,
+    payload: data
 });
 
 export const addRangeQAMConfiguration = (dbname, payload) => {
@@ -72,4 +78,15 @@ export const getConfigurationQAMTable = (dbname, ch_id) => {
     };
 }
 
+export const configurationQAMRowUpdate = (dbname, ch_id, payload) => {
+    return async dispatch => {
+
+        await updateConfiguration(dbname, ch_id, payload).then(function (response) {
+            dispatch(updateConfigurationSuccessed(response));
+        })
+            .catch(function (error) {
+                console.log("configurationQAMRowUpdate error");
+            });
+    };
+}
 
