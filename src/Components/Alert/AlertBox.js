@@ -16,7 +16,7 @@ const AlertBox = ({ popupData }) => {
       const timer = setTimeout(() => {
         dispatch(hidePopup());
         setVisible(false);
-      }, 1000);
+      }, 2000);
 
       return () => clearTimeout(timer);
     }

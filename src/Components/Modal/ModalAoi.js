@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import { useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-const ModalAoi = ({ modalTitle, modalBody, modalFooter, onHide , show}) => {
+const ModalAoi = ({ modalTitle, modalBody, modalFooter, onHide, show }) => {
+
     return (
         <Modal
             show={show}

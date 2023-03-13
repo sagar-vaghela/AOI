@@ -11,11 +11,12 @@ import {
   addRangeQAMConfiguration,
   getConfigurationQAMTable,
 } from "../../../../actions/dConfiguration";
+import { showPopup } from "../../../../actions/popupAction";
 
 let manageConfigTableIndex = [];
 let data = [];
 
-const QAMTab = ({ dataBaseName, chID }) => {
+const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const dispatch = useDispatch();
 
   const addRangeData = useSelector(
@@ -58,13 +59,8 @@ const QAMTab = ({ dataBaseName, chID }) => {
   }, [addRangeData]);
 
   useEffect(() => {
-    // if (configQAMTableData && configQAMTableData.data) {
-    //   data.push(configQAMTableData.data[0]);
-    // }
-    if (configQAMTableData && configQAMTableData.data) {
-      setTableData(configQAMTableData.data);
-    }
-  }, [configQAMTableData]);
+      setTableData(configuratonData);
+  }, []);
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow);
@@ -350,7 +346,7 @@ const QAMTab = ({ dataBaseName, chID }) => {
           role="switch"
           id="flexSwitchCheckChecked"
           checked={checkSwitch}
-          onChange={(e) => {}}
+          onChange={(e) => { }}
         />
       </div>
     );
@@ -382,11 +378,23 @@ const QAMTab = ({ dataBaseName, chID }) => {
       dataField: "frequency",
       text: "Frequency",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "power",
       text: "Power",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     // {
     //   dataField: 'width',
@@ -400,11 +408,23 @@ const QAMTab = ({ dataBaseName, chID }) => {
       dataField: "annex",
       text: "Annex",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "operMode",
       text: "OP Mode",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "mute",
@@ -419,7 +439,7 @@ const QAMTab = ({ dataBaseName, chID }) => {
       <div className="d-flex justify-content-center">
         <div className="mb-3 d-flex flex-column align-items-end me-3">
           <div className="mb-2">
-            <label htmlFor="" className="me-2">
+            <label htmlFor="" className="me-2" title='value from 1 to 300'>
               Number of Channels:{" "}
             </label>
             <input
@@ -440,7 +460,7 @@ const QAMTab = ({ dataBaseName, chID }) => {
 
         <div className="mb-3 d-flex flex-column align-items-start">
           <div className='me-2 mb-3'>
-            <label htmlFor="" className='me-2' title='value from 0 to 1800 MHz' >Starting Frequency: </label>
+            <label htmlFor="" className='me-2' title='value from 1 to 1800 MHz' >Starting Frequency: </label>
             <input
               type="number"
               value={frequency}
@@ -503,6 +523,18 @@ const QAMTab = ({ dataBaseName, chID }) => {
   const rangeFooter = () => {
     const opMode = operModeValue === "" ? "QAM64" : operModeValue;
 
+    let message;
+
+    if (nofChannel <= 1 || nofChannel >= 300) {
+      message = 'No of Channel betwwen 1 to 300';
+    }
+    else if (frequency <= 1 || frequency >= 1800) {
+      message = 'Frequency betwwen 1 to 1800 MHz';
+    }
+    else if (power <= -12 || power >= 12) {
+      message = 'Power betwwen -12 to 12';
+    }
+
     return (
       <div className="edit_btns">
         <Button
@@ -517,7 +549,12 @@ const QAMTab = ({ dataBaseName, chID }) => {
               frequency: frequency,
             };
 
-            dispatch(addRangeQAMConfiguration(dataBaseName, payload));
+            if (message) {
+              dispatch(showPopup({ message: message, type: "danger" }))
+            } else {
+              dispatch(addRangeQAMConfiguration(dataBaseName, payload));
+            }
+
             setRangeModalShow(false);
             // setNOFChannel('');
             setPower("");
@@ -669,9 +706,9 @@ const QAMTab = ({ dataBaseName, chID }) => {
     onClick: (e, row, rowIndex) => {
       manageConfigTableIndex.includes({ selectRow: row.no })
         ? manageConfigTableIndex.splice(
-            manageConfigTableIndex.indexOf({ selectRow: row.no }),
-            1
-          )
+          manageConfigTableIndex.indexOf({ selectRow: row.no }),
+          1
+        )
         : manageConfigTableIndex.push({ selectRow: row.no });
       console.log(
         `clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`
@@ -713,6 +750,8 @@ const QAMTab = ({ dataBaseName, chID }) => {
             headerClasses="table_header"
             classes="mb-0"
             rowEvents={rowEvents}
+            defaultSortDirection='asc'
+
           />
         ) : (
           <p className="text-center fw-bold mt-2">No record found</p>
@@ -763,7 +802,7 @@ const QAMTab = ({ dataBaseName, chID }) => {
             </div>
           </div>
           <div className="right_btn d-flex flex-column">
-            <Button label={"Save"} handleClick={saveHandleClick} />
+            {/* <Button label={"Save"} handleClick={saveHandleClick} /> */}
             <ModalAoi
               show={saveModal}
               onHide={() => setSaveModal(false)}

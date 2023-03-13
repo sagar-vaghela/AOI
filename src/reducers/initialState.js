@@ -111,6 +111,14 @@ const initialState = {
 
     dmcDeleteDataBase:{
         dmcDeleteDataBaseData: [],
+    },
+    
+    dmcArchiveDataBase:{
+        dmcArchiveDataBaseData: [],
+    },
+
+    dmcRunDataBase:{
+        dmcRunDataBaseData: [],
     }
 };
 

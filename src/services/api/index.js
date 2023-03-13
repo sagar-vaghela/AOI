@@ -1,4 +1,6 @@
+import axios from "axios";
 import { createAxiosFor } from "../axios";
+
 
 export const getTableRunConfigQAM = () => {
   return createAxiosFor.get('/downstream_qams/running')
@@ -81,5 +83,14 @@ export const deleteDataBase = (dbname) => {
 };
 
 export const archiveDataBase = (dbname) => {
-  return createAxiosFor.post(`/downstream_config/archive?dbname=${dbname}`)
+  // return createAxiosFor.post(`/downstream_config/archive?dbname=${dbname}`)
+  return axios({
+    url: `http://69.180.23.205/downstream_config/archive?dbname=${dbname}`,
+    method: 'POST',
+    responseType: 'blob'
+  })
+};
+
+export const runDataBase = (dbname) => {
+  return createAxiosFor.post(`/downstream_config/load?dbname=${dbname}`)
 };

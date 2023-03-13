@@ -17,6 +17,7 @@ import { showPopup } from '../../../../actions/popupAction';
 import { getSystemSettingsAnnex } from '../../../../actions/systemSettings';
 import Form from 'react-bootstrap/Form';
 import { addRangeQAMConfiguration } from '../../../../actions/dConfiguration';
+import MutedFormatter from './MuteFormatter';
 
 let editRowData = [];
 
@@ -48,6 +49,7 @@ export default function QAMTab(props) {
   const [frequency, setFrequency] = useState();
   const [mute, setMute] = useState(false);
   const [operModeValue, setOperModeValue] = useState('');
+  const [columnSelect, setColumnSelect] = useState('');
 
 
   let Reg = new RegExp(search, "i");
@@ -88,204 +90,6 @@ export default function QAMTab(props) {
     setTableData(tableData);
   }, [tableData])
 
-  const muted = (
-    <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitch1" />
-    </div>
-  );
-
-  const tablerow = [
-    {
-      no: 1,
-      frequency: "test1",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 2,
-      frequency: "test2",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 3,
-      frequency: "test3",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 4,
-      frequency: "test4",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 5,
-      frequency: "test5",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 6,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 7,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 8,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 9,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 10,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 11,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 12,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 13,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 14,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 15,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 16,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 17,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 18,
-      frequency: "test",
-      power: "25",
-      width: "10",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-    {
-      no: 19,
-      frequency: "test",
-      power: "25",
-      width: "11",
-      modulation: "test",
-      annex: "test",
-      op_mode: "test",
-      muted: muted,
-    },
-  ];
 
   useEffect(() => {
     if (search.length > 0) {
@@ -295,8 +99,6 @@ export default function QAMTab(props) {
           (data) =>
             Reg.test(data.frequency) ||
             Reg.test(data.power) ||
-            Reg.test(data.width) ||
-            Reg.test(data.modulation) ||
             Reg.test(data.annex) ||
             Reg.test(data.operMode)
         );
@@ -305,43 +107,44 @@ export default function QAMTab(props) {
   }, [search]);
 
   function numberFormatter(cell, row, rowIndex) {
-    return <span>{rowIndex + 1}</span>;
-  }
-
-  function mutedFormatter(row) {
-    const checkSwitch = row === "YES" ? true : false;
-
-    return (
-      <div className="form-check form-switch">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="flexSwitchCheckChecked"
-          checked={checkSwitch}
-          onChange={(e) => { }}
-        />
-      </div>
-    );
+    return <span>{row.ch_index}</span>;
   }
 
   const columns = [
-    // {
-    //   dataField: "no",
-    //   text: "No",
-    //   sort: true,
-    //   editable: false,
-    //   formatter: numberFormatter,
-    // },
+    {
+      dataField: "ch_index",
+      text: "Ch_Index",
+      sort: true,
+      editable: false,
+      formatter: numberFormatter,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
+    },
     {
       dataField: "frequency",
       text: "Frequency",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "power",
       text: "Power",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     // {
     //   dataField: "width",
@@ -355,21 +158,35 @@ export default function QAMTab(props) {
       dataField: "annex",
       text: "Annex",
       sort: true,
+      editable: false,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
+
     },
     {
       dataField: "operMode",
       text: "Oper Mode",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      },
       editor: {
         type: Type.SELECT,
         options: [
           {
-            value: 'QAM64',
-            label: 'QAM64'
-          },
-          {
             value: 'QAM256',
             label: 'QAM256'
+          },
+          {
+            value: 'QAM64',
+            label: 'QAM64'
           },
           {
             value: 'CW_CARRIER',
@@ -382,7 +199,13 @@ export default function QAMTab(props) {
       dataField: "mute",
       text: "Muted",
       editable: false,
-      formatter: mutedFormatter,
+      formatter: (row) => <MutedFormatter row={row} />,
+      events: {
+        onClick: (e, column, columnIndex, row, rowIndex) => {
+
+          console.log("row========", row, column);
+        },
+      },
     },
   ];
 
@@ -419,7 +242,7 @@ export default function QAMTab(props) {
     classes: "selection-row",
     clickToEdit: true,
     hideSelectColumn: true,
-    onSelect: handleOnSelect,
+    onSelect: handleOnSelect
   };
 
   const editBody = () => {
@@ -451,7 +274,12 @@ export default function QAMTab(props) {
               <div className='d-flex'>
                 <label htmlFor="" className='me-2'>Mute: </label>
                 <div className="form-check form-switch">
-                  <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onChange={e => setMuteValue(e.target.checked)} />
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckChecked"
+                    onChange={e => setMuteValue(e.target.checked)} />
                 </div>
               </div>
             </div>
@@ -463,7 +291,7 @@ export default function QAMTab(props) {
 
   const upateRow = () => {
 
-    const checkSwitch = (muteValue === true ? 'YES' : 'NO')
+    const checkSwitch = (muteValue === true ? 'YES' : 'NO');
 
     editRowData.forEach((item, index) => {
       const payload = {
@@ -528,7 +356,7 @@ export default function QAMTab(props) {
   //   (row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
   //   (row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1))
 
-  const dbSaveCell = (row, newValue) => {
+  const dbSaveCell = (row) => {
 
     const payload = {
       modulation: row.modulation,
@@ -563,7 +391,7 @@ export default function QAMTab(props) {
     let validationMessage;
 
     if (validationField === 'frequency') {
-      validationMessage = "Frequency should be in between 0 and 1800";
+      validationMessage = "Frequency should be in between 1 and 1800";
     }
     else if (validationField === 'power') {
       validationMessage = "Power Range should be in between -12 and 12";
@@ -581,7 +409,7 @@ export default function QAMTab(props) {
       <div className='d-flex justify-content-center'>
         <div className="mb-3 d-flex flex-column align-items-end me-3">
           <div className='mb-2'>
-            <label htmlFor="" className='me-2'>Number of Channels: </label>
+            <label htmlFor="" className='me-2' title='value from 1 to 300' >Number of Channels: </label>
             <input
               type="number"
               value={nofChannel}
@@ -591,7 +419,7 @@ export default function QAMTab(props) {
           <div className='mb-2'>
             <label htmlFor="" className='me-2' title='value from -12 to 12 dB'>Power: </label>
             <input
-              type="text"
+              type="number"
               value={power}
               onChange={(e) => setPower(e.target.value)}
             />
@@ -600,7 +428,7 @@ export default function QAMTab(props) {
 
         <div className="mb-3 d-flex flex-column align-items-start">
           <div className='me-2 mb-3'>
-            <label htmlFor="" className='me-2' title='value from 0 to 1800 MHz'>Starting Frequency: </label>
+            <label htmlFor="" className='me-2' title='value from 1 to 1800 MHz'>Starting Frequency: </label>
             <input
               type="number"
               value={frequency}
@@ -624,8 +452,8 @@ export default function QAMTab(props) {
       <div className='d-flex mb-2 advance_setting'>
         <label htmlFor="" className='text-nowrap me-2'>Oper Mode: </label>
         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
-          <option value="QAM64">QAM64</option>
           <option value="QAM256">QAM256 </option>
+          <option value="QAM64">QAM64</option>
           <option value="CW_CARRIER">CW_CARRIER</option>
         </Form.Select>
       </div>
@@ -633,7 +461,19 @@ export default function QAMTab(props) {
   )
   const rangeFooter = () => {
 
-    const opMode = operModeValue === '' ? 'QAM64' : operModeValue;
+    const opMode = operModeValue === '' ? 'QAM256' : operModeValue;
+
+    let message;
+
+    if (nofChannel <= 1 || nofChannel >= 300) {
+      message = 'No of Channel betwwen 1 to 300';
+    }
+    else if (frequency <= 1 || frequency >= 1800) {
+      message = 'Frequency betwwen 1 to 1800 MHz';
+    }
+    else if (power <= -12 || power >= 12) {
+      message = 'Power betwwen -12 to 12';
+    }
 
     return (
 
@@ -650,7 +490,13 @@ export default function QAMTab(props) {
               mute: mute === true ? "YES" : "NO",
               frequency: frequency,
             };
-            dispatch(getRCQAMCreateTableRow(payload));
+
+            if (message) {
+              dispatch(showPopup({ message: message, type: "danger" }))
+            } else {
+              dispatch(getRCQAMCreateTableRow(payload));
+            }
+
             setRangeModalOpen(false);
             // setNOFChannel('');
             setPower('');
@@ -688,11 +534,14 @@ export default function QAMTab(props) {
                 data={tableData}
                 columns={columns}
                 selectRow={selectRow}
+                defaultSortDirection='asc'
                 cellEdit={cellEditFactory({
                   mode: 'dbclick',
                   blurToSave: true,
                   onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
                   afterSaveCell: (oldValue, newValue, row, column) => {
+
+                    console.log("row-----", row);
 
                     if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
                       setValidationField('frequency');
@@ -707,7 +556,7 @@ export default function QAMTab(props) {
 
                     }
                     else {
-                      dbSaveCell(row, newValue)
+                      dbSaveCell(row)
                     }
 
                   }
