@@ -16,6 +16,7 @@ import {
   mcChangeRemoveDataBase,
   mcDeleteDataBase,
   mcArchiveDataBase,
+  mcRunDataBase,
 } from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
 
@@ -86,7 +87,7 @@ const tablerow = [
 
 let manageConfigTableIndex = [];
 
-export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID }) {
+export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID, setTabDisable, setConfiguratonData }) {
 
   const mcTableUser = useSelector((state) => state.dmcTableReducer.mcTableUser.data);
   const mcTableSystem = useSelector((state) => state.dmcTableReducer.mcTableSystem.data);
@@ -96,6 +97,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const mcDeleteConfigData = useSelector((state) => state.dmcDeleteDatabaseReducer.dmcDeleteDataBaseData);
   const mcRenameDatabase = useSelector((state) => state.dmcRenameDataBaseReducer.dmcRenameDataBaseData);
   const mcRenameDeleteDatabase = useSelector((state) => state.dmcRenameDeleteDBReducer.dmcRenameDeleteDBData);
+  const mcArchiveDatabase = useSelector((state) => state.dmcArchiveDatabaseReducer.dmcArchiveDataBaseData);
 
 
   const [tableData, setTableData] = useState([]);
@@ -115,7 +117,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const [annexModal, setAnnexModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
-  const [editablebody, seteditablebody] = useState('');
+  const [editablebody, setEditablebody] = useState('');
   const [dbRename, setdbRename] = useState('');
 
   let Reg = new RegExp(search, "i");
@@ -125,7 +127,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   useEffect(() => {
     dispatch(getManageConfigQAMTable(0));
     dispatch(getManageConfigQAMTable(1));
-
+    setTabDisable('disabled-link');
   }, []);
 
 
@@ -175,7 +177,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       setCheckSameDataBase(false);
       setdbRename(selectedRow.name);
     } else {
-      seteditablebody('Please select at list one Row !');
+      setEditablebody('Please select at list one Row !');
       setdbRename('');
       setOfdmEditModalShow(true);
     }
@@ -186,16 +188,38 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
   // }
 
+  function numberFormatter(cell, row, rowIndex) {
+    return <span>{rowIndex + 1}</span>;
+  }
+
   const columns = [
+    {
+      dataField: "no",
+      text: "Index",
+      editable: false,
+      formatter: numberFormatter,
+    },
     {
       dataField: "name",
       text: "Name",
-      sort: true
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "editable",
       text: "Editable",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      },
       editor: {
         type: Type.SELECT,
         options: [
@@ -216,11 +240,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     setEditValue(selectRowLength);
     const dbName = row.name;
     const dbType = row.editable === 'no' ? 1 : 0;
-    console.log("row", row);
     setSelectedRow(row);
     dispatch(getManageConfigRowSelect(dbName, dbType));
     dispatch(getSystemSettingsAnnex());
   };
+
+  useEffect(() => {
+    if (mcTableRowData) {
+      setConfiguratonData(mcTableRowData.data)
+    }
+  }, [mcTableRowData])
+
 
   const selectRow = {
     mode: "radio",
@@ -318,9 +348,19 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   );
 
   const deleteItem = () => {
+
+
+
     if (editValue !== 0) {
-      dispatch(mcDeleteDataBase(selectedRow.name));
-      setDeleteModalShow(false);
+      if (selectedRow.editable === 'no') {
+        setDeleteModalShow(false);
+        setOfdmEditModalShow(true);
+        setEditablebody('This Database is System Database That is not Delete.');
+      }
+      else {
+        dispatch(mcDeleteDataBase(selectedRow.name));
+        setDeleteModalShow(false);
+      }
     }
   };
 
@@ -397,14 +437,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
       if (selectedRow.editable === 'no') {
         setOfdmEditModalShow(true);
-        seteditablebody('This Database is System Database That is not Editable.');
+        setEditablebody('This Database is System Database That is not Editable.');
 
       }
       else {
 
         if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length === 0) {
           setOfdmEditModalShow(true);
-          seteditablebody('This DataBase is Empty.');
+          setEditablebody('This DataBase is Empty.');
         }
         else if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length > 0) {
 
@@ -424,7 +464,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     }
 
     else {
-      seteditablebody('Please select at list one Row !');
+      setEditablebody('Please select at list one Row !');
       setOfdmEditModalShow(true);
     }
 
@@ -454,28 +494,47 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     }
   }, [search]);
 
+  useEffect(() => {
+    if (mcArchiveDatabase && mcArchiveDatabase.data) {
+      const url = window.URL.createObjectURL(new Blob([mcArchiveDatabase.data]));
+      console.log("url-----", url);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${selectedRow.name}.zip`
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+  }, [mcArchiveDatabase])
+
+
   const archiveHandleClick = () => {
     if (selectedRow.name) {
       dispatch(mcArchiveDataBase(selectedRow.name));
     } else {
-      seteditablebody("Please select at list one Row !");
+      setEditablebody("Please select at list one Row !");
       setOfdmEditModalShow(true);
     }
   };
 
-
-  // const filteredData = tableRow && tableRow.filter((row) =>
-  //   (row?.name?.toUpperCase().indexOf(search.toUpperCase()) > -1) ||
-  //   (row?.editable?.toUpperCase().indexOf(search.toUpperCase()) > -1)
-  // )
-  // console.log("selectedRow",selectedRow.name);
+  const runHandler = () => {
+    if (selectedRow.name) {
+      dispatch(mcRunDataBase(selectedRow.name));
+    } else {
+      setEditablebody("Please select at list one Row !");
+      setOfdmEditModalShow(true);
+    }
+  }
 
   return (
     <div className="channel_tab">
       <div className="border border-dark mb-4">
         <div className="table_top_bar border-bottom border-dark d-flex justify-content-between align-items-center p-2">
           <h5 className="mb-0">Current Configuration files</h5>
+
           <div className="searchbar p-2">
+            <label htmlFor="search">Count: {tableData.length}</label>
+
             <label htmlFor="search">Search:</label>
             <input
               type="text"
@@ -497,6 +556,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
             selectRow={selectRow}
             classes="mb-0"
             rowEvents={rowEvents}
+            defaultSortDirection='asc'
+
           />
         )}
       </div>
@@ -522,7 +583,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
             />
           </div>
           <div className="right_btn">
-            <Button label={"Run"} />
+            <Button label={"Run"} handleClick={runHandler} />
           </div>
         </div>
       </div>
@@ -540,7 +601,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               modalFooter={deleteFooter}
             />
 
-            <Button label={"Archive"} handleClick={archiveHandleClick}/>
+            <Button label={"Archive"} handleClick={archiveHandleClick} />
             <Button label={"Visualize"} handleClick={visualizeHandleClick} />
             <Button label={"Rename"} handleClick={renameHandleClick} />
             <ModalAoi
@@ -586,7 +647,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
           </Tab>
           <Tab
             eventKey="OFDMChannels"
-            tabClassName="fw-bold"
+            tabClassName="fw-bold disabled-link"
             title="OFDM Channels"
           >
             <OFDMTab /> </Tab> </Tabs>) : null} {visualizeModel ? <Visualize hideVisualize={hideVisualize} /> : null}

@@ -38,7 +38,7 @@ export const SideBar = ({
             <Link className="nav-link" to="/downstream">Downstream</Link>
           </Nav.Item>
           <Nav.Item as="li" className={splitLocation[1] === "upstream" ? "active" : ""}>
-            <Link className="nav-link" to="/upstream">Upstream</Link>
+            <Link className="nav-link disabled-link" to="/upstream">Upstream</Link>
           </Nav.Item>
           <Nav.Item as="li" className={splitLocation[1] === "system" ? "active" : ""}>
             <Accordion defaultActiveKey="1">

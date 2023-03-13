@@ -10,7 +10,8 @@ import {
     GET_MANAGE_CONFIG_ROW_SELECT_STARTED,
     GET_MANAGE_CONFIG_ROW_SELECT_SUCCEEDED,
     GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED,
-    ARCHIVE_DATABASE_SUCCEEDED
+    ARCHIVE_DATABASE_SUCCEEDED,
+    RUN_DATABASE_SUCCEEDED
 } from "../lib/constants";
 import {
     getMangeConfigRowAPI,
@@ -19,7 +20,8 @@ import {
     renameDbName,
     deleteRenameConfig,
     deleteDataBase,
-    archiveDataBase
+    archiveDataBase,
+    runDataBase
 } from "../services/api";
 import { showPopup } from ".//popupAction";
 
@@ -82,6 +84,11 @@ const deleteDatabaseSuccess = (data) => ({
 
 const archiveDatabaseSuccess = (data) => ({
     type: ARCHIVE_DATABASE_SUCCEEDED,
+    payload: data
+});
+
+const runDatabaseSuccess = (data) => ({
+    type: RUN_DATABASE_SUCCEEDED,
     payload: data
 });
 
@@ -183,6 +190,21 @@ export const mcArchiveDataBase = (dbname) => {
         })
             .catch(function (error) {
                 console.log("mcArchiveDataBase error");
+            });
+    };
+}
+
+
+export const mcRunDataBase = (dbname) => {
+
+    return async dispatch => {
+
+        await runDataBase(dbname).then(function (response) {
+            dispatch(runDatabaseSuccess(response));
+            dispatch(showPopup({ message: " Run as Successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                console.log("mcRunDataBase error");
             });
     };
 }

@@ -15,7 +15,7 @@ const RunningConfigPage = (props) => {
       <Tab eventKey="QAMChannels" tabClassName="fw-bold" title="QAM Channels">
         <QAMTab />
       </Tab>
-      <Tab eventKey="OFDMChannels" tabClassName="fw-bold" title="OFDM Channels">
+      <Tab eventKey="OFDMChannels" tabClassName="fw-bold disabled-link" title="OFDM Channels">
         <OFDMTab />
       </Tab>
     </Tabs>

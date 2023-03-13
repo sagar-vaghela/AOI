@@ -230,10 +230,10 @@ li a.dropdown-toggle::after {
 .alert {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   border-radius: 0;
   z-index: 999;
+  height: 55px;
 }
 /* ---------------------------------------------------
     TITLE STYLE
@@ -245,11 +245,16 @@ li a.dropdown-toggle::after {
 /* ---------------------------------------------------
     NAV TABS STYLE
 ----------------------------------------------------- */
+
+.disabled-link {
+  pointer-events: none;
+}
+
 .nav_tabs {
   background-color: #f1e4ff;
   border-bottom: 1px solid #000;
 }
-.nav_tabs .nav-link {
+.nav_tabs .nav-link { 
   min-width: 350px;
   font-size: 1.5rem;
   color: #000;
@@ -531,9 +536,11 @@ tbody::-webkit-scrollbar {
   justify-content: center;
 }
 .modal_common input[type="text"],
-.modal_common input[type="number"],
-.modal-content select {
+.modal_common input[type="number"] {
   max-width: 100px;
+}
+.modal-content select {
+  width: 250px;
 }
 .edit_modal .mute {
   display: flex;
@@ -553,6 +560,9 @@ select:focus {
 }
 .visualize_modal .bg-lightgray {
   background: #d3d3d363;
+}
+.modal-dialog{
+  max-width: 650px !important;
 }
 /* ---------------------------------------------------
     OFDM Chennle STYLE
@@ -747,4 +757,17 @@ select:focus {
   border-bottom: 4px dashed;
   border-bottom: 4px solid \9;
   content: "";
+}
+
+/* table sort css */
+.react-bootstrap-table-sort-order,
+.order{
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+.sortable:hover .react-bootstrap-table-sort-order,
+.sortable:hover .order{
+  opacity: 1;
+  visibility: visible;
 }

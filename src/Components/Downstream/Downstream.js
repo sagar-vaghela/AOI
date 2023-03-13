@@ -10,6 +10,9 @@ const Downstream = (props) => {
   const [activeTab, setActiveTab] = useState('RunningConfigPage');
   const [dataBaseName, setDataBaseName] = useState('');
   const [chID, setChID] = useState('');
+  const [tabDisable, setTabDisable] = useState('disabled-link');
+  const [configuratonData, setConfiguratonData] = useState([]);
+
 
   const handleTabChange = (eventKey) => {
     setActiveTab(eventKey);
@@ -29,10 +32,10 @@ const Downstream = (props) => {
           <RunningConfigPage />
         </Tab>
         <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-          <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} setChID={setChID}/>
+          <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} setChID={setChID} setTabDisable={setTabDisable} setConfiguratonData={setConfiguratonData} />
         </Tab>
-        <Tab eventKey="configuration" title="Configuration">
-          <Configuration dataBaseName={dataBaseName} chID={chID}/>
+        <Tab eventKey="configuration" title="Configuration" tabClassName={tabDisable}>
+          <Configuration dataBaseName={dataBaseName} chID={chID} configuratonData={configuratonData} />
         </Tab>
       </Tabs>
     </div>

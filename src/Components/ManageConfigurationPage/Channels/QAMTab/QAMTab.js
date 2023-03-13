@@ -6,41 +6,19 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 export default function QAMTab({ mcTableRowData }) {
 
   const [search, setSearch] = useState('');
-  const [tableData, setTableData] = useState(mcTableRowData);
+  const [tableData, setTableData] = useState([]);
+
+  let Reg = new RegExp(search, "i");
 
   useEffect(() => {
-    setTableData(mcTableRowData);
+    if (mcTableRowData) {
+      setTableData(mcTableRowData);
+    }
   }, [mcTableRowData]);
 
-
-  // const muted = (<div><label className="toggle_box">
-  //   <input type="checkbox" />
-  //   <span className="slider"></span>
-  //   <span className="labels" data-on="Yes" data-off="No"></span>
-  // </label></div>)
-
-
-  // const tablerow = [
-  //   { no: 1, frequency: "test1", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 2, frequency: "test2", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 3, frequency: "test3", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 4, frequency: "test4", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 5, frequency: "test5", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 6, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 7, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 8, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 9, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 10, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 11, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 12, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 13, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 14, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 15, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 16, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 17, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 18, frequency: "test", power: '25', width: '10', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted },
-  //   { no: 19, frequency: "test", power: '25', width: '11', modulation: 'test', annex: 'test', op_mode: 'test', muted: muted }
-  // ]
+  useEffect(() => {
+    setTableData(tableData);
+  }, [tableData])
 
   function mutedFormatter(row) {
     const checkSwitch = row === "YES" ? true : false;
@@ -67,10 +45,24 @@ export default function QAMTab({ mcTableRowData }) {
     {
       dataField: 'frequency',
       text: 'Frequency',
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: 'power',
       text: 'Power',
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     // {
     //   dataField: 'width',
@@ -83,10 +75,24 @@ export default function QAMTab({ mcTableRowData }) {
     {
       dataField: 'annex',
       text: 'Annex',
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
     },
     {
       dataField: "operMode",
       text: "OP Mode",
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      },
       editor: {
         type: Type.SELECT,
         options: [
@@ -129,6 +135,24 @@ export default function QAMTab({ mcTableRowData }) {
     }
   };
 
+  useEffect(() => {
+    if (search.length > 0) {
+      let data =
+        mcTableRowData.length > 0 &&
+        mcTableRowData.filter(
+          (data) =>
+            Reg.test(data.frequency) ||
+            Reg.test(data.power) ||
+            Reg.test(data.annex) ||
+            Reg.test(data.operMode)
+        );
+      setTableData(data);
+    }
+    else {
+      setTableData(mcTableRowData);
+    }
+  }, [search]);
+
   return (
     <>
       < div className='channel_tab ' >
@@ -152,6 +176,8 @@ export default function QAMTab({ mcTableRowData }) {
               headerClasses="table_header"
               classes="mb-0"
               rowEvents={rowEvents}
+              defaultSortDirection='asc'
+
             /> :
               <p className='text-center fw-bold mt-2'>No record found</p>
           }

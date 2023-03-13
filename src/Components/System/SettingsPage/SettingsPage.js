@@ -45,10 +45,10 @@ export default function SettingsPage() {
 
             <div className='d-flex'>
 
-              <div>
+              <div className='me-5'>
                 <h6 className='fw-bold'>Configure US-DS Splits</h6>
-                <div style={{ width: '100%' }}>
-                  <Form.Select aria-label="Default select example" placeholder='Select Splits' style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Splits')}>
+                <div style={{ width: '100%'}}>
+                  <Form.Select aria-label="Default select example" placeholder='Select Splits' style={{  padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Splits')}>
                     <option >Select Splits</option>
                     <option value='Low_split'>Low_split (42Mhz-54Mhz)</option>
                     <option value="Mid_Split">Mid_Split (85Mhz-102Mhz)</option>

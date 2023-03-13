@@ -4,7 +4,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import QAMTab from './Channels/QAMTab/QAMTab'
 import OFDMTab from './Channels/OFDMTab/OFDMTab'
 
-const Configuration = ({dataBaseName, chID}) => {
+const Configuration = ({dataBaseName, chID, configuratonData}) => {
     return (
         <>
         <h5 className="mb-3">{dataBaseName}</h5>
@@ -14,9 +14,9 @@ const Configuration = ({dataBaseName, chID}) => {
             className="config_tabs border border-dark"
         >
             <Tab eventKey="QAMChannels" tabClassName='fw-bold col-4' title="QAM Channels">
-                <QAMTab dataBaseName={dataBaseName} chID={chID} />
+                <QAMTab dataBaseName={dataBaseName} chID={chID} configuratonData={configuratonData} />
             </Tab>
-            <Tab eventKey="OFDMChannels" tabClassName='fw-bold col-4' title="OFDM Channels">
+            <Tab eventKey="OFDMChannels" tabClassName='fw-bold col-4 disabled-link' title="OFDM Channels">
                 <OFDMTab />
             </Tab>
         </Tabs>
