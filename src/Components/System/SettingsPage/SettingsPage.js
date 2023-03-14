@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from '../../Button';
-import { useDispatch } from 'react-redux';
-import { postSettingsAnnex, postSettingsSplit } from '../../../actions/systemSettings';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSystemSettingsAnnex, getSystemSettingsSplit, postSettingsAnnex, postSettingsSplit } from '../../../actions/systemSettings';
 
 export default function SettingsPage() {
 
   const dispatch = useDispatch();
 
+  const settingSplitsData = useSelector((state) => state.settingSplitDataReducer.settingSplitGet);
+  const settingAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
+
+
   const [splitValue, setSplitValue] = useState('');
-  const [annexValue, setAnnexValue] = useState('')
+  const [annexValue, setAnnexValue] = useState('');
+
+  console.log("settingSplitsData======",settingSplitsData);
+  console.log("settingAnnexData======",settingAnnexData);
+
+  useEffect(() => {
+    dispatch(getSystemSettingsSplit());
+    dispatch(getSystemSettingsAnnex());
+  }, []);
+  
+  useEffect(() => {
+
+    if(settingSplitsData && settingSplitsData.data){
+      setSplitValue(settingSplitsData.data);
+    }
+    if(settingAnnexData && settingAnnexData.data){
+      setAnnexValue(settingAnnexData.data);
+    }
+ 
+  }, [settingSplitsData, settingAnnexData])
+  
 
 
   const handleChangeSplit = (e, type) => {
@@ -47,9 +71,10 @@ export default function SettingsPage() {
 
               <div className='me-5'>
                 <h6 className='fw-bold'>Configure US-DS Splits</h6>
-                <div style={{ width: '100%'}}>
-                  <Form.Select aria-label="Default select example" placeholder='Select Splits' style={{  padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Splits')}>
+                <div style={{ width: '100%' }}>
+                  <Form.Select aria-label="Default select example" value={splitValue} placeholder='Select Splits' style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Splits')}>
                     <option >Select Splits</option>
+
                     <option value='Low_split'>Low_split (42Mhz-54Mhz)</option>
                     <option value="Mid_Split">Mid_Split (85Mhz-102Mhz)</option>
                     <option value="High_split">High_split (204Mhz-258Mhz)</option>
@@ -65,7 +90,7 @@ export default function SettingsPage() {
               <div className='dropdownSpace'>
                 <h6 className='fw-bold'>Annex</h6>
                 <div style={{ width: '100%' }}>
-                  <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Annex')}>
+                  <Form.Select aria-label="Default select example" value={annexValue} style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={(e) => handleChangeSplit(e, 'Annex')}>
                     <option>Select Annex</option>
                     <option value='ANNEX_A'>Annex_A</option>
                     <option value="ANNEX_B">Annex_B</option>

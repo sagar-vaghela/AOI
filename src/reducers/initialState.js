@@ -119,7 +119,16 @@ const initialState = {
 
     dmcRunDataBase:{
         dmcRunDataBaseData: [],
-    }
+    },
+
+    dmcDownloadAllDB:{
+        dmcDownloadAllDBData: [],
+        isLoading: false,
+    },
+    
+    dcUpdateConfiguration:{
+        dcUpdateConfigurationData: [],
+    },
 };
 
 export default initialState;

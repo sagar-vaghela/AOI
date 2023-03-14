@@ -2,6 +2,8 @@ import {
     ARCHIVE_DATABASE_SUCCEEDED,
     CHANGE_DELETE_DATABASE_SUCCEEDED,
     DELETE_DATABASE_SUCCEEDED,
+    DOWNLOAD_ALL_DATABASE_STARTED,
+    DOWNLOAD_ALL_DATABASE_SUCCEEDED,
     GET_CHANGE_NAME,
     GET_MANAGE_CONFIG_QAM_TABLE_FAILED,
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
@@ -147,6 +149,25 @@ export const dmcRunDatabaseReducer = (state = initialState.dmcRunDataBase, actio
             return {
                 ...state,
                 dmcRunDataBaseData: action.payload,
+            };
+        default:
+            return state;
+    }
+};
+
+export const dmcDownloadAllDBReducer = (state = initialState.dmcDownloadAllDB, action) => {
+    switch (action.type) {
+
+        case DOWNLOAD_ALL_DATABASE_STARTED:
+            return {
+                ...state,
+                isLoading: true,
+            };
+
+        case DOWNLOAD_ALL_DATABASE_SUCCEEDED:
+            return {
+                ...state,
+                dmcDownloadAllDBData: action.payload,
             };
         default:
             return state;

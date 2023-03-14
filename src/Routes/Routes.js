@@ -19,7 +19,9 @@ export default function Routes(props) {
       <Route exact path="/upstream" component={() => (<Upstream />)}></Route>
       <Route exact path="/maintenanace" component={() => (<MainTenanacePage />)} />
       <Route exact path="/softwareUpgrade" component={() => (<SoftwareUpgradePage />)} />
-      <Route exact path="/settings" component={() => (<SettingsPage />)} />
+      {/* <Route exact path="/settings" component={() => (<SettingsPage />)} /> */}
+      <Route exact path="/settings" render={() => <SettingsPage />} ></Route>
+
       <Route exact path="/help" component={() => (<Help />)} />
     </Switch>
   );

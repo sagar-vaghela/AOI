@@ -23,11 +23,14 @@ import {
     dmcDeleteDatabaseReducer,
     dmcArchiveDatabaseReducer,
     dmcRunDatabaseReducer,
+    dmcDownloadAllDBReducer
 } from './dmcCurrentFilesReducer';
 import {
     dcAddRangeReducer,
     dcDeleteConfigurationReducer,
-    dcSingleQAMTableReducer
+    dcSingleQAMTableReducer,
+    dcUpdateConfigurationReducer
+
 } from './dConfigurationReducer';
 
 const rootReducer = combineReducers({
@@ -51,7 +54,10 @@ const rootReducer = combineReducers({
     drcSingleQAMTableReducer,
     dmcDeleteDatabaseReducer,
     dmcArchiveDatabaseReducer,
-    dmcRunDatabaseReducer
+    dmcRunDatabaseReducer,
+    dmcDownloadAllDBReducer,
+    dcUpdateConfigurationReducer
+
 });
 
 export default rootReducer;

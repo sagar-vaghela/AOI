@@ -199,11 +199,10 @@ export default function QAMTab(props) {
       dataField: "mute",
       text: "Muted",
       editable: false,
-      formatter: (row) => <MutedFormatter row={row} />,
+      formatter: (cell, row) => <MutedFormatter cell={cell} row={row}/>,
       events: {
         onClick: (e, column, columnIndex, row, rowIndex) => {
-
-          console.log("row========", row, column);
+          e.stopPropagation();
         },
       },
     },
@@ -232,8 +231,6 @@ export default function QAMTab(props) {
       const updateRowData = editRowData.filter(item => item.ch_index !== row.ch_index);
       editRowData = updateRowData;
     }
-    setUpdateRowData(editRowData);
-
   }
 
   const selectRow = {
@@ -241,7 +238,6 @@ export default function QAMTab(props) {
     clickToSelect: true,
     classes: "selection-row",
     clickToEdit: true,
-    hideSelectColumn: true,
     onSelect: handleOnSelect
   };
 
@@ -528,6 +524,7 @@ export default function QAMTab(props) {
 
           {
             tableData && tableData.length > 0 ?
+            <div className="tableContainer">
               <BootstrapTable
                 id='running_qam_table'
                 keyField="ch_index"
@@ -565,6 +562,7 @@ export default function QAMTab(props) {
                 classes="mb-0"
                 rowEvents={rowEvents}
               />
+              </div>
               :
               <p className='text-center fw-bold mt-2'>No record found</p>
           }

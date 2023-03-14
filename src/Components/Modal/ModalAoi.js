@@ -4,6 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 
 const ModalAoi = ({ modalTitle, modalBody, modalFooter, onHide, show }) => {
 
+    if (document.querySelector(".modal") !== null)
+        document.querySelector(".modal").appendTo(".content")
+
     return (
         <Modal
             show={show}

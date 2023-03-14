@@ -15,6 +15,7 @@ import {
     systemSettingsSplit
 }
     from "../services/api";
+import { showPopup } from "./popupAction";
 
 
 const postSystemSettingsSplit = (data) => ({
@@ -66,6 +67,8 @@ export const postSettingsSplit = (payload) => {
 
         await systemSettingsSplit(payload).then(function (response) {
             dispatch(postSystemSettingsSplit(response));
+            dispatch(showPopup({ message: " Setting Splits as Successfully", type: "success" }))
+
         })
             .catch(function (error) {
                 console.log("postSettingsSplit error");
@@ -79,6 +82,8 @@ export const postSettingsAnnex = (payload) => {
 
         await systemSettingsAnnex(payload).then(function (response) {
             dispatch(postSystemSettingsAnnex(response));
+            dispatch(showPopup({ message: " Setting Annex as Successfully", type: "success" }))
+
         })
             .catch(function (error) {
                 console.log("postSettingsAnnex error");
