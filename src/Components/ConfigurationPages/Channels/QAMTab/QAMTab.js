@@ -9,22 +9,19 @@ import { Accordion, Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addRangeQAMConfiguration,
+  configurationQAMRowUpdate,
   getConfigurationQAMTable,
 } from "../../../../actions/dConfiguration";
 import { showPopup } from "../../../../actions/popupAction";
 
 let manageConfigTableIndex = [];
-let data = [];
+let editRowData = [];
 
 const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const dispatch = useDispatch();
 
-  const addRangeData = useSelector(
-    (state) => state.dcAddRangeReducer.dcAddRangeData
-  );
-  const configQAMTableData = useSelector(
-    (state) => state.dcSingleQAMTableReducer.dcSingleQAMTableData
-  );
+  const addRangeData = useSelector((state) => state.dcAddRangeReducer.dcAddRangeData);
+
 
   const [search, setSearch] = useState("");
   const [selectBtn, setSelectBtn] = useState("Select All");
@@ -42,6 +39,8 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const [annexSelectType, setannexSelectType] = useState();
   const [mute, setMute] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [powerValue, setPowerValue] = useState();
+  const [muteValue, setMuteValue] = useState();
 
   useEffect(() => {
     if (dataBaseName && chID) {
@@ -59,7 +58,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   }, [addRangeData]);
 
   useEffect(() => {
-      setTableData(configuratonData);
+    setTableData(configuratonData);
   }, []);
 
   const editHandleClick = () => {
@@ -305,15 +304,22 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     },
   ];
 
-  const [tableRow, setTableRow] = useState(tablerow);
+  const handleOnSelect = (row, isSelect) => {
+    if (isSelect) {
+      editRowData.push(row);
+    } else {
+      const updateRowData = editRowData.filter(item => item.ch_index !== row.ch_index);
+      editRowData = updateRowData;
+    }
+  }
 
   const selectRow = {
     mode: "checkbox",
     clickToSelect: true,
-    hideSelectColumn: true,
     classes: "selection-row",
     clickToEdit: true,
-    hideSelectColumn: true,
+    onSelect: handleOnSelect
+
   };
 
   const selectHandleClick = () => {
@@ -590,20 +596,19 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
             </div>
             <div className="d-flex justify-content-center mb-3">
               <div className="me-3">
-                <label htmlFor="" className="me-2">
-                  Power:{" "}
-                </label>
-                <input type="text" />
+                <label htmlFor="" className='me-2'>Power: </label>
+                <input type="text" value={powerValue} onChange={(e) => setPowerValue(e.target.value)} />
               </div>
-              <div>
-                <label htmlFor="" className="me-2">
-                  Mute:{" "}
-                </label>
-                <label className="toggle_box">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                  <span className="labels" data-on="Yes" data-off="No"></span>
-                </label>
+              <div className='d-flex'>
+                <label htmlFor="" className='me-2'>Mute: </label>
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckChecked"
+                    onChange={e => setMuteValue(e.target.checked)} />
+                </div>
               </div>
             </div>
           </>
@@ -612,6 +617,24 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     );
   };
 
+  const updateHandler = () => {
+
+    const checkSwitch = (muteValue === true ? 'YES' : 'NO');
+
+    editRowData.forEach((item, index) => {
+      const payload = {
+        power: powerValue,
+        annex: item.annex,
+        operMode: item.operMode,
+        mute: checkSwitch,
+        frequency: item.frequency,
+      }
+      dispatch(configurationQAMRowUpdate(dataBaseName, item.ch_index, payload));
+      setEditModalShow(false);
+    });
+
+  }
+
   const editFooter = () => {
     return (
       <>
@@ -619,7 +642,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
           <></>
         ) : (
           <div className="edit_btns">
-            <Button label={"Edit"} />
+            <Button label={"Edit"} handleClick={updateHandler} />
             <Button
               label={"Cancel"}
               handleClick={() => setEditModalShow(false)}
@@ -671,13 +694,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   );
 
   const deleteItem = (manageConfigTableIndex) => {
-    console.log("table row====", tableRow);
     console.log("manageConfigTableIndex====", manageConfigTableIndex);
-    const results = tableRow.filter(
-      ({ no: id1 }) =>
-        !manageConfigTableIndex.some(({ selectRow: id2 }) => id2 === id1)
-    );
-    setTableRow(results);
     setDeleteModalShow(false);
   };
 
@@ -717,16 +734,6 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     },
   };
 
-  const filteredData = tableRow.filter(
-    (row) =>
-      row?.frequency?.toUpperCase().indexOf(search.toUpperCase()) > -1 ||
-      row?.power?.toUpperCase().indexOf(search.toUpperCase()) > -1 ||
-      row?.width?.toUpperCase().indexOf(search.toUpperCase()) > -1 ||
-      row?.op_mode?.toUpperCase().indexOf(search.toUpperCase()) > -1 ||
-      row?.modulation?.toUpperCase().indexOf(search.toUpperCase()) > -1 ||
-      row?.annex?.toUpperCase().indexOf(search.toUpperCase()) > -1
-  );
-
   return (
     <div className="channel_tab ">
       <div className="border border-dark mb-4">
@@ -740,19 +747,22 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
           />
         </div>
         {tableData && tableData.length > 0 ? (
-          <BootstrapTable
-            id="confinguration_qam_table"
-            keyField="frequency"
-            data={tableData}
-            columns={columns}
-            cellEdit={cellEditFactory({ mode: "dbclick", blurToSave: true })}
-            selectRow={selectRow}
-            headerClasses="table_header"
-            classes="mb-0"
-            rowEvents={rowEvents}
-            defaultSortDirection='asc'
+          <div className="tableContainer">
 
-          />
+            <BootstrapTable
+              id="confinguration_qam_table"
+              keyField="frequency"
+              data={tableData}
+              columns={columns}
+              cellEdit={cellEditFactory({ mode: "dbclick", blurToSave: true })}
+              selectRow={selectRow}
+              headerClasses="table_header"
+              classes="mb-0"
+              rowEvents={rowEvents}
+              defaultSortDirection='asc'
+
+            />
+          </div>
         ) : (
           <p className="text-center fw-bold mt-2">No record found</p>
         )}

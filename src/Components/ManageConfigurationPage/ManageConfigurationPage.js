@@ -17,8 +17,10 @@ import {
   mcDeleteDataBase,
   mcArchiveDataBase,
   mcRunDataBase,
+  mcDownloadAllDataBase,
 } from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
+import ArchiveFormatter from "./ArchiveFormatter";
 
 const tablerow = [
   { no: 1, name: "david_lanum - Copy.db", editable: "Yes" },
@@ -86,6 +88,7 @@ const tablerow = [
 ];
 
 let manageConfigTableIndex = [];
+let selectRowConfigName;
 
 export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID, setTabDisable, setConfiguratonData }) {
 
@@ -98,7 +101,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const mcRenameDatabase = useSelector((state) => state.dmcRenameDataBaseReducer.dmcRenameDataBaseData);
   const mcRenameDeleteDatabase = useSelector((state) => state.dmcRenameDeleteDBReducer.dmcRenameDeleteDBData);
   const mcArchiveDatabase = useSelector((state) => state.dmcArchiveDatabaseReducer.dmcArchiveDataBaseData);
-
+  const mcDownloadAllDatabase = useSelector((state) => state.dmcDownloadAllDBReducer.dmcDownloadAllDBData);
+  const configQAMTableUpdateData = useSelector((state) => state.dcUpdateConfigurationReducer.dcUpdateConfigurationData);
 
   const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
@@ -110,7 +114,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const [visualizeModel, setVisualizeModel] = useState(false);
   const [saveAs, setSaveAs] = useState(false);
   const [saveName, setSaveName] = useState("");
-  const [tableRow, setTableRow] = useState(tablerow);
   const [editValue, setEditValue] = useState(0);
   const [checkNewDataBase, setCheckNewDataBase] = useState(false);
   const [checkSameDataBase, setCheckSameDataBase] = useState(false);
@@ -119,6 +122,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const [OfdmEditModalShow, setOfdmEditModalShow] = useState(false);
   const [editablebody, setEditablebody] = useState('');
   const [dbRename, setdbRename] = useState('');
+  const [dbCopy, setDbCopy] = useState('');
+  const [copyModalShow, setCopyModalShow] = useState(false);
+
 
   let Reg = new RegExp(search, "i");
 
@@ -133,12 +139,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
   useEffect(() => {
     if ((mcDeleteConfigData && mcDeleteConfigData.data && mcDeleteConfigData.data.success === true) ||
-      (mcRenameDeleteDatabase && mcRenameDeleteDatabase.data && mcRenameDeleteDatabase.data.success === true)) {
+      (mcRenameDeleteDatabase && mcRenameDeleteDatabase.data && mcRenameDeleteDatabase.data.success === true) ||
+      (mcRenameDatabase && mcRenameDatabase.data && mcRenameDatabase.data.success === true)
+    ) {
       dispatch(getManageConfigQAMTable(0));
       dispatch(getManageConfigQAMTable(1));
       setEditValue(0);
     }
-  }, [mcDeleteConfigData, mcRenameDeleteDatabase])
+  }, [mcDeleteConfigData, mcRenameDeleteDatabase, mcRenameDatabase])
 
 
   useEffect(() => {
@@ -192,9 +200,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     return <span>{rowIndex + 1}</span>;
   }
 
+  function annexFormatter() {
+    const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
+    return <span>{settingAnnex}</span>;
+  }
+
   const columns = [
     {
-      dataField: "no",
+      dataField: "index",
       text: "Index",
       editable: false,
       formatter: numberFormatter,
@@ -234,6 +247,30 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
         ],
       },
     },
+    {
+      dataField: "annex",
+      text: "Annex",
+      sort: true,
+      editable: false,
+      formatter: annexFormatter,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      }
+    },
+    {
+      dataField: "archive",
+      text: "Archive",
+      editable: false,
+      formatter: (cell, row) => <ArchiveFormatter cell={cell} row={row} />,
+      events: {
+        onClick: (e, column, columnIndex, row, rowIndex) => {
+          e.stopPropagation();
+        },
+      },
+    }
   ];
   const selectionRow = (row) => {
     const selectRowLength = document.querySelectorAll("#manage_config_table .selection-row").length + 1;
@@ -245,6 +282,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     dispatch(getSystemSettingsAnnex());
   };
 
+
   useEffect(() => {
     if (mcTableRowData) {
       setConfiguratonData(mcTableRowData.data)
@@ -253,9 +291,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
 
   const selectRow = {
-    mode: "radio",
+    mode: "checkbox",
     clickToSelect: true,
-    hideSelectColumn: true,
     classes: "selection-row",
     clickToEdit: true,
     onSelect: selectionRow,
@@ -349,8 +386,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
   const deleteItem = () => {
 
-
-
     if (editValue !== 0) {
       if (selectedRow.editable === 'no') {
         setDeleteModalShow(false);
@@ -364,12 +399,11 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     }
   };
 
-  useEffect(() => {
-    console.log("mcRenameDatabase=======", mcRenameDatabase);
-    if (mcRenameDatabase && mcRenameDatabase.data && mcRenameDatabase.data.success === true) {
-      dispatch(mcChangeRemoveDataBase(selectedRow.name));
-    }
-  }, [mcRenameDatabase]);
+  // useEffect(() => {
+  //   if (mcRenameDatabase && mcRenameDatabase.data && mcRenameDatabase.data.success === true) {
+  //     dispatch(mcChangeRemoveDataBase(selectedRow.name));
+  //   }
+  // }, [mcRenameDatabase]);
 
 
   const renamedatabase = async () => {
@@ -377,7 +411,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       setCheckSameDataBase(true);
     } else {
       await dispatch(mcChangeDataBaseName(selectedRow.name, dbRename));
+      await dispatch(mcChangeRemoveDataBase(selectedRow.name));
       setRenameModalShow(false);
+    }
+  }
+
+  const copyDatabase = async () => {
+    if (tableData.map(item => item.name).includes(dbCopy)) {
+      setCheckSameDataBase(true);
+    } else {
+      await dispatch(mcChangeDataBaseName(selectedRow.name, dbCopy));
+      setCopyModalShow(false);
     }
   }
 
@@ -390,6 +434,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       <Button label={"Cancel"} handleClick={() => setDeleteModalShow(false)} />
     </div>
   );
+
   const renameBody = (checkSameDataBase ?
     <div>This name is already exists. Please enter different name.</div>
     :
@@ -411,17 +456,36 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     </div>
   );
 
+  const copyBody = (checkSameDataBase ?
+    <div>This name is already exists. Please enter different name.</div>
+    :
+    <input
+      type="text"
+      placeholder="Enter a new db name"
+      className="w-100"
+      style={{ maxWidth: "100%" }}
+      value={dbCopy}
+      onChange={(e) => setDbCopy(e.target.value)}
+    />
+  );
+
+  const copyFooter = (
+    !checkSameDataBase &&
+    <div className="edit_btns">
+      <Button label={"Save"} handleClick={() => copyDatabase()} />
+      <Button label={"Cancel"} handleClick={() => setCopyModalShow(false)} />
+    </div>
+  );
+
+
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
+
       manageConfigTableIndex.includes({ selectRow: row.no })
-        ? manageConfigTableIndex.splice(
-          manageConfigTableIndex.indexOf({ selectRow: row.no }),
-          1
-        )
-        : manageConfigTableIndex.push({ selectRow: row.no });
-      console.log(
-        `clicked on row with index: ${rowIndex} ${manageConfigTableIndex} ${row.no}`
-      );
+        ?
+        manageConfigTableIndex.splice(manageConfigTableIndex.indexOf({ selectRow: row.no }), 1)
+        :
+        manageConfigTableIndex.push({ selectRow: row.no });
     },
   };
 
@@ -444,7 +508,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
         if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length === 0) {
           setOfdmEditModalShow(true);
-          setEditablebody('This DataBase is Empty.');
+          setEditablebody('This databse is empty so annex is not match to setting annex');
         }
         else if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length > 0) {
 
@@ -494,18 +558,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     }
   }, [search]);
 
-  useEffect(() => {
-    if (mcArchiveDatabase && mcArchiveDatabase.data) {
-      const url = window.URL.createObjectURL(new Blob([mcArchiveDatabase.data]));
-      console.log("url-----", url);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${selectedRow.name}.zip`
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-  }, [mcArchiveDatabase])
+  // useEffect(() => {
+  //   if (mcArchiveDatabase && mcArchiveDatabase.data) {
+  //     const url = window.URL.createObjectURL(new Blob([mcArchiveDatabase.data]));
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = `${selectedRow.name}.db`
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     window.URL.revokeObjectURL(url);
+  //   }
+  // }, [mcArchiveDatabase])
 
 
   const archiveHandleClick = () => {
@@ -522,6 +585,35 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       dispatch(mcRunDataBase(selectedRow.name));
     } else {
       setEditablebody("Please select at list one Row !");
+      setOfdmEditModalShow(true);
+    }
+  }
+
+  useEffect(() => {
+    if (mcDownloadAllDatabase && mcDownloadAllDatabase.data) {
+      const url = window.URL.createObjectURL(new Blob([mcDownloadAllDatabase.data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `database.zip`
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+  }, [mcDownloadAllDatabase])
+
+
+  const downloadHandleClick = () => {
+    dispatch(mcDownloadAllDataBase());
+  }
+
+  const copyHandleClick = () => {
+    if (editValue !== 0) {
+      setCopyModalShow(true);
+      setCheckSameDataBase(false);
+      setDbCopy(selectedRow.name);
+    } else {
+      setEditablebody('Please select at list one Row !');
+      setDbCopy('');
       setOfdmEditModalShow(true);
     }
   }
@@ -547,18 +639,21 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
         {tableData.length === 0 ? (
           <p className="text-center fw-bold mt-2">No record found</p>
         ) : (
-          <BootstrapTable
-            id="manage_config_table"
-            keyField="name"
-            data={tableData}
-            columns={columns}
-            // cellEdit={cellEditFactory({ mode: "dbclick", blurToSave: true })}
-            selectRow={selectRow}
-            classes="mb-0"
-            rowEvents={rowEvents}
-            defaultSortDirection='asc'
+          <div className="tableContainer">
 
-          />
+            <BootstrapTable
+              id="manage_config_table"
+              keyField="name"
+              data={tableData}
+              columns={columns}
+              // cellEdit={cellEditFactory({ mode: "dbclick", blurToSave: true })}
+              selectRow={selectRow}
+              classes="mb-0"
+              rowEvents={rowEvents}
+              defaultSortDirection='asc'
+
+            />
+          </div>
         )}
       </div>
       <div className="action mb-4 border border-dark p-2">
@@ -581,17 +676,35 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               modalBody={editablebody}
               modalFooter=''
             />
+
           </div>
           <div className="right_btn">
+            <Button label={"Visualize"} handleClick={visualizeHandleClick} />
             <Button label={"Run"} handleClick={runHandler} />
           </div>
         </div>
       </div>
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Manage Actions</h5> */}
+
         <div className="action_btns justify-content-between align-items-end">
           <div className="left_btns">
-
+            <Button label={"Rename"} handleClick={renameHandleClick} />
+            <ModalAoi
+              show={renameModalShow}
+              onHide={() => setRenameModalShow(false)}
+              modalTitle="Rename"
+              modalBody={renameBody}
+              modalFooter={renameFooter}
+            />
+            <Button label={"Copy"} handleClick={copyHandleClick} />
+            <ModalAoi
+              show={copyModalShow}
+              onHide={() => setCopyModalShow(false)}
+              modalTitle="Copy db "
+              modalBody={copyBody}
+              modalFooter={copyFooter}
+            />
             <Button label={"Delete"} handleClick={deleteHandleClick} />
             <ModalAoi
               show={deleteModalShow}
@@ -601,16 +714,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               modalFooter={deleteFooter}
             />
 
-            <Button label={"Archive"} handleClick={archiveHandleClick} />
-            <Button label={"Visualize"} handleClick={visualizeHandleClick} />
-            <Button label={"Rename"} handleClick={renameHandleClick} />
-            <ModalAoi
-              show={renameModalShow}
-              onHide={() => setRenameModalShow(false)}
-              modalTitle="Rename"
-              modalBody={renameBody}
-              modalFooter={renameFooter}
-            />
+            {/* <Button label={"Archive"} handleClick={archiveHandleClick} /> */}
+
             <Button label={"Save as"} handleClick={saveHandleClick} />
             <ModalAoi
               show={saveAs}
@@ -620,15 +725,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               modalFooter={saveFooter}
             />
           </div>
-          <div className="right_btn">
+          <div className="right_btn d-flex align-items-end">
+            <Button label={"Download All"} handleClick={downloadHandleClick} />
             <div className="d-flex flex-column ">
               <strong>Upload from Pc to CPSG</strong>
               <button className="btn-file">
-                Upload
+                CPSG
                 <input type="file" />
               </button>
             </div>
           </div>
+
         </div>
       </div>
       {editValue !== 0 ? (

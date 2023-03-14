@@ -11,7 +11,9 @@ import {
     GET_MANAGE_CONFIG_ROW_SELECT_SUCCEEDED,
     GET_MANAGE_NEW_DATABASE_ADD_SUCCEEDED,
     ARCHIVE_DATABASE_SUCCEEDED,
-    RUN_DATABASE_SUCCEEDED
+    RUN_DATABASE_SUCCEEDED,
+    DOWNLOAD_ALL_DATABASE_STARTED,
+    DOWNLOAD_ALL_DATABASE_SUCCEEDED,
 } from "../lib/constants";
 import {
     getMangeConfigRowAPI,
@@ -21,7 +23,8 @@ import {
     deleteRenameConfig,
     deleteDataBase,
     archiveDataBase,
-    runDataBase
+    runDataBase,
+    downloadAllDataBase
 } from "../services/api";
 import { showPopup } from ".//popupAction";
 
@@ -92,6 +95,17 @@ const runDatabaseSuccess = (data) => ({
     payload: data
 });
 
+const downloadAllDatabasStarted = () => ({
+    type: DOWNLOAD_ALL_DATABASE_STARTED,
+});
+
+
+const downloadAllDatabaseSuccess = (data) => ({
+    type: DOWNLOAD_ALL_DATABASE_SUCCEEDED,
+    payload: data
+});
+
+
 
 export const getManageConfigQAMTable = (db_default_type) => {
     return async (dispatch) => {
@@ -145,7 +159,7 @@ export const mcChangeDataBaseName = (dbname, copyname) => {
 
         await renameDbName(dbname, copyname).then(function (response) {
             dispatch(renameDatabaseSuccess(response))
-            dispatch(showPopup({ message: " Change name successfully", type: "success" }))
+            dispatch(showPopup({ message: "databse as successfully", type: "success" }))
         })
             .catch(function (error) {
                 dispatch(showPopup({ message: error.message, type: "danger" }))
@@ -189,7 +203,7 @@ export const mcArchiveDataBase = (dbname) => {
             dispatch(showPopup({ message: " Archive as Successfully", type: "success" }))
         })
             .catch(function (error) {
-                console.log("mcArchiveDataBase error");
+                dispatch(showPopup({ message: error.message, type: "success" }))
             });
     };
 }
@@ -205,6 +219,23 @@ export const mcRunDataBase = (dbname) => {
         })
             .catch(function (error) {
                 console.log("mcRunDataBase error");
+            });
+    };
+}
+
+export const mcDownloadAllDataBase = () => {
+
+    return async dispatch => {
+
+        dispatch(downloadAllDatabasStarted());
+        dispatch(showPopup({ message: " Download is Running Please Wait!!", type: "success" }))
+
+        await downloadAllDataBase().then(function (response) {
+            dispatch(downloadAllDatabaseSuccess(response));
+            dispatch(showPopup({ message: " Download as Successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                console.log("mcDownloadAllDataBase error");
             });
     };
 }

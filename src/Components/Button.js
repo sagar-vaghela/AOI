@@ -8,11 +8,12 @@ const Button = (props) => {
         marginRight: '20px',
         minWidth : '150px',
         marginBottom : '5px',
-        transition : 'all 0.3s ease-in-out'
+        transition : 'all 0.3s ease-in-out',
+        maxHeight : '32px'
     }
 
     return (
-        <button style={btnStyle} onClick={handleClick}>{label}</button>
+        <button style={btnStyle} title={label} onClick={handleClick}>{label}</button>
     )
 }
 

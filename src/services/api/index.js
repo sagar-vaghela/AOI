@@ -94,3 +94,12 @@ export const archiveDataBase = (dbname) => {
 export const runDataBase = (dbname) => {
   return createAxiosFor.post(`/downstream_config/load?dbname=${dbname}`)
 };
+
+export const downloadAllDataBase = () => {
+  return createAxiosFor.post(`/downstream_config/download`)
+};
+
+export const updateConfiguration = (dbname, ch_id, payload) => {
+  return createAxiosFor.post(`/downstream_qams_single/update?dbname=${dbname}&ch_id=${ch_id}`, payload)
+};
+

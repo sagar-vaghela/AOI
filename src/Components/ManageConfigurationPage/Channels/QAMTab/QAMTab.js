@@ -125,7 +125,6 @@ export default function QAMTab({ mcTableRowData }) {
     clickToSelect: true,
     // classes: 'selection-row',
     clickToEdit: false,
-    hideSelectColumn: true
   };
 
 
@@ -166,7 +165,10 @@ export default function QAMTab({ mcTableRowData }) {
 
           </div>
           {
-            tableData && tableData.length > 0 ? <BootstrapTable
+            tableData && tableData.length > 0 ? 
+            <div className="tableContainer">
+            
+            <BootstrapTable
               id='running_qam_table'
               keyField="ch_index"
               data={tableData}
@@ -178,7 +180,9 @@ export default function QAMTab({ mcTableRowData }) {
               rowEvents={rowEvents}
               defaultSortDirection='asc'
 
-            /> :
+            /> 
+            </div>
+            :
               <p className='text-center fw-bold mt-2'>No record found</p>
           }
         </div>

@@ -3,7 +3,8 @@ import {
   GET_CONFIGURATION_QAM_TABLE_FAILED,
   GET_CONFIGURATION_QAM_TABLE_STARTED,
   GET_CONFIGURATION_QAM_TABLE_SUCCEEDED,
-  POST_CONFIG_QAM_TABLE_ADD_RANGE
+  POST_CONFIG_QAM_TABLE_ADD_RANGE,
+  UPDATE_CONFIGURATION_SUCCESSED
 } from "../lib/constants";
 import initialState from "./initialState";
 
@@ -53,6 +54,19 @@ export const dcSingleQAMTableReducer = (state = initialState.dcSingleQAMTable, a
         isLoading: false,
         error: action.payload
       };
+    default:
+      return state;
+  }
+};
+
+export const dcUpdateConfigurationReducer = (state = initialState.dcUpdateConfiguration, action) => {
+  switch (action.type) {
+    case UPDATE_CONFIGURATION_SUCCESSED:
+      return {
+        ...state,
+        dcUpdateConfigurationData: action.payload,
+      };
+
     default:
       return state;
   }
