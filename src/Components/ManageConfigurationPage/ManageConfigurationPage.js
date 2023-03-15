@@ -97,12 +97,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
     if (mcTableSystem) {
       mcTableSystem.map((data, index) => {
-        newdata.push({ name: data, editable: "no"});
+        newdata.push({ name: data.dbname, editable: "no", annex: data.annex});
       });
     }
     if (mcTableUser) {
       mcTableUser.map((data, index) => {
-        newdata.push({ name: data, editable: "yes" });
+        newdata.push({ name: data.dbname, editable: "yes" , annex: data.annex});
       });
     }
 
@@ -179,9 +179,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
 
   function annexFormatter(cell, row) {
-
+    console.log('rowrowrowrowrowrow',row.annex);
     const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
-    return <span>{settingAnnex}</span>;
+    return <span>{row.annex === '' ? settingAnnex : row.annex}</span>;
   }
 
   const columns = [
