@@ -7,7 +7,7 @@ import OFDMTab from './Channels/OFDMTab/OFDMTab'
 const Configuration = ({dataBaseName, chID, configuratonData}) => {
     return (
         <>
-        <h5 className="mb-3">{dataBaseName}</h5>
+        <h5 className="mb-3">{dataBaseName.includes('.db')? dataBaseName : `${dataBaseName}.db`}</h5>
         <Tabs
             defaultActiveKey="QAMChannels"
             id="uncontrolled-tab-example"
