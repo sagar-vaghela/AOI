@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { getRCQAMEditTableRow } from '../../../../actions/drcQAMchannels';
 import { useDispatch } from 'react-redux';
+import { configurationQAMRowUpdate } from '../../actions/dConfiguration';
 
-const MutedFormatter = ({ row, cell }) => {
+const MutedFormatter = ({ row, cell, dataBaseName }) => {
 
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const MutedFormatter = ({ row, cell }) => {
         mute: checkSwitch,
         frequency: row.frequency,
       }
-      dispatch(getRCQAMEditTableRow(row.ch_index, payload));
+      dispatch(configurationQAMRowUpdate(dataBaseName, row.ch_index, payload));
       setCheckChange(false);
     }
   }, [checkSwitchMute, !checkSwitchMute])

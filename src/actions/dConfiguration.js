@@ -5,8 +5,10 @@ import {
     GET_CONFIGURATION_QAM_TABLE_SUCCEEDED,
     GET_CONFIGURATION_QAM_TABLE_FAILED,
     UPDATE_CONFIGURATION_SUCCESSED,
+    POST_CONFIG_QAM_TABLE_ADD_TILT,
+    ALL_DELETE_CONFIGURATION_SUCCESSED,
 } from "../lib/constants";
-import { addRangeConfiguration, configSingleQAMTableData, deleteConfiguration, updateConfiguration } from "../services/api";
+import { addRangeConfiguration, addTiltConfiguration, allDeleteConfiguration, configSingleQAMTableData, deleteConfiguration, updateConfiguration } from "../services/api";
 import { showPopup } from "./popupAction";
 
 const addRangeConfigurationSucceded = (data) => ({
@@ -36,6 +38,16 @@ const getConfigurationQAMtableFailed = error => ({
 
 const updateConfigurationSuccessed = (data) => ({
     type: UPDATE_CONFIGURATION_SUCCESSED,
+    payload: data
+});
+
+const addTiltConfigurationSucceded = (data) => ({
+    type: POST_CONFIG_QAM_TABLE_ADD_TILT,
+    payload: data
+});
+
+const allDeleteConfigurationSuccessed = (data) => ({
+    type: ALL_DELETE_CONFIGURATION_SUCCESSED,
     payload: data
 });
 
@@ -87,6 +99,32 @@ export const configurationQAMRowUpdate = (dbname, ch_id, payload) => {
         })
             .catch(function (error) {
                 console.log("configurationQAMRowUpdate error");
+            });
+    };
+}
+
+export const addTiltQAMConfiguration = (start_freq, end_freq, start_power, end_power, dbname) => {
+    return async dispatch => {
+
+        await addTiltConfiguration(start_freq, end_freq, start_power, end_power, dbname).then(function (response) {
+            dispatch(addTiltConfigurationSucceded(response));
+            dispatch(showPopup({ message: "Add Tilt as successfully", type: "success" }))
+        })
+            .catch(function (error) {
+                dispatch(showPopup({ message: error.message, type: "danger" }))
+            });
+    };
+}
+
+
+export const configurationQAMRowAllDelete = (dbname) => {
+    return async dispatch => {
+
+        await allDeleteConfiguration(dbname).then(function (response) {
+            dispatch(allDeleteConfigurationSuccessed(response));
+        })
+            .catch(function (error) {
+                console.log("configurationQAMRowAllDelete error");
             });
     };
 }

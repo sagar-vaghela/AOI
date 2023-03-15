@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../Button";
 import BootstrapTable from "react-bootstrap-table-next";
-import cellEditFactory from "react-bootstrap-table2-editor";
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import Visualize from "../../../Modal/Visualize";
 import Form from "react-bootstrap/Form";
 import ModalAoi from "../../../Modal/ModalAoi";
@@ -9,18 +9,30 @@ import { Accordion, Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addRangeQAMConfiguration,
+  addTiltQAMConfiguration,
+  configurationQAMRowAllDelete,
+  configurationQAMRowDelete,
   configurationQAMRowUpdate,
   getConfigurationQAMTable,
 } from "../../../../actions/dConfiguration";
 import { showPopup } from "../../../../actions/popupAction";
+import { getManageConfigRowSelect } from "../../../../actions/dmcCurrentFiles";
+import MutedFormatter from "../../MuteFormatter";
 
 let manageConfigTableIndex = [];
 let editRowData = [];
+let allRowsSelectData = [];
+let singalRowSelectData = [];
 
 const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const dispatch = useDispatch();
 
   const addRangeData = useSelector((state) => state.dcAddRangeReducer.dcAddRangeData);
+  const addTiltData = useSelector((state) => state.dcAddTiltReducer.dcAddTiltData);
+  const cTableRowData = useSelector((state) => state.dmcTableRowReducer.dmcRowData.data);
+  const cTableRowDeleteData = useSelector((state) => state.dcDeleteConfigurationReducer.dcDeleteConfigurationData);
+  const cTableRowAllDeleteData = useSelector((state) => state.dcAllDeleteConfigurationReducer.dcAllDeleteConfigData);
+  const cTableRowUpdateData = useSelector((state) => state.dcUpdateConfigurationReducer.dcUpdateConfigurationData);
 
 
   const [search, setSearch] = useState("");
@@ -41,25 +53,43 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const [tableData, setTableData] = useState([]);
   const [powerValue, setPowerValue] = useState();
   const [muteValue, setMuteValue] = useState();
+  const [startFreq, setStartFreq] = useState();
+  const [endFreq, setEndFreq] = useState();
+  const [startPower, setStartPower] = useState();
+  const [endPower, setEndPower] = useState();
+  const [validationQAMTable, setValidationQAMTable] = useState(false);
+  const [validationField, setValidationField] = useState('');
+
+
+  let Reg = new RegExp(search, "i");
 
   useEffect(() => {
-    if (dataBaseName && chID) {
-      dispatch(getConfigurationQAMTable(dataBaseName, chID));
-    }
-  }, [dataBaseName && chID]);
-
-  useEffect(() => {
-    const chId = addRangeData && addRangeData.data && addRangeData.data.ch_id;
-    if (addRangeData && addRangeData.status === 200) {
-      for (let i = 1; i <= Number(nofChannel); i++) {
-        dispatch(getConfigurationQAMTable(dataBaseName, chId));
-      }
-    }
-  }, [addRangeData]);
-
-  useEffect(() => {
-    setTableData(configuratonData);
+    dispatch(getManageConfigRowSelect(dataBaseName, 0));
   }, []);
+
+  useEffect(() => {
+    if ((addRangeData && addRangeData.status === 200) ||
+      (addTiltData && addTiltData.status === 200) ||
+      (cTableRowDeleteData && addTiltData.status === 200) ||
+      (cTableRowAllDeleteData && cTableRowAllDeleteData.data && cTableRowAllDeleteData.data.success === true) ||
+      (cTableRowUpdateData && cTableRowUpdateData.data && cTableRowUpdateData.data.success === true)
+    ) {
+      dispatch(getManageConfigRowSelect(dataBaseName, 0));
+    }
+  }, [addRangeData, addTiltData, cTableRowDeleteData, cTableRowAllDeleteData, cTableRowUpdateData]);
+
+
+  useEffect(() => {
+    if (cTableRowData) {
+      setTableData(cTableRowData);
+    }
+  }, [cTableRowData]);
+
+  // useEffect(() => {
+  //   if (dataBaseName && chID) {
+  //     dispatch(getConfigurationQAMTable(dataBaseName, chID));
+  //   }
+  // }, [dataBaseName && chID]);
 
   const editHandleClick = () => {
     setEditModalShow(!editModalShow);
@@ -87,7 +117,8 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   };
 
   const deleteHandleClick = () => {
-    setDeleteModalShow(true);
+    singalRowSelectData.length > 0 ? setDeleteModalShow(true) :  setEditModalShow(true);
+    
   };
 
   const saveHandleClick = () => {
@@ -305,11 +336,21 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   ];
 
   const handleOnSelect = (row, isSelect) => {
+
     if (isSelect) {
-      editRowData.push(row);
+      singalRowSelectData.push(row);
     } else {
-      const updateRowData = editRowData.filter(item => item.ch_index !== row.ch_index);
-      editRowData = updateRowData;
+      const updateRowData = singalRowSelectData.filter(item => item.ch_index !== row.ch_index);
+      singalRowSelectData = updateRowData;
+    }
+  }
+
+  const handleOnSelectAll = (isSelect, rows) => {
+    if (isSelect) {
+      allRowsSelectData = rows;
+    }
+    else {
+      allRowsSelectData = [];
     }
   }
 
@@ -318,7 +359,8 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     clickToSelect: true,
     classes: "selection-row",
     clickToEdit: true,
-    onSelect: handleOnSelect
+    onSelect: handleOnSelect,
+    onSelectAll: handleOnSelectAll
 
   };
 
@@ -375,31 +417,73 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     );
   }
 
+  function numberFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.ch_index)}</span>;
+  }
+
+  function frequencyFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.frequency)}</span>;
+  }
+
+  function powerFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.power)}</span>;
+  }
+
+
   const columns = [
-    // {
-    //   dataField: 'no',
-    //   text: 'No',
-    // },
+    {
+      dataField: "ch_index",
+      text: "Ch_Index",
+      sort: true,
+      editable: false,
+      formatter: numberFormatter,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
+      }
+    },
     {
       dataField: "frequency",
       text: "Frequency",
+      formatter: frequencyFormatter,
       sort: true,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     {
       dataField: "power",
       text: "Power",
       sort: true,
+      formatter: powerFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     // {
@@ -430,13 +514,35 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      editor: {
+        type: Type.SELECT,
+        options: [
+          {
+            value: 'QAM256',
+            label: 'QAM256'
+          },
+          {
+            value: 'QAM64',
+            label: 'QAM64'
+          },
+          {
+            value: 'CW_CARRIER',
+            label: 'CW_CARRIER'
+          }
+        ],
       }
     },
     {
       dataField: "mute",
       text: "Muted",
       editable: false,
-      formatter: mutedFormatter,
+      formatter:(cell, row) => <MutedFormatter cell={cell} row={row} dataBaseName={dataBaseName} />,
+      events: {
+        onClick: (e, column, columnIndex, row, rowIndex) => {
+          e.stopPropagation();
+        },
+      },
     },
   ];
 
@@ -493,8 +599,8 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
       <div className='d-flex mb-2 advance_setting'>
         <label htmlFor="" className='text-nowrap me-2'>Oper Mode: </label>
         <Form.Select aria-label="Default select example" style={{ padding: '2px 36px 2px 12px', borderRadius: '2px', border: '1px solid' }} onChange={handleChangemodul} value={operModeValue}>
-          <option value="QAM64">QAM64</option>
           <option value="QAM256">QAM256 </option>
+          <option value="QAM64">QAM64</option>
           <option value="CW_CARRIER">CW_CARRIER</option>
         </Form.Select>
       </div>
@@ -527,7 +633,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   );
 
   const rangeFooter = () => {
-    const opMode = operModeValue === "" ? "QAM64" : operModeValue;
+    const opMode = operModeValue === "" ? "QAM256" : operModeValue;
 
     let message;
 
@@ -620,8 +726,11 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   const updateHandler = () => {
 
     const checkSwitch = (muteValue === true ? 'YES' : 'NO');
+    let updateRowsData;
 
-    editRowData.forEach((item, index) => {
+    updateRowsData = allRowsSelectData.length > 0 ? allRowsSelectData : singalRowSelectData;
+
+    updateRowsData.forEach((item, index) => {
       const payload = {
         power: powerValue,
         annex: item.annex,
@@ -660,13 +769,21 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
           <label htmlFor="" className="me-2">
             Starting Tilt Freq:{" "}
           </label>
-          <input type="number" />
+          <input
+            type="number"
+            value={startFreq}
+            onChange={(e) => setStartFreq(e.target.value)}
+          />
         </div>
         <div className="mb-2">
           <label htmlFor="" className="me-2">
             Ending Tilt Freq:{" "}
           </label>
-          <input type="number" />
+          <input
+            type="number"
+            value={endFreq}
+            onChange={(e) => setEndFreq(e.target.value)}
+          />
         </div>
       </div>
       <div className="d-flex justify-content-center align-items-center">
@@ -674,37 +791,58 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
           <label htmlFor="" className="me-2">
             Starting Tilt Power:{" "}
           </label>
-          <input type="number" />
+          <input type="number"
+            value={startPower}
+            onChange={(e) => setStartPower(e.target.value)}
+          />
         </div>
         <div className="mb-2">
           <label htmlFor="" className="me-2">
             Ending Tilt Power:{" "}
           </label>
-          <input type="number" />
+          <input type="number"
+            value={endPower}
+            onChange={(e) => setEndPower(e.target.value)}
+          />
         </div>
       </div>
     </div>
   );
 
+  const handleAddTilt = () => {
+
+    dispatch(addTiltQAMConfiguration(startFreq, endFreq, startPower, endPower, dataBaseName))
+    setTiltModalShow(false);
+  }
+
   const tiltFooter = (
     <div className="edit_btns">
-      <Button label={"Add Tilt"} />
+      <Button label={"Add Tilt"} handleClick={handleAddTilt} />
       <Button label={"Cancel"} handleClick={() => setTiltModalShow(false)} />
     </div>
   );
 
-  const deleteItem = (manageConfigTableIndex) => {
-    console.log("manageConfigTableIndex====", manageConfigTableIndex);
+  const deleteItem = () => {
     setDeleteModalShow(false);
+    if (allRowsSelectData.length > 0) {
+      dispatch(configurationQAMRowAllDelete(dataBaseName))
+      allRowsSelectData = [];
+
+    } else {
+      singalRowSelectData.forEach((item, index) => {
+        dispatch(configurationQAMRowDelete(dataBaseName, item.ch_index))
+        singalRowSelectData = [];
+      });
+    }
   };
 
-  const deleteBody = <p>Delete the entry?</p>;
+  const deleteBody = <p>Delete the selected entry?</p>;
 
   const deleteFooter = (
     <div className="edit_btns">
       <Button
         label={"Yes"}
-        handleClick={() => deleteItem(manageConfigTableIndex)}
+        handleClick={deleteItem}
       />
       <Button label={"Cancel"} handleClick={() => setDeleteModalShow(false)} />
     </div>
@@ -734,6 +872,56 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
     },
   };
 
+  useEffect(() => {
+    setTableData(tableData);
+  }, [tableData])
+
+  useEffect(() => {
+    if (search.length > 0) {
+      let data =
+        cTableRowData.length > 0 &&
+        cTableRowData.filter(
+          (data) =>
+            Reg.test(data.frequency) ||
+            Reg.test(data.power) ||
+            Reg.test(data.annex) ||
+            Reg.test(data.operMode)
+        );
+
+      setTableData(data);
+    }
+  }, [search]);
+
+  const dbSaveCell = (row) => {
+
+    const payload = {
+      power: row.power,
+      annex: row.annex,
+      operMode: row.operMode,
+      mute: row.mute,
+      frequency: row.frequency,
+    }
+    dispatch(configurationQAMRowUpdate(dataBaseName, row.ch_index, payload));
+  }
+
+  const validationModal = () => {
+
+    let validationMessage;
+
+    if (validationField === 'frequency') {
+      validationMessage = "Frequency should be in between 1 and 1800";
+    }
+    else if (validationField === 'power') {
+      validationMessage = "Power Range should be in between -12 and 12";
+
+    }
+    return (
+
+      <div>{validationMessage}</div>
+
+    )
+  }
+
   return (
     <div className="channel_tab ">
       <div className="border border-dark mb-4">
@@ -754,7 +942,30 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
               keyField="frequency"
               data={tableData}
               columns={columns}
-              cellEdit={cellEditFactory({ mode: "dbclick", blurToSave: true })}
+              cellEdit={cellEditFactory({
+                mode: 'dbclick',
+                blurToSave: true,
+                onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
+                afterSaveCell: (oldValue, newValue, row, column) => {
+
+                  if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
+                    setValidationField('frequency');
+                    setValidationQAMTable(true);
+                    dispatch(getManageConfigRowSelect(dataBaseName, 0));
+
+                  }
+                  else if (column.dataField === 'power' && (newValue < -12 || newValue > 12 || newValue === '')) {
+                    setValidationField('power');
+                    setValidationQAMTable(true);
+                    dispatch(getManageConfigRowSelect(dataBaseName, 0));
+
+                  }
+                  else {
+                    dbSaveCell(row)
+                  }
+
+                }
+              })}
               selectRow={selectRow}
               headerClasses="table_header"
               classes="mb-0"
@@ -767,6 +978,14 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
           <p className="text-center fw-bold mt-2">No record found</p>
         )}
       </div>
+
+      <ModalAoi
+        show={validationQAMTable}
+        onHide={() => setValidationQAMTable(false)}
+        modalTitle=""
+        modalBody={validationModal()}
+      />
+
       <div className="action mb-4 border border-dark p-2">
         {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
         <div className="action_btns justify-content-between">

@@ -109,26 +109,45 @@ const initialState = {
         error: null
     },
 
-    dmcDeleteDataBase:{
+    dmcDeleteDataBase: {
         dmcDeleteDataBaseData: [],
     },
-    
-    dmcArchiveDataBase:{
+
+    dmcArchiveDataBase: {
         dmcArchiveDataBaseData: [],
     },
 
-    dmcRunDataBase:{
+    dmcRunDataBase: {
         dmcRunDataBaseData: [],
     },
 
-    dmcDownloadAllDB:{
+    dmcDownloadAllDB: {
         dmcDownloadAllDBData: [],
         isLoading: false,
     },
-    
-    dcUpdateConfiguration:{
+
+    dcUpdateConfiguration: {
         dcUpdateConfigurationData: [],
     },
+
+    rcQAMDeleteAllRows: {
+        rcQAMDeleteAllRowsData: [],
+    },
+
+    dmConfigAnnex: {
+        dmConfigAnnexData: [],
+        isLoading: false,
+        error: null
+    },
+
+    dcAddTilt: {
+        dcAddTiltData: [],
+    },
+
+    dcAllDeleteConfig: {
+        dcAllDeleteConfigData: [],
+    },
+
 };
 
 export default initialState;

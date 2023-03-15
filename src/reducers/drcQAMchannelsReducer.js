@@ -1,5 +1,6 @@
 import initialState from "./initialState";
 import {
+    GET_QAM_DELETE_All_TABLE_ROW_SUCCEEDED,
     GET_RC_QAM_CREATE_TABLE_ROW_SUCCEEDED,
     GET_RC_QAM_DELETE_TABLE_ROW_SUCCEEDED,
     GET_RC_QAM_EDIT_TABLE_ROW_SUCCEEDED,
@@ -97,6 +98,20 @@ export const drcSingleQAMTableReducer = (state = initialState.drcSinglelQAMTable
                 isLoading: false,
                 error: action.payload
             };
+        default:
+            return state;
+    }
+};
+
+export const drcQAMTableAllDeleteReducer = (state = initialState.rcQAMDeleteAllRows, action) => {
+    switch (action.type) {
+
+        case GET_QAM_DELETE_All_TABLE_ROW_SUCCEEDED:
+            return {
+                ...state,
+                rcQAMDeleteAllRowsData: action.payload,
+            };
+
         default:
             return state;
     }

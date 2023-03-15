@@ -62,18 +62,18 @@ table tbody {
   border-color: rgba(0, 0, 0, 0.563) !important;
 }
 .form-control:focus {
-  border: none; 
+  border: none;
   box-shadow: none;
 }
-.left_btns button:hover{
+.left_btns button:hover {
   background-color: #d3d3d33c !important;
 }
 
-.right_btn button:hover{
+.right_btn button:hover {
   background-color: #d3d3d33c !important;
 }
 
-.right_btn button:hover{
+.right_btn button:hover {
   background-color: #d3d3d33c !important;
 }
 
@@ -254,7 +254,7 @@ li a.dropdown-toggle::after {
   background-color: #f1e4ff;
   border-bottom: 1px solid #000;
 }
-.nav_tabs .nav-link { 
+.nav_tabs .nav-link {
   min-width: 350px;
   font-size: 1.5rem;
   color: #000;
@@ -266,7 +266,7 @@ li a.dropdown-toggle::after {
 }
 .nav_tabs .nav-link.active {
   color: #000;
-  background-color: #f5e5ba; 
+  background-color: #f5e5ba;
   border-color: #000;
   border: none;
   border-right: 1px solid;
@@ -342,41 +342,30 @@ li a.dropdown-toggle::after {
 }
 /* ******************** Table Css **************** */
 
-/* tbody tr {
-  display: table;
+thead:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  table-layout: fixed;
+  height: 1px;
+  background: #000;
+  content: "";
 }
-thead,
-tfoot {
-  background: #d3d3d363;
-  display: table;
-  width: 100%;
-}
-tbody {
-  max-height: 300px;
-  overflow-y: scroll;
-  width: 100%;
-  display: block;
-}
-tr th,
-tr td{
-  word-wrap: break-word;
-  border-right: 1px solid #000;
-  width: 8.16%;
-} */
+
 tr th {
   font-size: 14px;
+  border-right-color: #000;
 }
+
 tr td {
   font-size: 13px;
 }
 
-
 .tableContainer {
   min-height: 300px;
   max-height: 300px;
-  height:100%;
+  height: 100%;
   overflow-y: scroll;
 }
 table thead {
@@ -410,11 +399,11 @@ th.selection-cell-header {
   margin-bottom: 5px;
 }
 tbody {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
-tbody::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+tbody::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 /* ******************** Table Toggle Css **************** */
 .toggle_box {
@@ -578,7 +567,7 @@ select:focus {
 .visualize_modal .bg-lightgray {
   background: #d3d3d363;
 }
-.modal-dialog{
+.modal-dialog {
   max-width: 650px !important;
 }
 /* ---------------------------------------------------
@@ -624,7 +613,7 @@ select:focus {
   background-color: transparent;
 }
 
-.dropdownSpace{
+.dropdownSpace {
   margin-left: 10px;
 }
 /* ---------------------------------------------------
@@ -769,7 +758,8 @@ select:focus {
   border-left: 4px solid transparent;
 }
 
-.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+.dropup .caret,
+.navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
   border-bottom: 4px dashed;
   border-bottom: 4px solid \9;
@@ -778,13 +768,13 @@ select:focus {
 
 /* table sort css */
 .react-bootstrap-table-sort-order,
-.order{
+.order {
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease-in-out;
 }
 .sortable:hover .react-bootstrap-table-sort-order,
-.sortable:hover .order{
+.sortable:hover .order {
   opacity: 1;
   visibility: visible;
 }

@@ -9,6 +9,9 @@ import {
     GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
     GET_MANAGE_CONFIG_QAM_TABLE_SYSTEM_SUCCEEDED,
     GET_MANAGE_CONFIG_QAM_TABLE_USER_SUCCEEDED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_FAILED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_STARTED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_SUCCEEDED,
     GET_MANAGE_CONFIG_ROW_SELECT_FAILED,
     GET_MANAGE_CONFIG_ROW_SELECT_STARTED,
     GET_MANAGE_CONFIG_ROW_SELECT_SUCCEEDED,
@@ -169,6 +172,33 @@ export const dmcDownloadAllDBReducer = (state = initialState.dmcDownloadAllDB, a
                 ...state,
                 dmcDownloadAllDBData: action.payload,
             };
+        default:
+            return state;
+    }
+};
+
+
+export const dmConfigAnnexReducer = (state = initialState.dmConfigAnnex, action) => {
+    switch (action.type) {
+        case GET_MANAGE_CONFIG_ROW_ANNEX_STARTED:
+            return {
+                ...state,
+                isLoading: true,
+                error: null,
+            };
+        case GET_MANAGE_CONFIG_ROW_ANNEX_SUCCEEDED:
+            return {
+                ...state,
+                dmConfigAnnexData: action.payload,
+                isLoading: false,
+            };
+        case GET_MANAGE_CONFIG_ROW_ANNEX_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+
         default:
             return state;
     }

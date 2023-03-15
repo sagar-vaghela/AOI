@@ -14,6 +14,9 @@ import {
     RUN_DATABASE_SUCCEEDED,
     DOWNLOAD_ALL_DATABASE_STARTED,
     DOWNLOAD_ALL_DATABASE_SUCCEEDED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_STARTED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_SUCCEEDED,
+    GET_MANAGE_CONFIG_ROW_ANNEX_FAILED,
 } from "../lib/constants";
 import {
     getMangeConfigRowAPI,
@@ -24,9 +27,10 @@ import {
     deleteDataBase,
     archiveDataBase,
     runDataBase,
-    downloadAllDataBase
+    downloadAllDataBase,
+    getManageConfigAnnex
 } from "../services/api";
-import { showPopup } from ".//popupAction";
+import { showPopup } from "./popupAction";
 
 const getManageConfigQAMTableStarted = () => ({
     type: GET_MANAGE_CONFIG_QAM_TABLE_STARTED,
@@ -103,6 +107,21 @@ const downloadAllDatabasStarted = () => ({
 const downloadAllDatabaseSuccess = (data) => ({
     type: DOWNLOAD_ALL_DATABASE_SUCCEEDED,
     payload: data
+});
+
+const dmcDatabaseAnnexStarted = () => ({
+    type: GET_MANAGE_CONFIG_ROW_ANNEX_STARTED
+});
+
+const dmcDatabaseAnnexSucceeded = data => ({
+    type: GET_MANAGE_CONFIG_ROW_ANNEX_SUCCEEDED,
+    payload: data
+});
+
+const dmcDatabaseAnnexFailed = error => ({
+    type: GET_MANAGE_CONFIG_ROW_ANNEX_FAILED,
+    payload: error,
+    error: true
 });
 
 
@@ -236,6 +255,19 @@ export const mcDownloadAllDataBase = () => {
         })
             .catch(function (error) {
                 console.log("mcDownloadAllDataBase error");
+            });
+    };
+}
+
+export const dmcDatabaseAnnex = (db_default_type, dbname) => {
+    return async dispatch => {
+        dispatch(dmcDatabaseAnnexStarted());
+
+        await getManageConfigAnnex(db_default_type, dbname).then(function (response) {
+            dispatch(dmcDatabaseAnnexSucceeded(response));
+        })
+            .catch(function (error) {
+                dispatch(dmcDatabaseAnnexFailed(error));
             });
     };
 }

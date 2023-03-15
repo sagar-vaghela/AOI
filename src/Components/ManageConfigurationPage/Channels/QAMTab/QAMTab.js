@@ -159,7 +159,7 @@ export default function QAMTab({ mcTableRowData }) {
 
           <div className='searchbar table_top_bar d-flex justify-content-end align-items-center border-bottom border-dark'>
 
-            <label htmlFor="search">Annex: {tableData && tableData[0] && tableData[0].annex}</label>
+            {/* <label htmlFor="search">Annex: {tableData && tableData[0] && tableData[0].annex}</label> */}
             <label htmlFor="search">Search:</label>
             <input type="text" id='search' value={search || ''} onChange={e => setSearch(e.target.value)} />
 
