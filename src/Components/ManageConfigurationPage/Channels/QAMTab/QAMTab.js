@@ -36,6 +36,11 @@ export default function QAMTab({ mcTableRowData }) {
       </div>
     );
   }
+
+  function powerFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.power).toFixed(2)}</span>;
+  }
+
   const columns = [
     // {
     //   dataField: 'no',
@@ -57,6 +62,7 @@ export default function QAMTab({ mcTableRowData }) {
       dataField: 'power',
       text: 'Power',
       sort: true,
+      formatter: powerFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
