@@ -63,6 +63,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const [dbCopy, setDbCopy] = useState('');
   const [copyModalShow, setCopyModalShow] = useState(false);
   const [selectDBValidation, setSelectDBValidation] = useState(false);
+  const [totalData, setTotalData] = useState([]);
 
 
   let Reg = new RegExp(search, "i");
@@ -95,16 +96,23 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     let newdata = [];
 
     if (mcTableSystem) {
-      mcTableSystem.map((data) => {
-        newdata.push({ name: data, editable: "no" });
+      mcTableSystem.map((data, index) => {
+        newdata.push({ name: data, editable: "no"});
       });
     }
     if (mcTableUser) {
-      mcTableUser.map((data) => {
+      mcTableUser.map((data, index) => {
         newdata.push({ name: data, editable: "yes" });
       });
     }
-    setTableData(newdata);
+
+    let updateData =[];
+
+    newdata.forEach((item, index)=>{
+      updateData.push({...item, rowIndex: index+1})
+    });
+    setTotalData(updateData);
+    setTableData(updateData);
 
 
   }, [mcTableSystem, mcTableUser]);
@@ -169,10 +177,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
   // }
 
-  function numberFormatter(cell, row, rowIndex) {
-
-    return <span>{rowIndex + 1}</span>;
-  }
 
   function annexFormatter(cell, row) {
 
@@ -182,17 +186,17 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
   const columns = [
     {
-      dataField: "index",
+      dataField: "rowIndex",
       text: "Index",
       editable: false,
       sort: true,
-      formatter: numberFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
       },
+      
     },
     {
       dataField: "name",
@@ -591,12 +595,21 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       });
     }
 
+    let updateData =[];
+
+    manageConfigData.forEach((item, index)=>{
+      updateData.push({...item, rowIndex: index+1})
+    });
+
     if (search.length > 0) {
-      let data = manageConfigData.length > 0 && manageConfigData.filter((item) =>
+      let data = updateData.length > 0 && updateData.filter((item) =>
         Reg.test(item.name) ||
         Reg.test(item.editable)
       );
       setTableData(data);
+    }
+    else{
+      setTableData(totalData);
     }
   }, [search]);
 

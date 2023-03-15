@@ -139,6 +139,7 @@ export default function QAMTab(props) {
         return null;
       },
       sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        console.log(a, b);
         if (order === 'asc') {
           return b - a;
         }
