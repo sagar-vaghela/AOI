@@ -18,77 +18,15 @@ import {
   mcArchiveDataBase,
   mcRunDataBase,
   mcDownloadAllDataBase,
+  dmcDatabaseAnnex,
 } from "../../actions/dmcCurrentFiles";
 import { getSystemSettingsAnnex } from "../../actions/systemSettings";
 import ArchiveFormatter from "./ArchiveFormatter";
-
-const tablerow = [
-  { no: 1, name: "david_lanum - Copy.db", editable: "Yes" },
-  { no: 2, name: "david_lanum.db", editable: "Yes" },
-  { no: 3, name: "david_lanum_copy.db", editable: "Yes" },
-  { no: 4, name: "david_lanum_noofdm.db", editable: "Yes" },
-  { no: 5, name: "no_channels.db", editable: "Yes" },
-  { no: 6, name: "no_channels_copy.db", editable: "Yes" },
-  { no: 7, name: "ofdm54M_qams_258to1794M.db", editable: "Yes" },
-  { no: 8, name: "ofdm54M_qams_258to1794M_copy - Copy.db", editable: "Yes" },
-  { no: 9, name: "ofdm54M_qams_258to1794M_copy.db", editable: "Yes" },
-  {
-    no: 10,
-    name: "ofdm54M_qams_258to1794M_copy_copy - Copy.db",
-    editable: "Yes",
-  },
-  { no: 11, name: "ofdm54M_qams_258to1794M_copy_copy.db", editable: "Yes" },
-  {
-    no: 12,
-    name: "ofdm54M_qams_258to1794M_copy_copy_copy.db",
-    editable: "Yes",
-  },
-  {
-    no: 13,
-    name: "ofdm54M_qams_258to1794M_copy_copy_copy_copy.db",
-    editable: "Yes",
-  },
-  { no: 14, name: "qams_102to1218M.db", editable: "Yes" },
-  { no: 15, name: "qams_54to1200M.db", editable: "Yes" },
-  { no: 16, name: "qams_54to1218M.db", editable: "Yes" },
-  { no: 17, name: "qams_54to1218M_copy - Copy.db", editable: "Yes" },
-  { no: 18, name: "qams_54to1218M_copy.db", editable: "Yes" },
-  { no: 19, name: "qams_54to1218M_copy_copy - Copy.db", editable: "Yes" },
-  { no: 20, name: "qams_54to1218M_copy_copy.db", editable: "Yes" },
-  { no: 21, name: "qams_54to1584M_ofdm1602M.db", editable: "Yes" },
-  { no: 22, name: "qams_54to1584M_ofdm1602M_copy - Copy.db", editable: "Yes" },
-  { no: 23, name: "qams_54to1584M_ofdm1602M_copy.db", editable: "Yes" },
-  {
-    no: 24,
-    name: "qams_54to1584M_ofdm1602M_copy_copy - Copy.db",
-    editable: "Yes",
-  },
-  { no: 25, name: "qams_54to1584M_ofdm1602M_copy_copy.db", editable: "Yes" },
-  {
-    no: 26,
-    name: "qams_54to1584M_ofdm1602M_copy_copy_copy - Copy.db",
-    editable: "Yes",
-  },
-  {
-    no: 27,
-    name: "qams_54to1584M_ofdm1602M_copy_copy_copy.db",
-    editable: "Yes",
-  },
-  {
-    no: 28,
-    name: "qams_54to1584M_ofdm1602M_copy_copy_copy_copy - Copy.db",
-    editable: "Yes",
-  },
-  {
-    no: 29,
-    name: "qams_54to1584M_ofdm1602M_copy_copy_copy_copy.db",
-    editable: "Yes",
-  },
-  { no: 30, name: "test_ram_db0.db", editable: "Yes" },
-];
+import { postSaveAs } from "../../actions/drcQAMchannels";
 
 let manageConfigTableIndex = [];
-let selectRowConfigName;
+let singalRowSelectDB = [];
+let allRowsSelectDB = [];
 
 export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID, setTabDisable, setConfiguratonData }) {
 
@@ -124,6 +62,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   const [dbRename, setdbRename] = useState('');
   const [dbCopy, setDbCopy] = useState('');
   const [copyModalShow, setCopyModalShow] = useState(false);
+  const [selectDBValidation, setSelectDBValidation] = useState(false);
 
 
   let Reg = new RegExp(search, "i");
@@ -134,8 +73,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     dispatch(getManageConfigQAMTable(0));
     dispatch(getManageConfigQAMTable(1));
     setTabDisable('disabled-link');
+    singalRowSelectDB = [];
+    allRowsSelectDB = [];
   }, []);
-
 
   useEffect(() => {
     if ((mcDeleteConfigData && mcDeleteConfigData.data && mcDeleteConfigData.data.success === true) ||
@@ -145,12 +85,15 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       dispatch(getManageConfigQAMTable(0));
       dispatch(getManageConfigQAMTable(1));
       setEditValue(0);
+      singalRowSelectDB = [];
+      allRowsSelectDB = [];
     }
   }, [mcDeleteConfigData, mcRenameDeleteDatabase, mcRenameDatabase])
 
 
   useEffect(() => {
     let newdata = [];
+
     if (mcTableSystem) {
       mcTableSystem.map((data) => {
         newdata.push({ name: data, editable: "no" });
@@ -162,6 +105,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       });
     }
     setTableData(newdata);
+
+
   }, [mcTableSystem, mcTableUser]);
 
   const visualizeHandleClick = () => {
@@ -173,23 +118,51 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   };
 
   const saveHandleClick = () => {
-    setSaveAs(true);
+    if (singalRowSelectDB.length !== 0) {
+      if (singalRowSelectDB.length > 1) {
+        setSelectDBValidation(true);
+      }
+      else {
+        setSaveAs(true);
+        setSaveName(singalRowSelectDB[0].name);
+      }
+    } else {
+      setEditablebody('Please select at list one Row !');
+      setSaveName('');
+      setOfdmEditModalShow(true);
+    }
   };
 
   const deleteHandleClick = () => {
-    setDeleteModalShow(true);
+    if (singalRowSelectDB.length > 0) {
+      setDeleteModalShow(true)
+
+    }
+    else {
+      setEditablebody('Please select at list one Row !');
+      setOfdmEditModalShow(true);
+    }
+
   };
+
   const renameHandleClick = () => {
-    if (editValue !== 0) {
-      setRenameModalShow(true);
-      setCheckSameDataBase(false);
-      setdbRename(selectedRow.name);
+
+    if (singalRowSelectDB.length !== 0) {
+      if (singalRowSelectDB.length > 1) {
+        setSelectDBValidation(true);
+      }
+      else {
+        setRenameModalShow(true);
+        setCheckSameDataBase(false);
+        setdbRename(singalRowSelectDB[0].name);
+      }
     } else {
       setEditablebody('Please select at list one Row !');
       setdbRename('');
       setOfdmEditModalShow(true);
     }
   };
+
   // if (visualizeModel) {
   //   document.getElementsByClassName('tab-content')[0].classList.add('overflow-hide')
   // } else {
@@ -197,10 +170,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   // }
 
   function numberFormatter(cell, row, rowIndex) {
+
     return <span>{rowIndex + 1}</span>;
   }
 
-  function annexFormatter() {
+  function annexFormatter(cell, row) {
+
     const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
     return <span>{settingAnnex}</span>;
   }
@@ -210,7 +185,20 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       dataField: "index",
       text: "Index",
       editable: false,
+      sort: true,
       formatter: numberFormatter,
+      sortCaret: (order, column) => {
+        if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
+        else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
+        return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
+      }
     },
     {
       dataField: "name",
@@ -221,7 +209,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
-      }
+      },
     },
     {
       dataField: "editable",
@@ -268,11 +256,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       events: {
         onClick: (e, column, columnIndex, row, rowIndex) => {
           e.stopPropagation();
+          e.preventDefault();
         },
       },
     }
   ];
-  const selectionRow = (row) => {
+  const selectionRow = (row, isSelect) => {
     const selectRowLength = document.querySelectorAll("#manage_config_table .selection-row").length + 1;
     setEditValue(selectRowLength);
     const dbName = row.name;
@@ -280,6 +269,13 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     setSelectedRow(row);
     dispatch(getManageConfigRowSelect(dbName, dbType));
     dispatch(getSystemSettingsAnnex());
+
+    if (isSelect) {
+      singalRowSelectDB.push(row);
+    } else {
+      const updateRowData = singalRowSelectDB.filter(item => item.name !== row.name);
+      singalRowSelectDB = updateRowData;
+    }
   };
 
 
@@ -287,15 +283,26 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     if (mcTableRowData) {
       setConfiguratonData(mcTableRowData.data)
     }
-  }, [mcTableRowData])
+  }, [mcTableRowData]);
 
+  const handleOnSelectAll = (isSelect, rows) => {
+    if (isSelect) {
+      allRowsSelectDB = rows;
+    }
+    else {
+      allRowsSelectDB = [];
+    }
+  }
 
   const selectRow = {
     mode: "checkbox",
     clickToSelect: true,
     classes: "selection-row",
     clickToEdit: true,
+    hideSelectAll: true,
     onSelect: selectionRow,
+    onSelectAll: handleOnSelectAll
+
   };
 
   const selectHandleClick = () => {
@@ -326,14 +333,28 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     />
   );
 
+  const hanldeSaveDatabase = async () => {
+    if (tableData.map(item => item.name).includes(saveName)) {
+      setCheckSameDataBase(true);
+    } else {
+      await dispatch(postSaveAs(selectedRow.name, saveName));
+      setSaveAs(false);
+      dispatch(getManageConfigQAMTable(0));
+      dispatch(getManageConfigQAMTable(1));
+    }
+  }
+
   const saveFooter = (
     <div className="edit_btns">
-      <Button label={"Save"} />
+      <Button
+        label={"Save"}
+        handleClick={() => hanldeSaveDatabase()}
+      />
       <Button label={"Cancel"} handleClick={() => setSaveAs(false)} />
     </div>
   );
 
-  const deleteBody = <p>Delete the entry?</p>;
+  const deleteBody = <p>Delete the selected entry?</p>;
   const newBody = (
     checkSameDataBase ?
       <div>This name is already exists. Please enter different name.</div>
@@ -386,16 +407,20 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
   const deleteItem = () => {
 
-    if (editValue !== 0) {
-      if (selectedRow.editable === 'no') {
+    let deleteRowsData;
+
+    deleteRowsData = allRowsSelectDB.length > 0 ? allRowsSelectDB : singalRowSelectDB;
+
+    if (selectedRow.editable === 'no') {
+      setDeleteModalShow(false);
+      setOfdmEditModalShow(true);
+      setEditablebody('This Database is System Database That is not Delete.');
+    }
+    else {
+      deleteRowsData.forEach((item) => {
+        dispatch(mcDeleteDataBase(item.name));
         setDeleteModalShow(false);
-        setOfdmEditModalShow(true);
-        setEditablebody('This Database is System Database That is not Delete.');
-      }
-      else {
-        dispatch(mcDeleteDataBase(selectedRow.name));
-        setDeleteModalShow(false);
-      }
+      });
     }
   };
 
@@ -495,33 +520,56 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     )
   }
 
+
+  const selectDBVaidationModal = () => {
+    return (
+      <div>you can't more than one databse</div>
+    )
+  }
+
   const rowEditHandler = () => {
 
-    if (editValue !== 0) {
+    if (singalRowSelectDB.length !== 0) {
 
-      if (selectedRow.editable === 'no') {
-        setOfdmEditModalShow(true);
-        setEditablebody('This Database is System Database That is not Editable.');
-
+      if (singalRowSelectDB.length > 1) {
+        setSelectDBValidation(true);
       }
       else {
+        setSelectDBValidation(false);
 
-        if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length === 0) {
+        if (selectedRow.editable === 'no') {
           setOfdmEditModalShow(true);
-          setEditablebody('This databse is empty so annex is not match to setting annex');
+          setEditablebody('This Database is System Database That is not Editable.');
+
         }
-        else if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length > 0) {
+        else {
 
-          const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
-          const rowAnnex = mcTableRowData && mcTableRowData.data[0] && mcTableRowData.data[0].annex;
+          // if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length === 0) {
+          //   setOfdmEditModalShow(true);
+          //   setEditablebody('This databse is empty so annex is not match to setting annex');
+          // }
+          if (mcTableRowData && mcTableRowData.data && mcTableRowData.data.length > 0) {
 
-          if (settingAnnex === rowAnnex) {
-            setActiveTab("configuration");
-            setDataBaseName(selectedRow.name);
-            setChID(1);
+            const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
+            const rowAnnex = mcTableRowData && mcTableRowData.data[0] && mcTableRowData.data[0].annex;
+
+            if (rowAnnex) {
+              if (settingAnnex === rowAnnex) {
+                setActiveTab("configuration");
+                setDataBaseName(singalRowSelectDB[0].name);
+                setChID(1);
+              }
+              else {
+                setAnnexModal(true);
+              }
+            }
           }
           else {
-            setAnnexModal(true);
+            if (mcTableRowData && mcTableRowData.data.length === 0) {
+              setActiveTab("configuration");
+              setDataBaseName(singalRowSelectDB[0].name);
+              setChID(1);
+            }
           }
         }
       }
@@ -581,8 +629,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   };
 
   const runHandler = () => {
-    if (selectedRow.name) {
-      dispatch(mcRunDataBase(selectedRow.name));
+    if (singalRowSelectDB.length !== 0) {
+
+      if (singalRowSelectDB.length > 1) {
+        setSelectDBValidation(true);
+      }
+      else {
+        dispatch(mcRunDataBase(singalRowSelectDB[0].name));
+      }
     } else {
       setEditablebody("Please select at list one Row !");
       setOfdmEditModalShow(true);
@@ -607,10 +661,18 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   }
 
   const copyHandleClick = () => {
-    if (editValue !== 0) {
-      setCopyModalShow(true);
-      setCheckSameDataBase(false);
-      setDbCopy(selectedRow.name);
+
+    if (singalRowSelectDB.length !== 0) {
+
+      if (singalRowSelectDB.length > 1) {
+        setSelectDBValidation(true);
+      }
+      else {
+        setCopyModalShow(true);
+        setCheckSameDataBase(false);
+        setDbCopy(singalRowSelectDB[0].name);
+      }
+
     } else {
       setEditablebody('Please select at list one Row !');
       setDbCopy('');
@@ -728,7 +790,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
           <div className="right_btn d-flex align-items-end">
             <Button label={"Download All"} handleClick={downloadHandleClick} />
             <div className="d-flex flex-column ">
-              <strong>Upload from Pc to CPSG</strong>
+              {/* <strong>Upload from Pc to CPSG</strong> */}
               <button className="btn-file">
                 CPSG
                 <input type="file" />
@@ -763,6 +825,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
         onHide={() => setAnnexModal(false)}
         modalTitle=""
         modalBody={annexVaidationModal()}
+      />
+      <ModalAoi
+        show={selectDBValidation}
+        onHide={() => setSelectDBValidation(false)}
+        modalTitle=""
+        modalBody={selectDBVaidationModal()}
       />
     </div>
   );

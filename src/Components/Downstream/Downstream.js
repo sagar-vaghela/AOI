@@ -41,7 +41,13 @@ const Downstream = (props) => {
             <RunningConfigPage />
           </Tab>
           <Tab eventKey="ManageConfigurationPage" title="Manage Configurations">
-            <ManageConfigurationPage setActiveTab={setActiveTab} setDataBaseName={setDataBaseName} setChID={setChID} setTabDisable={setTabDisable} setConfiguratonData={setConfiguratonData} />
+            <ManageConfigurationPage 
+            setActiveTab={setActiveTab} 
+            setDataBaseName={setDataBaseName} 
+            setChID={setChID} 
+            setTabDisable={setTabDisable} 
+            setConfiguratonData={setConfiguratonData} 
+            />
           </Tab>
           <Tab eventKey="configuration" title="Configuration" tabClassName={tabDisable} configRef={configRef}>
             <Configuration dataBaseName={dataBaseName} chID={chID} configuratonData={configuratonData} />

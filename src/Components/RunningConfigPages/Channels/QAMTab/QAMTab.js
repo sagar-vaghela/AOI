@@ -4,6 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import ModalAoi from '../../../Modal/ModalAoi';
 import {
+  drcQAMDeleteAllTableRowCell,
   drcSingleQAMTable,
   getRCQAMCreateTableRow,
   getRCQAMDeleteTableRowCell,
@@ -19,7 +20,9 @@ import Form from 'react-bootstrap/Form';
 import { addRangeQAMConfiguration } from '../../../../actions/dConfiguration';
 import MutedFormatter from './MuteFormatter';
 
-let editRowData = [];
+let singalRowSelectData = [];
+let allRowsSelectData = [];
+
 
 export default function QAMTab(props) {
   const dispatch = useDispatch();
@@ -30,6 +33,8 @@ export default function QAMTab(props) {
   const rcQAMTableDeleteData = useSelector((state) => state.drcQAMTableRowDeleteReducer.rcQAMDeleteRow);
   const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
   const rcQAMTableSingleData = useSelector((state) => state.drcSingleQAMTableReducer.drcSinglelQAMTableData);
+  const rcQAMTableDeleteAllData = useSelector((state) => state.drcQAMTableAllDeleteReducer.rcQAMDeleteAllRowsData);
+
 
   const [tableData, setTableData] = useState([]);
   const [search, setSearch] = useState("");
@@ -70,12 +75,13 @@ export default function QAMTab(props) {
   useEffect(() => {
     if ((rcQAMTableUpdateData.data && rcQAMTableUpdateData.data.success === true) ||
       (rcQAMTableDeleteData.data && rcQAMTableDeleteData.data.success === true) ||
-      (rcQAMTableSingleData && rcQAMTableSingleData.status === 200)
+      (rcQAMTableSingleData && rcQAMTableSingleData.status === 200) ||
+      (rcQAMTableDeleteAllData.data && rcQAMTableDeleteAllData.data.success === true)
     ) {
       dispatch(getRunConfigQAMTable());
       setModalShow(false);
     }
-  }, [rcQAMTableUpdateData, rcQAMTableDeleteData, rcQAMTableSingleData]);
+  }, [rcQAMTableUpdateData, rcQAMTableDeleteData, rcQAMTableSingleData, rcQAMTableDeleteAllData]);
 
   useEffect(() => {
     const chId = rcQAMTableCreateData && rcQAMTableCreateData.data && rcQAMTableCreateData.data.ch_id;
@@ -107,8 +113,17 @@ export default function QAMTab(props) {
   }, [search]);
 
   function numberFormatter(cell, row, rowIndex) {
-    return <span>{row.ch_index}</span>;
+    return <span>{Number(row.ch_index)}</span>;
   }
+
+  function frequencyFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.frequency)}</span>;
+  }
+
+  function powerFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.power)}</span>;
+  }
+
 
   const columns = [
     {
@@ -122,28 +137,48 @@ export default function QAMTab(props) {
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     {
       dataField: "frequency",
       text: "Frequency",
       sort: true,
+      formatter: frequencyFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     {
       dataField: "power",
       text: "Power",
       sort: true,
+      formatter: powerFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     // {
@@ -199,7 +234,7 @@ export default function QAMTab(props) {
       dataField: "mute",
       text: "Muted",
       editable: false,
-      formatter: (cell, row) => <MutedFormatter cell={cell} row={row}/>,
+      formatter: (cell, row) => <MutedFormatter cell={cell} row={row} />,
       events: {
         onClick: (e, column, columnIndex, row, rowIndex) => {
           e.stopPropagation();
@@ -211,7 +246,7 @@ export default function QAMTab(props) {
   const editHandleClick = () => {
     setPowerValue();
     const selectRowLength = document.querySelectorAll('#running_qam_table .selection-row').length;
-    selectRowLength === 0 ? setModalShow(true) : setModalShow(true); // changes on ticket 1
+    setModalShow(true); // changes on ticket 1
     setEditValue(selectRowLength);
   };
 
@@ -225,11 +260,21 @@ export default function QAMTab(props) {
 
 
   const handleOnSelect = (row, isSelect) => {
+
     if (isSelect) {
-      editRowData.push(row);
+      singalRowSelectData.push(row);
     } else {
-      const updateRowData = editRowData.filter(item => item.ch_index !== row.ch_index);
-      editRowData = updateRowData;
+      const updateRowData = singalRowSelectData.filter(item => item.ch_index !== row.ch_index);
+      singalRowSelectData = updateRowData;
+    }
+  }
+
+  const handleOnSelectAll = (isSelect, rows) => {
+    if (isSelect) {
+      allRowsSelectData = rows;
+    }
+    else {
+      allRowsSelectData = [];
     }
   }
 
@@ -238,7 +283,8 @@ export default function QAMTab(props) {
     clickToSelect: true,
     classes: "selection-row",
     clickToEdit: true,
-    onSelect: handleOnSelect
+    onSelect: handleOnSelect,
+    onSelectAll: handleOnSelectAll
   };
 
   const editBody = () => {
@@ -288,8 +334,11 @@ export default function QAMTab(props) {
   const upateRow = () => {
 
     const checkSwitch = (muteValue === true ? 'YES' : 'NO');
+    let updateRowsData;
 
-    editRowData.forEach((item, index) => {
+    updateRowsData = allRowsSelectData.length > 0 ? allRowsSelectData : singalRowSelectData;
+
+    updateRowsData.forEach((item, index) => {
       const payload = {
         power: powerValue,
         annex: item.annex,
@@ -355,13 +404,10 @@ export default function QAMTab(props) {
   const dbSaveCell = (row) => {
 
     const payload = {
-      modulation: row.modulation,
       power: row.power,
-      interleave: row.interleave,
       annex: row.annex,
       operMode: row.operMode,
       mute: row.mute,
-      width: row.width,
       frequency: row.frequency,
     }
     dispatch(getRCQAMEditTableRow(row.ch_index, payload));
@@ -377,9 +423,24 @@ export default function QAMTab(props) {
   }
 
   const deleteRowCell = () => {
-    editRowData.forEach((item, index) => {
-      dispatch(getRCQAMDeleteTableRowCell(item.ch_index));
-    });
+
+    if (allRowsSelectData.length === 0 && singalRowSelectData.length === 0) {
+      setModalShow(true);
+    }
+    else {
+
+      if (allRowsSelectData.length > 0) {
+        dispatch(drcQAMDeleteAllTableRowCell());
+        allRowsSelectData = [];
+
+      } else {
+        singalRowSelectData.forEach((item, index) => {
+          dispatch(getRCQAMDeleteTableRowCell(item.ch_index));
+          singalRowSelectData = [];
+        });
+      }
+    }
+
   }
 
   const validationModal = () => {
@@ -512,7 +573,7 @@ export default function QAMTab(props) {
         <div className="border border-dark mb-4">
           <div className="searchbar table_top_bar d-flex justify-content-end align-items-center border-bottom border-dark">
 
-            <label htmlFor="search">Annex: {rcQAMAnnexData && rcQAMAnnexData.data}</label>
+            {/* <label htmlFor="search">Annex: {rcQAMAnnexData && rcQAMAnnexData.data}</label> */}
             <label htmlFor="search">Search:</label>
             <input
               type="text"
@@ -524,44 +585,44 @@ export default function QAMTab(props) {
 
           {
             tableData && tableData.length > 0 ?
-            <div className="tableContainer">
-              <BootstrapTable
-                id='running_qam_table'
-                keyField="ch_index"
-                data={tableData}
-                columns={columns}
-                selectRow={selectRow}
-                defaultSortDirection='asc'
-                cellEdit={cellEditFactory({
-                  mode: 'dbclick',
-                  blurToSave: true,
-                  onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
-                  afterSaveCell: (oldValue, newValue, row, column) => {
+              <div className="tableContainer">
+                <BootstrapTable
+                  id='running_qam_table'
+                  keyField="ch_index"
+                  data={tableData}
+                  columns={columns}
+                  selectRow={selectRow}
+                  defaultSortDirection='asc'
+                  cellEdit={cellEditFactory({
+                    mode: 'dbclick',
+                    blurToSave: true,
+                    onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
+                    afterSaveCell: (oldValue, newValue, row, column) => {
 
-                    console.log("row-----", row);
+                      console.log("row-----", row);
 
-                    if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
-                      setValidationField('frequency');
-                      setValidationQAMTable(true);
-                      dispatch(getRunConfigQAMTable());
+                      if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
+                        setValidationField('frequency');
+                        setValidationQAMTable(true);
+                        dispatch(getRunConfigQAMTable());
+
+                      }
+                      else if (column.dataField === 'power' && (newValue < -12 || newValue > 12 || newValue === '')) {
+                        setValidationField('power');
+                        setValidationQAMTable(true);
+                        dispatch(getRunConfigQAMTable());
+
+                      }
+                      else {
+                        dbSaveCell(row)
+                      }
 
                     }
-                    else if (column.dataField === 'power' && (newValue < -12 || newValue > 12 || newValue === '')) {
-                      setValidationField('power');
-                      setValidationQAMTable(true);
-                      dispatch(getRunConfigQAMTable());
-
-                    }
-                    else {
-                      dbSaveCell(row)
-                    }
-
-                  }
-                })}
-                headerClasses="table_header"
-                classes="mb-0"
-                rowEvents={rowEvents}
-              />
+                  })}
+                  headerClasses="table_header"
+                  classes="mb-0"
+                  rowEvents={rowEvents}
+                />
               </div>
               :
               <p className='text-center fw-bold mt-2'>No record found</p>

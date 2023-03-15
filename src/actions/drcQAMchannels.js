@@ -7,9 +7,11 @@ import {
     GET_RUN_CONFIG_QAM_TABLE_SUCCEEDED,
     GET_RUN_CONFIG_SINGLE_QAM_TABLE_FAILED,
     GET_RUN_CONFIG_SINGLE_QAM_TABLE_STARTED,
-    GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED
+    GET_RUN_CONFIG_SINGLE_QAM_TABLE_SUCCEEDED,
+    GET_QAM_DELETE_All_TABLE_ROW_SUCCEEDED
 } from "../lib/constants";
 import {
+    drcQAMDeleteAllTableRow,
     getRCQAMAddTableRow,
     getRCQAMDeleteTableRow,
     getRCQAMUpdateTableRow,
@@ -65,6 +67,11 @@ const getRunConfigSingleQAMTableFailed = error => ({
     error: true
 });
 
+const drcQAMDeleteAllTableRowSucceeded = data => ({
+    type: GET_QAM_DELETE_All_TABLE_ROW_SUCCEEDED,
+    payload: data,
+});
+
 
 export const getRunConfigQAMTable = () => {
     return async dispatch => {
@@ -96,6 +103,8 @@ export const getRCQAMDeleteTableRowCell = (ch_id) => {
 
         await getRCQAMDeleteTableRow(ch_id).then(function (response) {
             dispatch(getRCQAMDeleteTableRowSucceeded(response));
+            dispatch(showPopup({ message: "delete as successfully", type: "success" }))
+
         })
             .catch(function (error) {
                 console.log("getRCQAMDeleteTableRow error");
@@ -116,10 +125,10 @@ export const getRCQAMEditTableRow = (ch_id, payload) => {
     };
 }
 
-export const postSaveAs = (filename) => {
+export const postSaveAs = (dbname, filename) => {
     return async dispatch => {
 
-        await postSaveAsAPI(filename).then(function (response) {
+        await postSaveAsAPI(dbname, filename).then(function (response) {
             dispatch(showPopup({ message: "save as successfully", type: "success" }))
         })
             .catch(function (error) {
@@ -150,6 +159,21 @@ export const drcSingleQAMTable = (ch_id) => {
         })
             .catch(function (error) {
                 dispatch(getRunConfigSingleQAMTableFailed(error));
+            });
+    };
+}
+
+export const drcQAMDeleteAllTableRowCell = () => {
+    return async dispatch => {
+
+        await drcQAMDeleteAllTableRow().then(function (response) {
+            dispatch(drcQAMDeleteAllTableRowSucceeded(response));
+            dispatch(showPopup({ message: "delete all rows as successfully", type: "success" }))
+
+        })
+            .catch(function (error) {
+                console.log("drcQAMDeleteAllTableRowCell error");
+
             });
     };
 }

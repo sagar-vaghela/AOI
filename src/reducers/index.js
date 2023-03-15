@@ -6,7 +6,8 @@ import {
     drcQAMTableRowEditReducer,
     drcQAMTableRowCreateReducer,
     drcQAMTableRowDeleteReducer,
-    drcSingleQAMTableReducer
+    drcSingleQAMTableReducer,
+    drcQAMTableAllDeleteReducer
 } from './drcQAMchannelsReducer';
 import {
     settingSplitReducer,
@@ -23,14 +24,16 @@ import {
     dmcDeleteDatabaseReducer,
     dmcArchiveDatabaseReducer,
     dmcRunDatabaseReducer,
-    dmcDownloadAllDBReducer
+    dmcDownloadAllDBReducer,
+    dmConfigAnnexReducer
 } from './dmcCurrentFilesReducer';
 import {
     dcAddRangeReducer,
     dcDeleteConfigurationReducer,
     dcSingleQAMTableReducer,
-    dcUpdateConfigurationReducer
-
+    dcUpdateConfigurationReducer,
+    dcAddTiltReducer,
+    dcAllDeleteConfigurationReducer
 } from './dConfigurationReducer';
 
 const rootReducer = combineReducers({
@@ -56,8 +59,11 @@ const rootReducer = combineReducers({
     dmcArchiveDatabaseReducer,
     dmcRunDatabaseReducer,
     dmcDownloadAllDBReducer,
-    dcUpdateConfigurationReducer
-
+    dcUpdateConfigurationReducer,
+    drcQAMTableAllDeleteReducer,
+    dmConfigAnnexReducer,
+    dcAddTiltReducer,
+    dcAllDeleteConfigurationReducer
 });
 
 export default rootReducer;

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 const Content = (props) => {
   const popupData = useSelector((state) => state.popupReducer);
+  const rcQAMAnnexData = useSelector((state) => state.settingAnnexDataReducer.settingAnnexGet);
   const loaction = useLocation();
 
   const pageName =
@@ -71,7 +72,7 @@ const Content = (props) => {
             CPSG 5102 Cable Plant Generator
           </h3>
           <p className="p-2 mb-0 fw-bold fs-5 border-bottom border-dark ">
-            {pageNameWithSpace}
+            {pageNameWithSpace} {loaction.pathname === '/downstream' ? `- ${rcQAMAnnexData && rcQAMAnnexData.data}` : ''}
           </p>
         </>
       )}

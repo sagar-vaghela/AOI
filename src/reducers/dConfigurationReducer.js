@@ -1,9 +1,11 @@
 import {
+  ALL_DELETE_CONFIGURATION_SUCCESSED,
   DELETE_CONFIGURATION_SUCCESSED,
   GET_CONFIGURATION_QAM_TABLE_FAILED,
   GET_CONFIGURATION_QAM_TABLE_STARTED,
   GET_CONFIGURATION_QAM_TABLE_SUCCEEDED,
   POST_CONFIG_QAM_TABLE_ADD_RANGE,
+  POST_CONFIG_QAM_TABLE_ADD_TILT,
   UPDATE_CONFIGURATION_SUCCESSED
 } from "../lib/constants";
 import initialState from "./initialState";
@@ -65,6 +67,32 @@ export const dcUpdateConfigurationReducer = (state = initialState.dcUpdateConfig
       return {
         ...state,
         dcUpdateConfigurationData: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const dcAddTiltReducer = (state = initialState.dcAddTilt, action) => {
+  switch (action.type) {
+    case POST_CONFIG_QAM_TABLE_ADD_TILT:
+      return {
+        ...state,
+        dcAddTiltData: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const dcAllDeleteConfigurationReducer = (state = initialState.dcAllDeleteConfig, action) => {
+  switch (action.type) {
+    case ALL_DELETE_CONFIGURATION_SUCCESSED:
+      return {
+        ...state,
+        dcAllDeleteConfigData: action.payload,
       };
 
     default:

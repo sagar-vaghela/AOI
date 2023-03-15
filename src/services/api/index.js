@@ -22,8 +22,8 @@ export const getRCQAMDeleteTableRow = (ch_id) => {
   return createAxiosFor.post(`/downstream_qams_single/running/delete?ch_id=${ch_id}`)
 };
 
-export const postSaveAsAPI = (filename) => {
-  return createAxiosFor.post(`/downstream_config/copy?from_db=test_default.db&to_db=${filename}`);
+export const postSaveAsAPI = (dbname, filename) => {
+  return createAxiosFor.post(`/downstream_config/copy?from_db=${dbname}&to_db=${filename}`);
 };
 
 export const makeDefaultAPI = () => {
@@ -43,19 +43,19 @@ export const addRangeConfiguration = (dbname, payload) => {
 };
 
 export const systemSettingsSplit = (split) => {
-  return createAxiosFor.post(`/downstream_config/split?split=${split}`);
+  return createAxiosFor.post(`/downstream_config_setting/split?split=${split}`);
 };
 
 export const systemSettingsAnnex = (annex) => {
-  return createAxiosFor.post(`/downstream_config/annex?annex=${annex}`);
+  return createAxiosFor.post(`/downstream_config_setting/annex?annex=${annex}`);
 };
 
 export const getSystemSettingsSplitData = () => {
-  return createAxiosFor.get('/downstream_config/split')
+  return createAxiosFor.get('/downstream_config_setting/split')
 };
 
 export const getSystemSettingsAnnexData = () => {
-  return createAxiosFor.get('/downstream_config/annex')
+  return createAxiosFor.get('/downstream_config_setting/annex')
 };
 
 export const getMangeConfigRowAPI = (dbname, db_default_type) => {
@@ -83,12 +83,7 @@ export const deleteDataBase = (dbname) => {
 };
 
 export const archiveDataBase = (dbname) => {
-  // return createAxiosFor.post(`/downstream_config/archive?dbname=${dbname}`)
-  return axios({
-    url: `http://69.180.23.205/downstream_config/archive?dbname=${dbname}`,
-    method: 'POST',
-    responseType: 'blob'
-  })
+  return createAxiosFor.post(`/downstream_config/archive?dbname=${dbname}`)
 };
 
 export const runDataBase = (dbname) => {
@@ -103,3 +98,18 @@ export const updateConfiguration = (dbname, ch_id, payload) => {
   return createAxiosFor.post(`/downstream_qams_single/update?dbname=${dbname}&ch_id=${ch_id}`, payload)
 };
 
+export const drcQAMDeleteAllTableRow = () => {
+  return createAxiosFor.post(`downstream_qams/running/delete_all`)
+};
+
+export const getManageConfigAnnex = (db_default_type, dbname) => {
+  return createAxiosFor.get(`/downstream_config/annex?db_default_type=${db_default_type}&dbname=${dbname}`)
+};
+
+export const addTiltConfiguration = (start_freq, end_freq, start_power, end_power, dbname) => {
+  return createAxiosFor.post(`/downstream_qams/tilt?start_freq=${start_freq}&end_freq=${end_freq}&start_power=${start_power}&end_power=${end_power}&dbname=${dbname}`)
+};
+
+export const allDeleteConfiguration = (dbname) => {
+  return createAxiosFor.post(`/downstream_qams/delete_all?dbname=${dbname}`)
+};
