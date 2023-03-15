@@ -426,7 +426,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   }
 
   function powerFormatter(cell, row, rowIndex) {
-    return <span>{Number(row.power)}</span>;
+    return <span>{Number(row.power).toFixed(2)}</span>;
   }
 
 
