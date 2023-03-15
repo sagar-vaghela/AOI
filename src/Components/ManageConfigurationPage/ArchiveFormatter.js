@@ -14,7 +14,7 @@ export default function ArchiveFormatter({ cell, row }) {
             const url = window.URL.createObjectURL(new Blob([mcArchiveDatabase.data]));
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${row.name}.db`
+            a.download = row.name.includes('.db')? row.name : `${row.name}.db`
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
