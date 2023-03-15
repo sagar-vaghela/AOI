@@ -173,8 +173,8 @@ export default function QAMTab({ mcTableRowData }) {
               keyField="ch_index"
               data={tableData}
               columns={columns}
-              selectRow={selectRow}
-              cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+              // selectRow={selectRow}
+              // cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
               headerClasses="table_header"
               classes="mb-0"
               rowEvents={rowEvents}

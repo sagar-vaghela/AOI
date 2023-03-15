@@ -589,12 +589,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
     if (mcTableSystem) {
       mcTableSystem.map((data) => {
-        manageConfigData.push({ name: data, editable: "no" });
+        manageConfigData.push({ name: data.dbname, editable: "no" , annex: data.annex});
       });
     }
     if (mcTableUser) {
       mcTableUser.map((data) => {
-        manageConfigData.push({ name: data, editable: "yes" });
+        manageConfigData.push({ name: data.dbname, editable: "yes", annex: data.annex });
       });
     }
 
