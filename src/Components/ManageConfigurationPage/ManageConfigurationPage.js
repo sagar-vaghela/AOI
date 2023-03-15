@@ -125,21 +125,21 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     setVisualizeModel(false);
   };
 
-  const saveHandleClick = () => {
-    if (singalRowSelectDB.length !== 0) {
-      if (singalRowSelectDB.length > 1) {
-        setSelectDBValidation(true);
-      }
-      else {
-        setSaveAs(true);
-        setSaveName(singalRowSelectDB[0].name);
-      }
-    } else {
-      setEditablebody('Please select at list one Row !');
-      setSaveName('');
-      setOfdmEditModalShow(true);
-    }
-  };
+  // const saveHandleClick = () => {
+  //   if (singalRowSelectDB.length !== 0) {
+  //     if (singalRowSelectDB.length > 1) {
+  //       setSelectDBValidation(true);
+  //     }
+  //     else {
+  //       setSaveAs(true);
+  //       setSaveName(singalRowSelectDB[0].name);
+  //     }
+  //   } else {
+  //     setEditablebody('Please select at list one Row !');
+  //     setSaveName('');
+  //     setOfdmEditModalShow(true);
+  //   }
+  // };
 
   const deleteHandleClick = () => {
     if (singalRowSelectDB.length > 0) {
@@ -261,6 +261,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   ];
   const selectionRow = (row, isSelect) => {
     const selectRowLength = document.querySelectorAll("#manage_config_table .selection-row").length + 1;
+    console.log('selectRowLength',selectRowLength, document.querySelectorAll("#manage_config_table .selection-row"));
     setEditValue(selectRowLength);
     const dbName = row.name;
     const dbType = row.editable === 'no' ? 1 : 0;
@@ -269,7 +270,8 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
     dispatch(getSystemSettingsAnnex());
 
     if (isSelect) {
-      singalRowSelectDB.push(row);
+      //singalRowSelectDB.push(row);
+      singalRowSelectDB = [row]
     } else {
       const updateRowData = singalRowSelectDB.filter(item => item.name !== row.name);
       singalRowSelectDB = updateRowData;
@@ -293,13 +295,14 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   }
 
   const selectRow = {
-    mode: "checkbox",
+    mode: "radio",
     clickToSelect: true,
     classes: "selection-row",
     clickToEdit: true,
     hideSelectAll: true,
+    hideSelectColumn: true,
     onSelect: selectionRow,
-    onSelectAll: handleOnSelectAll
+    //onSelectAll: handleOnSelectAll
 
   };
 
@@ -720,7 +723,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               classes="mb-0"
               rowEvents={rowEvents}
               defaultSortDirection='asc'
-
+              headerClasses="table_header"
             />
           </div>
         )}
@@ -785,7 +788,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
             {/* <Button label={"Archive"} handleClick={archiveHandleClick} /> */}
 
-            <Button label={"Save as"} handleClick={saveHandleClick} />
+            {/* <Button label={"Save as"} handleClick={saveHandleClick} /> */}
             <ModalAoi
               show={saveAs}
               onHide={() => setSaveAs(false)}
@@ -799,7 +802,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
             <div className="d-flex flex-column ">
               {/* <strong>Upload from Pc to CPSG</strong> */}
               <button className="btn-file">
-                CPSG
+                  Upload to CPSG
                 <input type="file" />
               </button>
             </div>
