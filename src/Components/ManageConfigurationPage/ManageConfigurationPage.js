@@ -193,12 +193,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
       },
-      sortFunc: (a, b, order, dataField, rowA, rowB) => {
-        if (order === 'asc') {
-          return b - a;
-        }
-        return a - b; // desc
-      }
     },
     {
       dataField: "name",
