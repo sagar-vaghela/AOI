@@ -86,9 +86,7 @@ export default function QAMTab(props) {
   useEffect(() => {
     const chId = rcQAMTableCreateData && rcQAMTableCreateData.data && rcQAMTableCreateData.data.ch_id;
     if (rcQAMTableCreateData && rcQAMTableCreateData.status === 200) {
-      for (let i = 1; i <= Number(nofChannel); i++) {
-        dispatch(drcSingleQAMTable(chId));
-      }
+      dispatch(drcSingleQAMTable(chId));
     }
   }, [rcQAMTableCreateData]);
 
@@ -139,7 +137,6 @@ export default function QAMTab(props) {
         return null;
       },
       sortFunc: (a, b, order, dataField, rowA, rowB) => {
-        console.log(a, b);
         if (order === 'asc') {
           return b - a;
         }
@@ -600,7 +597,6 @@ export default function QAMTab(props) {
                     onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!', row); },
                     afterSaveCell: (oldValue, newValue, row, column) => {
 
-                      console.log("row-----", row);
 
                       if (column.dataField === 'frequency' && (newValue < 0 || newValue > 1800 || newValue === '')) {
                         setValidationField('frequency');
@@ -641,7 +637,7 @@ export default function QAMTab(props) {
           {/* <h5 className='d-inline-block fw-bold'>Action</h5> */}
 
           <div className="action_btns justify-content-between">
-            <div className="left_btns text-center">
+            <div className="left_btns text-xl-center">
 
               <Button label={'Edit'} handleClick={editHandleClick} />
 
@@ -667,7 +663,7 @@ export default function QAMTab(props) {
               />
             </div>
 
-            <div className="right_btn text-center">
+            <div className="right_btn text-xl-center">
               <Button label={"Save as"} handleClick={saveHandleClick} />
               <ModalAoi
                 show={saveAs}

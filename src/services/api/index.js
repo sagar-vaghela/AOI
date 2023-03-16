@@ -15,7 +15,7 @@ export const getRCQAMUpdateTableRow = (ch_id, payload) => {
 };
 
 export const getRCQAMAddTableRow = (payload) => {
-  return createAxiosFor.post(`/downstream_qams_single/running/create`, payload)
+  return createAxiosFor.post(`/downstream_qams_range/running/create`, payload)
 };
 
 export const getRCQAMDeleteTableRow = (ch_id) => {
@@ -39,7 +39,7 @@ export const postNewDataBaseAPI = (name) => {
 };
 
 export const addRangeConfiguration = (dbname, payload) => {
-  return createAxiosFor.post(`/downstream_qams_single/create?dbname=${dbname}`, payload)
+  return createAxiosFor.post(`/downstream_qams_range/create?dbname=${dbname}`, payload)
 };
 
 export const systemSettingsSplit = (split) => {

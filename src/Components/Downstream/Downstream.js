@@ -9,19 +9,8 @@ const Downstream = (props) => {
   const [activeTab, setActiveTab] = useState('RunningConfigPage');
   const [dataBaseName, setDataBaseName] = useState('');
   const [chID, setChID] = useState('');
-  const [tabDisable, setTabDisable] = useState('disabled-link');
+  const [tabDisable, setTabDisable] = useState(true);
   const [configuratonData, setConfiguratonData] = useState([]);
-
-  const configRef = useRef(null);
-
-  useEffect(() => {
-    // create a new div element
-    const newDiv = document.createElement('div');
-    newDiv.innerHTML = 'Hello from the new div!';
-
-    // append the new div to the container div
-    configRef.current && configRef.current.appendChild(newDiv);
-  }, []);
 
   const handleTabChange = (eventKey) => {
     setActiveTab(eventKey);
@@ -49,7 +38,7 @@ const Downstream = (props) => {
             setConfiguratonData={setConfiguratonData} 
             />
           </Tab>
-          <Tab eventKey="configuration" title="Configuration" tabClassName={tabDisable} configRef={configRef}>
+          <Tab eventKey="configuration" title="Configuration" tabClassName={tabDisable} disabled={tabDisable} >
             <Configuration dataBaseName={dataBaseName} chID={chID} configuratonData={configuratonData} />
           </Tab>
 

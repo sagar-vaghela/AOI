@@ -41,7 +41,7 @@ ul {
   padding: 2px 15px;
   margin-right: 20px;
   min-width: 150px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .btn-file input[type="file"] {
   position: absolute;
@@ -75,6 +75,15 @@ table tbody {
 
 .right_btn button:hover {
   background-color: #d3d3d33c !important;
+}
+.button_dlt {
+  background-color: #fff;
+  padding: 2px 15px;
+  margin-right: 20px;
+  min-width: 150px;
+  margin-bottom: 5px;
+  transition: all 0.3s ease-in-out;
+  max-height: 32px;
 }
 
 /* ---------------------------------------------------
@@ -245,11 +254,10 @@ li a.dropdown-toggle::after {
 /* ---------------------------------------------------
     NAV TABS STYLE
 ----------------------------------------------------- */
-
-.disabled-link {
-  pointer-events: none;
+.nav-tabs .nav-link.disabled,
+.nav-tabs .nav-link:disabled {
+  border-color: #000 !important;
 }
-
 .nav_tabs {
   background-color: #f1e4ff;
   border-bottom: 1px solid #000;
@@ -381,9 +389,6 @@ table thead {
 .table_header {
   background: #d3d3d363;
 }
-.action_btns {
-  display: flex;
-}
 /* td.selection-cell,
 th.selection-cell-header {
   width: 30px;
@@ -391,7 +396,7 @@ th.selection-cell-header {
 .selection-row {
   background-color: rgb(241, 228, 255);
 }
-.tab-content button {
+.tab-content .nav-item button {
   background-color: #fff;
   padding: 2px 15px;
   margin-right: 20px;
@@ -619,8 +624,15 @@ select:focus {
 /* ---------------------------------------------------
     MEDIA STYLE
 ----------------------------------------------------- */
-
+@media (min-width: 576px){
+  .action_btns {
+    display: flex;
+  }
+}
 @media (max-width: 1199px) {
+  .button_dlt {
+    min-width: 100px;
+  }
   .welcome_screen .welcome_head_wrapper h1 {
     font-size: 60px;
   }
@@ -649,6 +661,11 @@ select:focus {
 }
 
 @media (max-width: 991px) {
+  .button_dlt {
+    min-width: 40px;
+    font-size: 14px;
+    margin-right: 10px;
+  }
   .welcome_screen .welcome_head_wrapper h1 {
     font-size: 50px;
     letter-spacing: 2px;

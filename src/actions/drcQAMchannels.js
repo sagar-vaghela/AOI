@@ -93,7 +93,7 @@ export const getRCQAMCreateTableRow = (payload) => {
             dispatch(getRCQAMCreateTableRowSucceeded(response));
         })
             .catch(function (error) {
-                console.log("getRCQAMAddTableRow error");
+                console.log("getRCQAMCreateTableRow error");
             });
     };
 }

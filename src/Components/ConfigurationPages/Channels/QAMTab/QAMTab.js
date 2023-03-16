@@ -939,7 +939,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
 
             <BootstrapTable
               id="confinguration_qam_table"
-              keyField="frequency"
+              keyField="ch_index"
               data={tableData}
               columns={columns}
               cellEdit={cellEditFactory({

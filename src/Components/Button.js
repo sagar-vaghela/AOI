@@ -13,7 +13,7 @@ const Button = (props) => {
     }
 
     return (
-        <button style={btnStyle} title={label} onClick={handleClick}>{label}</button>
+        <button className='button_dlt' title={label} onClick={handleClick}>{label}</button>
     )
 }
 

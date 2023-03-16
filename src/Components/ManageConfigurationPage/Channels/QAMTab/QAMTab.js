@@ -36,7 +36,10 @@ export default function QAMTab({ mcTableRowData }) {
       </div>
     );
   }
-
+  function frequencyFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.frequency)}</span>;
+  }
+  
   function powerFormatter(cell, row, rowIndex) {
     return <span>{Number(row.power).toFixed(2)}</span>;
   }
@@ -51,11 +54,19 @@ export default function QAMTab({ mcTableRowData }) {
       dataField: 'frequency',
       text: 'Frequency',
       sort: true,
+      formatter: frequencyFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        console.log(a, b);
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     {
@@ -68,6 +79,12 @@ export default function QAMTab({ mcTableRowData }) {
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
       }
     },
     // {

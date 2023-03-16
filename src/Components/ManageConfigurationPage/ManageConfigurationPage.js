@@ -27,6 +27,7 @@ import { postSaveAs } from "../../actions/drcQAMchannels";
 let manageConfigTableIndex = [];
 let singalRowSelectDB = [];
 let allRowsSelectDB = [];
+let singalrowIndex;
 
 export default function ManageConfigurationPage({ setActiveTab, setDataBaseName, setChID, setTabDisable, setConfiguratonData }) {
 
@@ -73,9 +74,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   useEffect(() => {
     dispatch(getManageConfigQAMTable(0));
     dispatch(getManageConfigQAMTable(1));
-    setTabDisable('disabled-link');
-    singalRowSelectDB = [];
-    allRowsSelectDB = [];
+    setTabDisable(true);
   }, []);
 
   useEffect(() => {
@@ -86,8 +85,6 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       dispatch(getManageConfigQAMTable(0));
       dispatch(getManageConfigQAMTable(1));
       setEditValue(0);
-      singalRowSelectDB = [];
-      allRowsSelectDB = [];
     }
   }, [mcDeleteConfigData, mcRenameDeleteDatabase, mcRenameDatabase])
 
@@ -97,19 +94,19 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
     if (mcTableSystem) {
       mcTableSystem.map((data, index) => {
-        newdata.push({ name: data.dbname, editable: "no", annex: data.annex});
+        newdata.push({ name: data.dbname, editable: "no", annex: data.annex });
       });
     }
     if (mcTableUser) {
       mcTableUser.map((data, index) => {
-        newdata.push({ name: data.dbname, editable: "yes" , annex: data.annex});
+        newdata.push({ name: data.dbname, editable: "yes", annex: data.annex });
       });
     }
 
-    let updateData =[];
+    let updateData = [];
 
-    newdata.forEach((item, index)=>{
-      updateData.push({...item, rowIndex: index+1})
+    newdata.forEach((item, index) => {
+      updateData.push({ ...item, rowIndex: index + 1 })
     });
     setTotalData(updateData);
     setTableData(updateData);
@@ -177,9 +174,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   //   document.getElementsByClassName('tab-content')[0].classList.remove('overflow-hide')
   // }
 
+  function numberFormatter(cell, row, rowIndex) {
+    return <span>{Number(row.rowIndex)}</span>;
+  }
 
   function annexFormatter(cell, row) {
-    console.log('rowrowrowrowrowrow',row.annex);
+
     const settingAnnex = rcQAMAnnexData && rcQAMAnnexData.data;
     return <span>{row.annex === '' ? settingAnnex : row.annex}</span>;
   }
@@ -190,13 +190,19 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       text: "Index",
       editable: false,
       sort: true,
+      formatter: numberFormatter,
       sortCaret: (order, column) => {
         if (!order) return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'asc') return (<span className="react-bootstrap-table-sort-order dropup"><span className="caret"></span></span>);
         else if (order === 'desc') return (<span className="react-bootstrap-table-sort-order"><span className="caret"></span></span>);
         return null;
       },
-      
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        if (order === 'asc') {
+          return b - a;
+        }
+        return a - b; // desc
+      }
     },
     {
       dataField: "name",
@@ -259,9 +265,9 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       },
     }
   ];
-  const selectionRow = (row, isSelect) => {
+  const selectionRow = (row, isSelect, rowIndex) => {
+
     const selectRowLength = document.querySelectorAll("#manage_config_table .selection-row").length + 1;
-    console.log('selectRowLength',selectRowLength, document.querySelectorAll("#manage_config_table .selection-row"));
     setEditValue(selectRowLength);
     const dbName = row.name;
     const dbType = row.editable === 'no' ? 1 : 0;
@@ -271,12 +277,30 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
     if (isSelect) {
       //singalRowSelectDB.push(row);
-      singalRowSelectDB = [row]
+
+      if (singalrowIndex) {
+        const selectRowData = document.querySelector(`#manage_config_table tbody tr:nth-child(${singalrowIndex + 1})`);
+        selectRowData.classList.remove('selection-row');
+      }
+
+      singalRowSelectDB = [row];
+      singalrowIndex = rowIndex;
     } else {
       const updateRowData = singalRowSelectDB.filter(item => item.name !== row.name);
       singalRowSelectDB = updateRowData;
     }
   };
+
+  useEffect(() => {
+    if (singalrowIndex && document.querySelector(`#manage_config_table`)) {
+      const selectRowData = document.querySelector(`#manage_config_table tbody tr:nth-child(${singalrowIndex + 1})`);
+      selectRowData.classList.add('selection-row');
+      setEditValue(selectRowData);
+
+    }
+
+  }, [singalrowIndex && document.querySelector(`#manage_config_table`)])
+
 
 
   useEffect(() => {
@@ -589,7 +613,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
 
     if (mcTableSystem) {
       mcTableSystem.map((data) => {
-        manageConfigData.push({ name: data.dbname, editable: "no" , annex: data.annex});
+        manageConfigData.push({ name: data.dbname, editable: "no", annex: data.annex });
       });
     }
     if (mcTableUser) {
@@ -598,10 +622,10 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       });
     }
 
-    let updateData =[];
+    let updateData = [];
 
-    manageConfigData.forEach((item, index)=>{
-      updateData.push({...item, rowIndex: index+1})
+    manageConfigData.forEach((item, index) => {
+      updateData.push({ ...item, rowIndex: index + 1 })
     });
 
     if (search.length > 0) {
@@ -611,7 +635,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
       );
       setTableData(data);
     }
-    else{
+    else {
       setTableData(totalData);
     }
   }, [search]);
@@ -797,12 +821,12 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
               modalFooter={saveFooter}
             />
           </div>
-          <div className="right_btn d-flex align-items-end">
+          <div className="right_btn d-flex align-items-center">
             <Button label={"Download All"} handleClick={downloadHandleClick} />
             <div className="d-flex flex-column ">
               {/* <strong>Upload from Pc to CPSG</strong> */}
               <button className="btn-file">
-                  Upload to CPSG
+                Upload to CPSG
                 <input type="file" />
               </button>
             </div>
