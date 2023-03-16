@@ -294,7 +294,7 @@ export default function ManageConfigurationPage({ setActiveTab, setDataBaseName,
   useEffect(() => {
     if (singalrowIndex && document.querySelector(`#manage_config_table`)) {
       const selectRowData = document.querySelector(`#manage_config_table tbody tr:nth-child(${singalrowIndex + 1})`);
-      selectRowData.classList.add('selection-row');
+      if(selectRowData) selectRowData.classList.add('selection-row');
       setEditValue(selectRowData);
 
     }

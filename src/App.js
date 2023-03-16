@@ -30,6 +30,15 @@ function App() {
     }
   }, [])
 
+  window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    if(width <= 767){
+      setIsOpen(false);
+    }else{
+      setIsOpen(true);
+    }
+  })
+
   const toggle = () => {
     setIsOpen(!isOpen);
   };

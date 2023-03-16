@@ -70,7 +70,7 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
   useEffect(() => {
     if ((addRangeData && addRangeData.status === 200) ||
       (addTiltData && addTiltData.status === 200) ||
-      (cTableRowDeleteData && addTiltData.status === 200) ||
+      (cTableRowDeleteData && cTableRowDeleteData.status === 200) ||
       (cTableRowAllDeleteData && cTableRowAllDeleteData.data && cTableRowAllDeleteData.data.success === true) ||
       (cTableRowUpdateData && cTableRowUpdateData.data && cTableRowUpdateData.data.success === true)
     ) {
@@ -118,7 +118,6 @@ const QAMTab = ({ dataBaseName, chID, configuratonData }) => {
 
   const deleteHandleClick = () => {
     singalRowSelectData.length > 0 ? setDeleteModalShow(true) :  setEditModalShow(true);
-    
   };
 
   const saveHandleClick = () => {
